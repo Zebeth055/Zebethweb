@@ -405,3 +405,44 @@ header::before {
     background-color: #1a1a1a;
     color: white;
 }
+
+/* Ajustes específicos para móviles (Android/iOS) */
+@media (max-width: 768px) {
+    /* 1. Buscador y Selector más grandes */
+    #inputBuscador, 
+    .estilo-retro {
+        height: 55px;        /* Aumentamos la altura */
+        font-size: 18px;     /* Texto más legible */
+        padding: 12px 20px;
+        width: 100%;         /* Que ocupen todo el ancho disponible */
+    }
+
+    .buscador-container {
+        flex-direction: column; /* Apilamos buscador y select uno sobre otro */
+        gap: 15px;
+        padding: 15px;
+    }
+
+    .select-wrapper {
+        width: 100%; /* El selector se expande al ancho del móvil */
+    }
+
+    /* 2. Tarjetas del Grid */
+    .tarjeta-info {
+        font-size: 1.1rem;   /* Nombre del juego un poco más grande */
+        padding: 12px 5px;
+    }
+
+    /* 3. Botones del Modal (El botón de "A" de GameCube o botones de acción) */
+    .btn-gc-a, .btn-cerrar {
+        min-width: 60px;     /* Área de toque más ancha */
+        min-height: 60px;    /* Área de toque más alta */
+        font-size: 20px;
+    }
+
+    /* 4. El disco en el modal */
+    #modalDisco {
+        width: 200px;        /* Un tamaño más manejable en pantallas pequeñas */
+        height: 200px;
+    }
+}
