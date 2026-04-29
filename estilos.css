@@ -353,7 +353,55 @@ header::before {
 
 .info-body span {
     font-family: monospace; /* Se ve más técnico */
-    background: rgba(210, 210, 210, 0.19);
+    background: rgba(255, 255, 255, 0.05);
     padding: 2px 5px;
     border-radius: 4px;
+}/* Contenedor para alinear buscador y select */
+.buscador-container {
+    display: flex;
+    gap: 15px;
+    padding: 20px;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Estilo del Select */
+.estilo-retro {
+    background-color: #1a1a1a; /* Fondo oscuro */
+    color: #00ffcc; /* Color neón o el que uses en tus títulos */
+    border: 2px solid #333;
+    padding: 8px 15px;
+    border-radius: 5px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.3s ease;
+    appearance: none; /* Quita la flecha por defecto */
+}
+
+.estilo-retro:hover {
+    border-color: #00ffcc;
+    box-shadow: 0 0 10px rgba(0, 255, 204, 0.2);
+}
+
+/* Contenedor para la flecha personalizada */
+.select-wrapper {
+    position: relative;
+}
+
+.select-wrapper::after {
+    content: '▼';
+    font-size: 10px;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    position: absolute;
+    color: #555;
+    pointer-events: none;
+}
+
+/* Estilo para las opciones dentro del desplegable */
+.estilo-retro option {
+    background-color: #1a1a1a;
+    color: white;
 }
