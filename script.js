@@ -1,29 +1,111 @@
 const productos = [
-{ 
-        nombre: "Metroid Prime", 
-        id: "GM8E01", 
-        idCompleta: "DOL-P-GMSE",
-        formato: "RVZ (1.35 GiB)", 
+    { 
+        nombre: "Animal Crossing", 
+        id: "GAFE01", 
+        idCompleta: "DOL-P-GAFE",
+        formato: "RVZ (18.56 MiB)", 
         compresion: "Zstandard",
-        url: "metroid.html" 
+        descripcion: "Vive una vida tranquila en un pueblo lleno de animales, donde el tiempo pasa como en la vida real.",
+        url: "animalcrossing.html" 
     },
     { 
-        nombre: "Zelda: Wind Waker", 
+        nombre: "Chibi-Robo!", 
+        id: "GGTE01", 
+        idCompleta: "DOL-P-GGTE",
+        formato: "RVZ (324.93 MiB)", 
+        compresion: "Zstandard",
+        descripcion: "Controla a un pequeño robot para limpiar la casa de los Sanderson y hacer a todos felices.",
+        url: "chibirobo.html" 
+    },
+    { 
+        nombre: "Donkey Kong: Jungle Beat", 
+        id: "GYBE01", 
+        idCompleta: "DOL-P-GYBE",
+        formato: "RVZ (550.33 MiB)", 
+        compresion: "Zstandard",
+        descripcion: "Usa los bongós para guiar a Donkey Kong a través de frenéticas plataformas y combates.",
+        url: "dkjungle.html" 
+    },
+    { 
+        nombre: "Eternal Darkness", 
+        id: "GEDE01", 
+        idCompleta: "DOL-P-GEDE",
+        formato: "RVZ (1.25 GiB)", 
+        compresion: "Zstandard",
+        descripcion: "Un thriller psicológico que atraviesa siglos de historia y pone a prueba tu cordura.",
+        url: "eternaldarkness.html" 
+    },
+    { 
+        nombre: "Fire Emblem: Path of Radiance", 
+        id: "GFEE01", 
+        idCompleta: "DOL-P-GFEE",
+        formato: "RVZ (1.03 GiB)", 
+        compresion: "Zstandard",
+        descripcion: "Estrategia táctica profunda en un continente al borde de la guerra entre humanos y laguz.",
+        url: "fireemblem.html" 
+    },
+    { 
+        nombre: "Mario Kart: Double Dash!!", 
+        id: "GM4E01", 
+        idCompleta: "DOL-P-GM4E",
+        formato: "RVZ (377.96 MiB)", 
+        compresion: "Zstandard",
+        descripcion: "Dos corredores por coche significan el doble de caos en las pistas más locas del Reino Champiñón.",
+        url: "mariokart.html" 
+    },
+    { 
+        nombre: "Pikmin 2", 
+        id: "GPVE01", 
+        idCompleta: "DOL-P-GPVE",
+        formato: "RVZ (868.67 MiB)", 
+        compresion: "Zstandard",
+        descripcion: "Olimar regresa con su asistente Louie para recolectar tesoros con la ayuda de nuevos tipos de Pikmin.",
+        url: "pikmin2.html" 
+    },
+    { 
+        nombre: "Super Mario Sunshine", 
+        id: "GMSE01", 
+        idCompleta: "DOL-P-GMSE",
+        formato: "RVZ (1002.15 MiB)", 
+        compresion: "Zstandard",
+        descripcion: "Usa el A.C.U.A.C. para limpiar la Isla Delfino y rescatar a la Princesa Peach.",
+        url: "mariosunshine.html" 
+    },
+    { 
+        nombre: "The Legend of Zelda: Twilight Princess", 
         id: "GZLE01", 
         idCompleta: "DOL-P-GZLE",
-        url: "zelda.html" 
+        formato: "RVZ (886.83 MiB)", 
+        compresion: "Zstandard",
+        descripcion: "Link debe salvar Hyrule de la invasión del Reino Crepuscular transformándose en lobo.",
+        url: "twilightprincess.html" 
     },
     { 
-        nombre: "Luigi's Mansion", 
-        id: "GLME01", 
-        idCompleta: "DOL-P-GLME",
-        url: "luigi.html"
+        nombre: "Viewtiful Joe", 
+        id: "GVCE01", 
+        idCompleta: "DOL-P-GVCE",
+        formato: "RVZ (893.60 MiB)", 
+        compresion: "Zstandard",
+        descripcion: "Acción estilizada en 2.5D donde usas poderes de efectos de película para derrotar enemigos.",
+        url: "viewtifuljoe.html" 
     },
     { 
-        nombre: "F-Zero GX", 
-        id: "GFZE01", 
-        idCompleta: "DOL-P-GFZE",
-        url: "fzero.html"
+        nombre: "Wario World", 
+        id: "GWWE01", 
+        idCompleta: "DOL-P-GWWE",
+        formato: "RVZ (188.69 MiB)", 
+        compresion: "Zstandard",
+        descripcion: "Wario reparte puñetazos y busca tesoros en un mundo lleno de plataformas y acción.",
+        url: "warioworld.html" 
+    },
+    { 
+        nombre: "Wave Race: Blue Storm", 
+        id: "GWRE01", 
+        idCompleta: "DOL-P-GWRE",
+        formato: "RVZ (1.02 GiB)", 
+        compresion: "Zstandard",
+        descripcion: "Carreras de motos de agua con físicas de olas realistas y clima dinámico.",
+        url: "waverace.html" 
     }
 ];
 
