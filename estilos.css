@@ -578,6 +578,20 @@ footer {
 
 /* --- ESTILO MÓVIL ANDROID DEFINITIVO --- */
 
+body.mobile-os header {
+    position: relative !important; /* Deja de ser fijo, se mueve con el scroll */
+    top: 0 !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background: #0a0f28 !important; /* Color sólido */
+    box-shadow: none !important;
+}
+
+/* Eliminamos el destello de luz animado en el header */
+body.mobile-os header::before {
+    display: none !important;
+}
+
 /* 1. Grid: Corregimos el estiramiento de las portadas */
 body.mobile-os #grid-container {
     /* Forzamos que se creen columnas automáticamente con un tamaño mínimo de 110px */
@@ -587,6 +601,9 @@ body.mobile-os #grid-container {
     justify-content: center !important;
     backdrop-filter: none !important; 
     -webkit-backdrop-filter: none !important;
+    background-image: radial-gradient(circle, transparent 0%, rgba(0, 0, 0, 1) 90%) !important;
+    background-attachment: scroll !important; /* Cambiamos fixed por scroll */
+    background-color: #000 !important;
 }
 
 /* 2. Tarjetas: Forzamos la proporción real de GameCube */
@@ -605,6 +622,7 @@ body.mobile-os .tarjeta {
     height: auto !important;
     border: 1.5px solid rgba(255, 255, 255, 0.3) !important;
     /* Optimizamos el renderizado */
+    box-shadow: none !important;
     will-change: transform;
     transform: translateZ(0);
 }
@@ -635,6 +653,8 @@ body.mobile-os .modal-left {
 body.mobile-os .modal-left img {
     width: 120px !important; /* Tamaño fijo para la portada en el modal */
     height: auto !important;
+    filter: none !important;
+    decoding: async;
 }
 
 /* Posición del Disco para que no tape los inputs */
