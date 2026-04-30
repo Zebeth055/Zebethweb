@@ -580,7 +580,7 @@ footer {
 
 
 /* 1. Grid Estático: Máximo rendimiento en móvil */
-body.mobile-os#grid-container {
+body.mobile-os #grid-container {
     /* En lugar de auto-fill, forzamos 2 columnas fijas */
     /* Esto es drásticamente más rápido de procesar */
     display: grid !important;
@@ -595,7 +595,7 @@ body.mobile-os#grid-container {
 }
 
 /* 2. Tarjetas: Simplificación de capas */
-body.mobile-os.tarjeta-wrapper {
+body.mobile-os .tarjeta-wrapper {
     width: 100% !important;
     max-width: none !important;
     margin: 0 !important;
@@ -603,7 +603,7 @@ body.mobile-os.tarjeta-wrapper {
     perspective: none !important;
     transform: none !important;
 }
-body.mobile-os.tarjeta {
+body.mobile-os .tarjeta {
     width: 100% !important;
     aspect-ratio: 3 / 4.2 !important;
     height: auto !important;
@@ -616,7 +616,7 @@ body.mobile-os.tarjeta {
     background: #050505 !important;
 }
 
- body.mobile-os.tarjeta img {
+ body.mobile-os .tarjeta img {
     width: 100% !important;
     height: 100% !important;
     object-fit: cover !important;
@@ -625,12 +625,12 @@ body.mobile-os.tarjeta {
 }
 
 /* Ocultamos la info flotante para que el scroll sea pura seda */
-body.mobile-osz.tarjeta-info {
+body.mobile-os z.tarjeta-info {
     display: none !important;
 }
 
 /* 3. Header: Un poco más de aire */
-body.mobile-osheader {
+body.mobile-os header {
     position: relative !important;
     width: 92% !important;
     margin: 10px auto 20px !important;
@@ -641,7 +641,7 @@ body.mobile-osheader {
     box-shadow: 0 4px 10px rgba(0,0,0,0.5) !important;
 }
 
-body.mobile-os.modal-content {
+body.mobile-os .modal-content {
     background: rgba(15, 20, 50, 0.95) !important;
     width: 90% !important;
     max-width: 380px !important;
