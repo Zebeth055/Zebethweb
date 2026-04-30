@@ -582,9 +582,9 @@ body.mobile-os {
 
 /* 1. Centrado del Grid */
 body.mobile-os #grid-container {
-    grid-template-columns: repeat(4, 1fr) !important; /* 4 columnas para el 30% más pequeño */
-    gap: 8px !important;
-    padding: 15px !important;
+    grid-template-columns: repeat(3, 1fr) !important; /* 4 columnas para el 30% más pequeño */
+    gap: 30px !important;
+    padding: 20px !important;
     justify-items: center; /* Centra el contenido de cada celda */
     align-items: start;
 }
@@ -592,7 +592,7 @@ body.mobile-os #grid-container {
 /* 2. El envoltorio debe dejar que la rejilla mande */
 body.mobile-os .tarjeta-wrapper {
     width: 100% !important; /* Que ocupe el ancho de su columna */
-    max-width: 85px;        /* Tamaño máximo para mantener la escala pequeña */
+    max-width: 200px;        /* Tamaño máximo para mantener la escala pequeña */
     margin: 0 !important;   /* Quitamos márgenes manuales */
     display: flex;
     justify-content: center;
@@ -621,10 +621,13 @@ body.mobile-os .modal-content {
 }
 
 /* Ajuste de secciones del modal */
-body.mobile-os .modal-left, 
+body.mobile-os .modal-left {
+    flex: none !important;
+    width: 90% !important;
+}
 body.mobile-os .modal-right {
     flex: none !important;
-    width: 100% !important;
+    width: 80% !important;
 }
 
 body.mobile-os .modal-left img {
@@ -639,7 +642,7 @@ body.mobile-os .modal-actions {
 }
 
 body.mobile-os .btn-gc {
-    width: 100% !important;
+    width: 50% !important;
     justify-content: center !important;
     padding: 15px !important;
 }
