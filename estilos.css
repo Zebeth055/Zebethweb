@@ -585,13 +585,13 @@ body.mobile-os #grid-container,
 body.mobile-os .db-grid {
     grid-template-columns: repeat(3, 1fr) !important;
     gap: 8px !important;
-    padding: 10px !important;
+    padding: 1px !important;
 }
 
 /* Convertir la tarjeta en un contenedor simple para la imagen */
 body.mobile-os .tarjeta-wrapper {
     width: 80% !important;
-    margin: 25px !important;
+    margin: 10px !important;
     perspective: none !important; /* Quitar efectos 3D que marean en móvil */
 }
 
@@ -629,12 +629,23 @@ body.mobile-os header {
 /* --- EL MODAL SIEMPRE DEBE VERSE COMPLETO --- */
 body.mobile-os .modal-content {
     flex-direction: column;
-    width: 90%;
-    padding: 15px;
+    width: 30%;
+    padding: 30px;
     max-height: 85vh;
 }
 
 body.mobile-os .modal-right .info-header,
 body.mobile-os .modal-right .info-body p {
     display: block !important; /* Aquí sí queremos ver el nombre y el ID */
+}
+
+body.mobile-os .btn-gc {
+    padding: 25px 10px;
+    border: 3px solid #000;
+    font-weight: bold;
+    cursor: pointer;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
