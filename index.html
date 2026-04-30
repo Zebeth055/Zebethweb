@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GameCube BIOS - Card Manager Mode</title>
     <link rel="stylesheet" href="estilos.css">
 </head>
@@ -12,20 +12,20 @@
     <header>
         <div class="header-title">Gamecube Backups</div>
         <div class="controles-orden">
-<div class="select-wrapper">
-        <select id="selectOrden" class="estilo-retro">
-            <option value="az">A - Z</option>
-            <option value="za">Z - A</option>
-            <option value="peso">Peso</option>
-        </select>
-    </div>
-</div>
+            <div class="select-wrapper">
+                <select id="selectOrden" class="estilo-retro">
+                    <option value="az">A - Z</option>
+                    <option value="za">Z - A</option>
+                    <option value="peso">Peso</option>
+                </select>
+            </div>
+        </div>
         <div class="search-container">
             <input type="text" id="inputBuscador" placeholder="[ BUSCAR_DATOS ]">
         </div>
     </header>
 
-    <div id="grid-container"></div>
+    <div id="grid-container" class="grid-container"></div>
 
     <div class="modal-overlay" id="modalDetalle">
         <div class="modal-content">
@@ -37,16 +37,15 @@
                 </div>
             </div>
 
-<div class="modal-right">
-    <h2 id="modalTitulo" class="info-header">TITULO</h2>
-    <div class="info-body">
-        ID: <span id="modalID" style="color: var(--btn-a);"></span><br>
-        FORMATO: <span id="modalFormato" style="color: #fff;"></span><br>
-        COMPRESIÓN: <span id="modalCompresion" style="color: #fff;"></span><br>
-
-    </div>
-    <br>
-    
+            <div class="modal-right">
+                <h2 id="modalTitulo" class="info-header">TITULO</h2>
+                <div class="info-body">
+                    ID: <span id="modalID" style="color: var(--btn-a);"></span><br>
+                    FORMATO: <span id="modalFormato" style="color: #fff;"></span><br>
+                    COMPRESIÓN: <span id="modalCompresion" style="color: #fff;"></span><br>
+                </div>
+                <br>
+                
                 <div class="modal-actions">
                     <button class="btn-gc btn-gc-a"><span>(A)</span> CONTINUAR</button>
                     <button class="btn-gc btn-gc-b" onclick="cerrarModal()"><span>(B)</span> ATRÁS</button>
@@ -58,8 +57,8 @@
     <div class="footer-guide">
         <div style="color:var(--btn-a)"> (A) DETALLES</div>
         <div style="color:var(--btn-b)"> (B) SALIR</div>
-    </div>
-
-    <script src="script.js"></script>
+    </div>        
+    <script type="module" src="script.js"></script>
+    
 </body>
 </html>

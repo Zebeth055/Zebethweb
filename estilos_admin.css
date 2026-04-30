@@ -1,0 +1,321 @@
+:root {
+    --gc-dark: rgb(0, 0, 0);
+    --gc-grid: rgba(255, 255, 255, 0.1); /* Más sutil para el fondo */
+    --gc-blue-deep: #1100aa;   
+    --gc-purple-deep: #330066;
+    --gc-cyan-neon: #00ffff;
+    --btn-a: #00ff5d;
+    --btn-b: #ff3366;
+    --font-main: "Arial Rounded MT Bold", "Helvetica", sans-serif;
+}
+
+body {
+    margin: 0;
+    padding: 20px;
+    font-family: var(--font-main);
+    background-color: var(--gc-dark);
+    /* CUADRICULADO DE FONDO IDÉNTICO */
+background-image: radial-gradient(circle, transparent 0%, rgba(0, 0, 0, 1) 90%),
+    linear-gradient(var(--gc-grid) 2px, transparent 2px), /* Líneas horizontales */
+    linear-gradient(90deg, var(--gc-grid) 2px, transparent 2px); /* Líneas verticales */
+    
+    background-size: 100% 100%, 30px 30px, 30px 30px; /* Tamaño de los cuadros (30x30px) */
+    background-attachment: fixed;
+    color: #ffffff;
+    min-height: 100vh;
+}
+
+
+
+.main-container {
+    display: flex;
+    height: 90vh;
+    padding: 20px;
+    gap: 20px;
+}
+
+/* Paneles */
+.left-panel, .right-panel {
+    border: 3px solid #3f51b5;
+    background: rgba(0, 0, 50, 0.8);
+    padding: 15px;
+    border-radius: 4px;
+}
+
+.right-panel { width: 65%; } /* La lista a la izquierda */
+.left-panel { width: 35%; }  /* El formulario a la derecha */
+
+.right-panel {
+    background: rgba(0, 0, 0, 0.6);
+    border: 0px solid #fff;
+    border-radius: 4px;
+        margin: 20px;
+}
+
+/* Título superior con fondo azul/morado degradado */
+
+/* Formulario */
+.input-group { margin-bottom: 15px; }
+.input-group label { display: block; color: #aaa; margin-bottom: 5px; }
+input {
+    width: 90%;
+    background: #000;
+    border: 1px solid #3f51b5;
+    color: #00ffff;
+    padding: 8px;
+    outline: none;
+}
+
+.action-zone {
+    margin-top: auto;
+    border-top: 2px solid #3f51b5;
+    padding-top: 15px;
+    text-align: center;
+}
+
+.btn-confirm { background: none; color: #ff9800; border: none; font-size: 1.5rem; cursor: pointer; margin: 0 15px; }
+.btn-cancel { background: none; color: white; border: none; font-size: 1.5rem; cursor: pointer; margin: 0 15px; }
+.btn-confirm:hover { text-shadow: 0 0 10px #ff9800; }
+
+/* Grid de juegos */
+.db-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 25px;
+    padding: 30px;
+    justify-items: center;
+}
+
+.db-item {
+    width: 90px;
+    height: 90px;
+    background: linear-gradient(135deg, #000044 0%, #0000aa 100%);
+    border: 2px solid #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    transition: transform 0.1s ease;
+    box-shadow: 4px 4px 0px rgba(255, 255, 255, 0.2);
+}
+
+.db-item:hover {
+    transform: scale(1.1);
+    border-color: #ffaa00; /* Color naranja de selección */
+    box-shadow: 0 0 15px #ffaa00;
+}
+
+/* El disco redondo dentro del cuadro */
+.disco-icon {
+    width: 75px;
+    height: 75px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Botón de borrar discreto en la esquina */
+.delete-btn {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    width: 22px;
+    height: 22px;
+    background: #ff4444;
+    color: white;
+    border: 2px solid white;
+    border-radius: 50%;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+}
+
+.delete-btn:hover {
+    background: #cc0000;
+    transform: scale(1.1);
+}
+
+.footer-bar {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background: linear-gradient(to right, #1a1a1a, #333, #1a1a1a);
+    border-top: 2px solid #fff;
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0;
+    font-weight: bold;
+}
+
+.footer-bar span {
+    text-shadow: 2px 2px #000;
+}
+
+
+
+.confirm-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.confirm-box {
+    background: linear-gradient(135deg, #8b0000 0%, #4b0082 100%);
+    border: 3px solid #ffffff;
+    padding: 20px;
+    width: 300px;
+    text-align: center;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+}
+
+.confirm-content p {
+    font-size: 1.1rem;
+    line-height: 1.4;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px #000;
+}
+
+.confirm-options {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid #fff;
+    padding: 10px;
+    display: inline-block;
+    min-width: 100px;
+}
+
+.option-item {
+    font-size: 1.3rem;
+    padding: 5px 10px;
+    cursor: pointer;
+    color: #fff;
+    transition: all 0.2s;
+}
+
+.option-item.selected {
+    color: #ffaa00;
+    text-shadow: 0 0 8px #ffaa00;
+}
+
+.selection-arrow {
+    visibility: hidden;
+}
+
+.selected .selection-arrow {
+    visibility: visible;
+}
+
+.info-display {
+    width: 90%;
+    height: 60px;
+    margin: 20px auto;
+    background: linear-gradient(to bottom, #00008b, #4b0082);
+    border: 2px solid #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+}
+
+
+/* Rectángulo de información cristalino */
+.info-display {
+    width: 90%;
+    max-width: 1100px;
+    height: 70px;
+    margin: 10px auto 80px; /* Margen inferior para que no tape el footer */
+    background: linear-gradient(180deg, #0000aa 0%, #330066 100%);
+    border: 3px solid #ffffff;
+    box-shadow: inset 0 0 15px rgba(255,255,255,0.2), 0 0 0 2px #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-shadow: 2px 2px 0px #000;
+}
+
+/* Footer con degradado de la BIOS */
+.footer-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 60px;
+    background: linear-gradient(180deg, #1100aa 0%, #330066 100%);
+    border-top: 3px solid #ffffff;
+    display: flex;
+    justify-content: center;
+    gap: 60px;
+    align-items: center;
+    z-index: 100;
+}
+
+.footer-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: bold;
+    text-shadow: 2px 2px 0px #000;
+}
+
+/* Iconos de botones redondos */
+.btn-icon {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    display: inline-block;
+}
+
+.select-dot { background: #fff; box-shadow: 0 0 5px #fff; width: 15px; height: 15px; }
+.btn-a { background: var(--btn-a); }
+.btn-b { background: var(--btn-b); }
+
+
+.info-display {
+    position: fixed;
+    bottom: 20px; /* Separado un poco del borde inferior */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 1000px;
+    height: 70px;
+    
+    /* Degradado oficial de la BIOS */
+    background: linear-gradient(180deg, var(--gc-blue-deep) 0%, var(--gc-purple-deep) 100%);
+    
+    /* Bordes y Sombras */
+    border: 3px solid #ffffff;
+    box-shadow: 
+        0 0 0 2px #000, 
+        inset 0 0 15px rgba(255, 255, 255, 0.2);
+    
+    /* Centrado de texto */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    /* Estilo de Fuente */
+    font-size: 1.5rem;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-shadow: 2px 2px 0px #000;
+    z-index: 100;
+}
+
+/* Ajuste para que el contenedor principal no se tape con la barra */
+.main-container {
+    margin-bottom: 110px; 
+}
+

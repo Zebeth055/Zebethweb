@@ -1,17 +1,23 @@
 :root {
-    --gc-dark: #000000;
-    --gc-grid: rgba(255, 255, 255, 0.15);
-    --btn-a: #00ffcc;
+    --gc-dark: rgb(0, 0, 0);
+    --gc-grid: rgba(255, 255, 255, 0.21);
     --btn-b: #ff3366;
     --font-main: "Arial Rounded MT Bold", "Helvetica", sans-serif;
-    
+    --gc-blue-deep: #0e11c5;   /* Azul cobalto intenso de la base */
+    --gc-blue-dark: #07096e;   /* Azul oscuro para degradados y fondos */
+    --gc-blue-slots: #030832;  /* Azul casi negro para el fondo del grid */
+    --gc-cyan-neón: #00ffff;   /* Cian neón para bordes activos y texto */
+    --gc-blue-bright: #3f60ff; /* Azul claro para brillos secundarios */
+    --btn-a: #00ff5d; /* Reutilizamos tu variable A */
+    --bordes: #000dda;
     /* Efecto Cristal Azul Profundo */
     --glass-bg: rgba(10, 15, 40, 0.75); /* Tono azul noche más intenso */
     --glass-border: rgba(100, 200, 255, 0.25); /* Borde con tinte cian */
-    --gc-blue-glow: rgba(0, 150, 255, 0.5); /* Brillo interno azul neón */
+    --gc-blue-glow: rgba(0, 15se0, 255, 0.5); /* Brillo interno azul neón */
     --gc-cyan-glow: rgba(0, 255, 255, 0.2); /* Brillo secundario para aristas */
     
     --glow-blue: 0 0 10px rgba(65, 105, 225, 0.8);
+    
 }
 
 @keyframes girarDiscoWii {
@@ -40,11 +46,11 @@ body {
     font-family: var(--font-main);
     background-color: var(--gc-dark);
     background-image: radial-gradient(circle, transparent 0%, rgba(0, 0, 0, 1) 90%),
-        linear-gradient(var(--gc-grid) 2px, transparent 2px),
-        linear-gradient(90deg, var(--gc-grid) 2px, transparent 2px);
+    linear-gradient(var(--gc-grid) 2px, transparent 2px),
+    linear-gradient(90deg, var(--gc-grid) 2px, transparent 2px);
     background-size: 100% 100%, 30px 30px, 30px 30px;
     background-attachment: fixed;
-    color: white;
+    color: #ffffff;
     min-height: 100vh;
     overflow-x: hidden;
 }
@@ -141,7 +147,7 @@ header::before {
 #grid-container {
     padding: 40px 20px 120px;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(210px, 240px));
+    grid-template-columns: repeat(auto-fill, minmax(30px, 240px));
     gap: 40px;
     justify-content: center;
 }
@@ -150,6 +156,8 @@ header::before {
 .tarjeta-wrapper {
     perspective: 1000px;
     transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+    width: 210px; /* Ancho base en PC */
+    margin: 15px;
 }
 
 .tarjeta-wrapper:hover {
@@ -159,15 +167,22 @@ header::before {
 
 /* 2. La Tarjeta Real (Maneja el diseño y el baile) */
 .tarjeta { 
-    position: relative;
-    background-color: #fff; 
+    width: 100%;
+    height: 295px; /* Calculado para que no se corte (210 * 1.4) */
+    background-color: #0055a3; 
     border: 4px solid #000;
     border-radius: 10px; 
     overflow: hidden; 
-    aspect-ratio: 1 / 1.3;
-    box-shadow: 10px 10px 0px rgba(0,0,0,0.5);
+    position: relative;
     cursor: pointer;
+    box-shadow: 
+        inset 0 2px 10px rgba(0,0,0,0.8), /* Profundidad interna */
+        0 4px 15px rgba(0,0,0,0.5); /* Sombra externa */
     
+    /* Brillo CyanNeón sutil en estado normal (como las ranuras que brillan) */
+    filter: drop-shadow(0 0 1px rgba(0, 255, 255, 0.2)); 
+    
+
     /* Transición suave para que los bordes regresen a su ángulo original al quitar el mouse */
     transition: transform 0.6s ease-out, border-color 0.3s;
     transform-style: preserve-3d;
@@ -175,7 +190,7 @@ header::before {
 }
 
 .tarjeta-wrapper:hover .tarjeta {
-    border-color: var(--btn-a);
+    border-color: var(--bordes);
     /* Aplicamos el baile a TODA la tarjeta (incluyendo bordes) */
     animation: baileCompleto 4s ease-in-out infinite;
 }
@@ -188,12 +203,14 @@ header::before {
 }
 
 .tarjeta img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+    object-fit: fill;
     /* Evita que se vea estático */
     transition: transform 0.5s ease; 
-    
+    border-radius: 1px; /* Pequeño ajuste para que encaje bien en el slot */
+    margin: 4px; /* Espacio para el brillo de fondo de la tarjeta */
+    width: calc(100% - 8px); /* Ajuste de ancho por el margin */
+    height: calc(100% - 8px); /* Ajuste de alto por el margin */
+    box-shadow: inset 0 0 5px rgba(0,255,255,0.1);
 }
 
 .tarjeta-info {
@@ -201,19 +218,53 @@ header::before {
     bottom: 0;
     left: 0;
     width: 100%;
-    background: linear-gradient(90deg, #2a2a8e 0%, #4169e1 100%);
-    border-top: 3px solid #fff;
+    /* Bajamos un poco la opacidad del color para que el blur se note más */
+    background: linear-gradient(to top, rgba(0, 0, 40, 0.7), rgba(65, 105, 225, 0.5));
+    border-top: 2px solid var(--bordes);
     padding: 12px 0;
     text-align: center;
     font-size: 0.9rem;
     text-transform: uppercase;
-    text-shadow:
-        -2px -2px 0 #000,
-        2px -2px 0 #000,
-        -2px 2px 0 #000,
-        2px 2px 0 #000;
+    color: white;
+    
+    /* --- EFECTO BLUR (CRISTAL) --- */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px); /* Para compatibilidad con Safari */
+    
+    /* ESTADO INICIAL: Escondido */
+    opacity: 0;
+    transform: translateY(10px); 
+    transition: all 0.3s ease-in-out;
+    z-index: 10;
+    overflow: hidden; 
 }
 
+.tarjeta-info::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -150%; /* Empezamos fuera de la vista a la izquierda */
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        120deg, 
+        transparent, 
+        rgba(255, 255, 255, 0.3), 
+        transparent
+    );
+    transition: all 0.6s;
+    pointer-events: none;
+}
+/* MOSTRAR AL PASAR EL CURSOR */
+.tarjeta-wrapper:hover .tarjeta-info {
+    opacity: 1;
+    transform: translateY(0); /* Sube a su posición original */
+}
+
+.tarjeta-wrapper:hover .tarjeta-info::before {
+    left: 150%; /* El brillo cruza toda la etiqueta hasta el otro lado */
+    transition: all 0.6s ease-in-out;
+}
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -322,18 +373,6 @@ header::before {
     color: #fff;
 }
 
-.footer-guide {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    background: rgba(0, 0, 0, 0.9);
-    padding: 15px 0;
-    display: flex;
-    justify-content: center;
-    gap: 60px;
-    border-top: 2px solid #333;
-    z-index: 100;
-}
 
 /* --- ANIMACIÓN FLOTANTE ESTILO GAMECUBE --- */
 /* Aplicamos el baile a todo lo que esté dentro de la tarjeta al hacer hover */
@@ -385,8 +424,31 @@ header::before {
 }
 
 /* Contenedor para la flecha personalizada */
-.select-wrapper {
-    position: relative;
+.select-wrapper .estilo-retro {
+    /* Fondo: Degradado azul/púrpura + rejilla técnica de GameCube */
+    background: 
+        linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(180deg, #1100aa 0%, #330066 100%);
+    background-size: 15px 15px, 15px 15px, 100% 100%;
+    
+    /* El Marco: Borde blanco nítido con sombras negras de profundidad */
+    border: 2px solid #ffffff;
+    box-shadow: 
+        0 0 0 2px #000,           /* Borde exterior negro */
+        inset 0 0 0 1px #000;     /* Línea interna negra */
+    
+    /* Tipografía de consola */
+    color: #ffffff;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-shadow: 2px 2px 0px #000; /* Sombra sólida retro */
+    
+    padding: 8px 35px 8px 15px;
+    border-radius: 4px;
+    appearance: none; /* Quitamos flecha por defecto */
+    cursor: pointer;
+    transition: all 0.3s ease;
 }
 
 .select-wrapper::after {
@@ -400,49 +462,114 @@ header::before {
     pointer-events: none;
 }
 
+.select-wrapper::after {
+    content: '▼';
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #00ffff; /* Cian neón */
+    font-size: 10px;
+    pointer-events: none;
+    text-shadow: 0 0 5px rgba(0, 255, 255, 0.8);
+}
+
+/* Efecto al pasar el cursor (Hover) */
+.select-wrapper .estilo-retro:hover {
+    border-color: #00ffff;
+    box-shadow: 
+        0 0 10px rgba(0, 255, 255, 0.5), 
+        0 0 0 2px #000;
+}
 /* Estilo para las opciones dentro del desplegable */
 .estilo-retro option {
     background-color: #1a1a1a;
     color: white;
 }
 
-/* Ajustes específicos para móviles (Android/iOS) */
-@media (max-width: 768px) {
-    /* 1. Buscador y Selector más grandes */
-    #inputBuscador, 
-    .estilo-retro {
-        height: 55px;        /* Aumentamos la altura */
-        font-size: 18px;     /* Texto más legible */
-        padding: 12px 20px;
-        width: 100%;         /* Que ocupen todo el ancho disponible */
+
+footer {
+    /* 1. Dimensiones y Posición */
+    width: 95%;
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 15px 25px;
+    position: relative;
+    
+    /* 2. Fondo: Degradado de Azul Cobalto a Púrpura Profundo + Cuadrícula */
+    background: 
+        /* El patrón de rejilla (ajusta el color rgba para que sea sutil) */
+        linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px),
+        /* El degradado de color base de la imagen */
+        linear-gradient(180deg, #1100aa 0%, #330066 100%);
+    background-size: 20px 20px, 20px 20px, 100% 100%;
+    
+    /* 3. El Borde Doble (Característico de GameCube) */
+    border: 3px solid #ffffff; /* Borde exterior blanco */
+    outline: 2px solid #555;   /* Borde exterior gris oscuro/negro para dar profundidad */
+    box-shadow: inset 0 0 0 2px #000; /* Línea negra interna para separar el borde del fondo */
+    
+    /* 4. Tipografía y Alineación */
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    color: #ffffff;
+    font-family: var(--font-main);
+    text-shadow: 2px 2px 0px #000; /* Sombra de texto sólida como en la consola */
+}
+
+
+.footer-guide {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 100;
+    
+    background: 
+        linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(180deg, #1100aa 0%, #330066 100%);
+    
+
+    /* 2. El Marco: Borde blanco nítido y sombra negra */
+    border-top: 3px solid #ffffff;
+    /* 3. Espaciado y alineación */
+    padding: 12px 0;
+    display: flex;
+    justify-content: center;
+    gap: 60px;
+    
+    /* 4. Texto: Sombra sólida estilo retro */
+    color: #ffffff;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
     }
 
-    .buscador-container {
-        flex-direction: column; /* Apilamos buscador y select uno sobre otro */
-        gap: 15px;
-        padding: 15px;
+/* Opcional: Si tienes iconos de botones (A, B, etc.) dentro */
+.footer-guide span {
+    border: 2px solid #fff;
+    padding: 2px 8px;
+    background: rgba(0, 0, 0, 0.4);
+    margin-right: 8px;
     }
 
-    .select-wrapper {
-        width: 100%; /* El selector se expande al ancho del móvil */
-    }
+/* Estilo para los elementos internos del footer (Select, Finish, Confirm) */
+.footer-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    text-transform: uppercase;
+}
 
-    /* 2. Tarjetas del Grid */
-    .tarjeta-info {
-        font-size: 1.1rem;   /* Nombre del juego un poco más grande */
-        padding: 12px 5px;
-    }
-
-    /* 3. Botones del Modal (El botón de "A" de GameCube o botones de acción) */
-    .btn-gc-a, .btn-cerrar {
-        min-width: 60px;     /* Área de toque más ancha */
-        min-height: 60px;    /* Área de toque más alta */
-        font-size: 20px;
-    }
-
-    /* 4. El disco en el modal */
-    #modalDisco {
-        width: 200px;        /* Un tamaño más manejable en pantallas pequeñas */
-        height: 200px;
-    }
+/* Pequeño detalle: las cajas de los botones A/B/Start en el footer */
+.footer-btn-icon {
+    border: 2px solid #fff;
+    padding: 2px 8px;
+    background: rgba(0,0,0,0.3);
+    box-shadow: inset 2px 2px 0 rgba(0,0,0,0.5);
 }
