@@ -615,9 +615,16 @@ body.mobile-os .tarjeta {
 }
 
 body.mobile-os .tarjeta img {
-    /* Importante: Evita que la imagen parpadee o laguee */
-    display: block !important;
-    content-visibility: auto;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    /* Evita el suavizado costoso durante el scroll */
+    image-rendering: auto; 
+}
+
+/* Ocultamos la info flotante para que el scroll sea pura seda */
+body.mobile-os .tarjeta-info {
+    display: none !important;
 }
 
 /* 3. Header: Un poco más de aire */
