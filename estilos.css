@@ -580,79 +580,72 @@ body.mobile-os {
     background-size: 20px 20px, 20px 20px, 100% 100%;
 }
 
-/* 1. Centrado del Grid */
+/* 1. Grid: Evitamos que las portadas se vean gigantes */
 body.mobile-os #grid-container {
-    /* Auto-fit intentará meter las que quepan, pero nunca menos de 100px */
-    gap: 15px !important; /* Gap más pequeño para ganar espacio */
+    /* Usamos auto-fill con un tamaño fijo pequeño para que se vean varias por fila */
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)) !important;
+    gap: 20px !important;
     padding: 15px !important;
-    justify-content: center !important;
-    align-items: start;
+    justify-items: center;
 }
-/* 2. El envoltorio debe dejar que la rejilla mande */
+
+/* 2. Tarjetas: Proporción correcta de GameCube */
 body.mobile-os .tarjeta-wrapper {
-    width: 100% !important; /* Que ocupe el ancho de su columna */
-    max-width: 200px;        /* Tamaño máximo para mantener la escala pequeña */
-    margin: 0 !important;   /* Quitamos márgenes manuales */
-    display: flex;
-    justify-content: center;
+    width: 100% !important;
+    max-width: 120px !important; /* Controlamos el ancho máximo */
 }
 
 body.mobile-os .tarjeta {
-    width: 100% !important;
-    height: auto !important;
-    aspect-ratio: 3 / 4.2;
-    background: transparent !important;
-    border: 1px solid rgba(255,255,255,0.3) !important;
-    box-shadow: none !important;
-    animation: none !important;
-}
-
-/* 3. Corrección del Modal (Para que NO sobresalga) */
-body.mobile-os .modal-content {
-    flex-direction: column !important;
-    width: 90% !important;     
-    height: auto !important;
-    /* dvh detecta la barra de navegación de Android dinámicamente */
-    max-height: 85dvh !important; 
-    padding: 20px !important;
-    overflow-y: auto !important; 
-    -webkit-overflow-scrolling: touch; /* Scroll suave en móviles */
-    gap: 10px !important;
-    background: rgba(10, 15, 45, 0.98) !important;
     border: 2px solid rgba(255, 255, 255, 0.2) !important;
+    aspect-ratio: 3 / 4.2 !important;
+    background: #000 !important;
 }
 
-/* Ajuste de secciones del modal */
-body.mobile-os .modal-left, 
-body.mobile-os .modal-right {
-    flex: none !important;
-    width: 100% !important; /* Cambiado de 80/90% a 100% para evitar desvíos */
-    box-sizing: border-box !important;
-}
-
-body.mobile-os .modal-left img {
-    width: 60% !important; /* Imagen del modal un poco más pequeña para ahorrar espacio */
-    margin: 0 auto;
-}
-
-/* Botones grandes para dedos */
-body.mobile-os .modal-actions {
-    flex-direction: column !important;
+/* 3. Modal: Le damos "aire" a los bordes para que no se vea pegado al navegador */
+body.mobile-os .modal-content {
+    width: 90% !important;
+    max-width: 350px !important; /* Evita que el modal sea gigante */
+    max-height: 80dvh !important; /* Dejamos margen arriba y abajo */
+    padding: 15px !important;
     gap: 10px !important;
+    border: 2px solid var(--btn-a) !important; /* Borde neón para que resalte */
+    border-radius: 15px !important;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.9) !important;
+}
+
+/* 4. Imágenes dentro del Modal */
+body.mobile-os .modal-left {
+    padding-top: 10px;
+}
+
+body.mobile-os .modal-left img#modalImagen {
+    width: 50% !important; /* Portada más pequeña en el modal */
+}
+
+body.mobile-os .modal-left div[style*="right: -25px"] {
+    right: 15% !important; /* Centramos un poco más el disco */
+    bottom: -10px !important;
+    width: 45% !important;
+}
+
+/* 5. Ajuste de textos en el Modal */
+body.mobile-os .info-header {
+    font-size: 1.3rem !important;
+    margin-bottom: 5px !important;
+}
+
+body.mobile-os .info-body {
+    font-size: 0.85rem !important;
+    line-height: 1.4 !important;
+}
+
+/* 6. Botones del Modal */
+body.mobile-os .modal-actions {
+    margin-top: 15px !important;
 }
 
 body.mobile-os .btn-gc {
-    width: 100% !important; /* Botones a lo ancho para fácil acceso con el pulgar */
-    max-width: 250px !important;
-    margin: 0 auto !important;
-    justify-content: center !important;
-    padding: 12px !important;
-    font-size: 0.9rem !important;
-}
-
-/* Ocultar elementos molestos en móvil */
-body.mobile-os .header-title,
-body.mobile-os .footer-guide,
-body.mobile-os .tarjeta-info {
-    display: none !important;
+    padding: 10px !important;
+    font-size: 0.8rem !important;
+    width: 100% !important;
 }
