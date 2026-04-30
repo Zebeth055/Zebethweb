@@ -576,18 +576,22 @@ footer {
 
 
 /* --- ESTILO MÓVIL FORZADO (MODO PORTADA LIMPIA) --- */
+body.mobile-os {
+    background-size: 20px 20px, 20px 20px, 100% 100%; /* Cuadrícula más pequeña */
+}
+
 /* Rejilla de 3 columnas estilo catálogo */
 body.mobile-os #grid-container, 
 body.mobile-os .db-grid {
     grid-template-columns: repeat(3, 1fr) !important;
-    gap: 1px !important;
-    padding: 30px !important;
+    gap: 8px !important;
+    padding: 10px !important;
 }
 
 /* Convertir la tarjeta en un contenedor simple para la imagen */
 body.mobile-os .tarjeta-wrapper {
     width: 80% !important;
-    margin: 10 !important;
+    margin: 25px !important;
     perspective: none !important; /* Quitar efectos 3D que marean en móvil */
 }
 
@@ -610,17 +614,22 @@ body.mobile-os .tarjeta img {
 }
 
 /* OCULTAR TODO EL TEXTO DE LA REJILLA */
+body.mobile-os .tarjeta-info,
+body.mobile-os .header-title,
+body.mobile-os .controles-orden {
+    display: none !important;
+}
 
 /* Hacer que el buscador sea lo único que se vea arriba */
 body.mobile-os header {
-    padding: 30px;
-    margin: 40px auto;
+    padding: 10px;
+    margin: 10px auto;
 }
 
 /* --- EL MODAL SIEMPRE DEBE VERSE COMPLETO --- */
 body.mobile-os .modal-content {
     flex-direction: column;
-    width: 50%;
+    width: 90%;
     padding: 15px;
     max-height: 85vh;
 }
