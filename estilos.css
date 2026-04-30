@@ -749,3 +749,76 @@ body.mobile-os #modalDisco {
     border: none !important; /* Eliminamos cualquier borde previo */
     background: none !important;
 }
+
+
+header {
+    display: flex !important;
+    flex-direction: column !important; /* Apilamos para dar espacio al título */
+    align-items: center !important;
+    gap: 15px !important;
+    padding: 20px 15px !important;
+    background: linear-gradient(180deg, #0a0f28 0%, #050515 100%) !important;
+    border-bottom: 3px solid #1a1f4d !important;
+    border-radius: 0 0 20px 20px !important; /* Redondeado solo abajo */
+    width: 100% !important;
+    margin: 0 0 20px 0 !important;
+    position: relative !important;
+
+}
+
+/* Título con efecto de brillo (Glow) */
+header h1 {
+    font-size: 1.8rem !important;
+    color: #fff !important;
+    text-align: center !important;
+    line-height: 1.1 !important;
+    margin: 0 !important;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5), 
+                 0 0 20px rgba(65, 105, 225, 0.4) !important;
+    font-weight: 800 !important;
+}
+
+/* Contenedor de controles (A-Z y Buscador) */
+.header-controls {
+    display: flex !important;
+    width: 100% !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 10px !important;
+}
+
+/* Botón A-Z Estilo Consola */
+#sort-btn {
+    background: linear-gradient(45deg, #2a0a5e, #4b0082) !important;
+    border: 2px solid #fff !important;
+    border-radius: 8px !important;
+    padding: 8px 12px !important;
+    color: #fff !important;
+    font-weight: bold !important;
+    font-size: 0.9rem !important;
+    min-width: 60px !important;
+    box-shadow: 0 0 10px rgba(75, 0, 130, 0.5) !important;
+}
+
+/* Barra de Búsqueda Estilo Tecnológico */
+.search-container {
+    flex: 1 !important;
+    max-width: 200px !important;
+    position: relative !important;
+}
+
+#search-input {
+    width: 100% !important;
+    background: rgba(0, 0, 0, 0.4) !important;
+    border: 2px solid #1a1f4d !important;
+    border-radius: 50px !important; /* Forma de cápsula como en la imagen */
+    padding: 8px 15px !important;
+    color: #4ed9ff !important; /* Azul tecnológico */
+    font-family: 'JetBrains Mono', monospace !important;
+    font-size: 0.8rem !important;
+    outline: none !important;
+}
+
+#search-input::placeholder {
+    color: rgba(78, 217, 255, 0.4) !important;
+}
