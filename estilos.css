@@ -578,23 +578,21 @@ footer {
 
 /* --- ESTILO MÓVIL ANDROID DEFINITIVO --- */
 
-body.mobile-os {
-    /* 1. Desactiva el desenfoque pesado en el fondo */
+/* 1. Grid: Corregimos el estiramiento de las portadas */
+body.mobile-os #grid-container {
+    /* Permitimos que el navegador ajuste las columnas pero con un ancho mínimo coherente */
+    gap: 15px !important;
+    padding: 10px !important;
+    justify-content: center !important;
     backdrop-filter: none !important; 
     -webkit-backdrop-filter: none !important;
 }
 
-body.mobile-os .header, 
-body.mobile-os .modal-content {
-    /* 2. Reemplaza el blur por un color sólido con transparencia */
-    background: rgba(10, 15, 45, 0.95) !important;
-    /* 3. Elimina sombras complejas que consumen GPU */
-    box-shadow: 0 4px 10px rgba(0,0,0,0.5) !important;
-}
-
-body.mobile-os .tarjeta,
+/* 2. Tarjetas: Forzamos la proporción real de GameCube */
 body.mobile-os .tarjeta-wrapper {
-    /* 4. Forzamos renderizado por hardware para suavizar el scroll */
+    width: 100% !important;
+    max-width: 110px !important; /* Evita que crezcan demasiado hacia arriba */
+    margin: 0 auto !important;
     will-change: transform;
     transform: translateZ(0);
     /* 5. Eliminamos animaciones de hover en móvil (no hay mouse) */
@@ -602,9 +600,35 @@ body.mobile-os .tarjeta-wrapper {
     animation: none !important;
 }
 
-body.mobile-os .modal-left div[style*="position: absolute"] {
-    /* 6. Si el disco giratorio es lento, quitamos la animación de rotación */
-    animation: none !important; 
+body.mobile-os .tarjeta {
+    width: 100% !important;
+    /* La clave: aspect-ratio evita que se estiren como en la captura */
+    aspect-ratio: 3 / 4.2 !important; 
+    height: auto !important;
+    border: 1.5px solid rgba(255, 255, 255, 0.3) !important;
+    background-size: cover !important;
+}
+
+/* 3. Modal de Edición: Arreglamos el caos visual */
+body.mobile-os .modal-content {
+    flex-direction: column !important;
+    width: 92% !important;
+    max-height: 85dvh !important; /* Evita que se corte por la barra de Android */
+    padding: 15px !important;
+    overflow-y: auto !important;
+    border-radius: 12px !important;
+    background: rgba(10, 15, 45, 0.95) !important;
+    /* 3. Elimina sombras complejas que consumen GPU */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5) !important;
+}
+
+/* Ajuste de imagen y disco en el modal */
+body.mobile-os .modal-left {
+    width: 100% !important;
+    display: flex;
+    justify-content: center;
+    position: relative;
+    margin-bottom: 20px;
 }
 
 body.mobile-os .modal-left img {
