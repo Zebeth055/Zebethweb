@@ -593,9 +593,6 @@ body.mobile-os .tarjeta-wrapper {
     width: 100% !important;
     max-width: 110px !important; /* Evita que crezcan demasiado hacia arriba */
     margin: 0 auto !important;
-    will-change: transform;
-    transform: translateZ(0);
-    /* 5. Eliminamos animaciones de hover en móvil (no hay mouse) */
     transition: none !important;
     animation: none !important;
 }
@@ -617,6 +614,7 @@ body.mobile-os .modal-content {
     padding: 15px !important;
     overflow-y: auto !important;
     border-radius: 12px !important;
+    /* 2. Reemplaza el blur por un color sólido con transparencia */
     background: rgba(10, 15, 45, 0.95) !important;
     /* 3. Elimina sombras complejas que consumen GPU */
     box-shadow: 0 4px 10px rgba(0,0,0,0.5) !important;
