@@ -225,3 +225,4 @@ document.addEventListener('keydown', (e) => {
 });
 // DISPARO INICIAL
 cargarDesdeFirebase();
+

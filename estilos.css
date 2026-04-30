@@ -573,3 +573,45 @@ footer {
     background: rgba(0,0,0,0.3);
     box-shadow: inset 2px 2px 0 rgba(0,0,0,0.5);
 }
+
+
+
+
+@media (max-width: 768px) {
+    /* 1. Rejilla ajustada: 3 columnas para que quepan más portadas */
+    #grid-container, .db-grid {
+        grid-template-columns: repeat(2, 1fr) !important; 
+        gap: 10px !important;
+        padding: 15px !important;
+    }
+
+    /* 2. Quitar el diseño de 'tarjeta' y dejar solo la imagen */
+    .tarjeta {
+        background: transparent !important; /* Quita el fondo azul */
+        border: 2px solid rgba(255, 255, 255, 0.2) !important; /* Borde sutil */
+        box-shadow: none !important;
+        height: auto !important;
+    }
+
+    .tarjeta img {
+        margin: 0 !important; /* Imagen a pantalla completa en su slot */
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover;
+        border-radius: 5px;
+    }
+
+    /* 3. OCULTAR NOMBRES Y TEXTOS en la rejilla principal */
+    .tarjeta-info, 
+    .tarjeta-wrapper:hover .tarjeta-info,
+    .info-body p, 
+    .header-title {
+        display: none !important; /* Solo queda la imagen */
+    }
+
+    /* 4. El Modal de detalles sí debe mantener el texto */
+    #modalDetalle .info-body p,
+    #modalDetalle .info-header {
+        display: block !important;
+    }
+}
