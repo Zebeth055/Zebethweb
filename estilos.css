@@ -576,47 +576,48 @@ footer {
 
 
 
-/* 1. Grid: Espaciado real y columnas equilibradas */
+/* 1. Grid Estático: Máximo rendimiento en móvil */
 body.mobile-os #grid-container {
+    /* En lugar de auto-fill, forzamos 2 columnas fijas */
+    /* Esto es drásticamente más rápido de procesar */
     display: grid !important;
-    /* Ajustamos el mínimo a 105px para que quepan 3 en la mayoría de pantallas sin amontonarse */
-    grid-template-columns: repeat(auto-fill, minmax(105px, 1fr)) !important;
-    /* Gap equilibrado: 20px vertical para separar filas, 12px horizontal */
-    gap: 20px 12px !important; 
+    grid-template-columns: 1fr 1fr !important; 
+    gap: 15px !important;
     padding: 15px !important;
-    justify-content: center !important;
-    /* Fondo sólido pero con el degradado radial simple que no laguea */
-    background: radial-gradient(circle at top, #050515 0%, #000 100%) !important;
+    
+    /* Eliminamos cualquier cálculo de fondo extra */
+    background: #000 !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
 }
 
-/* 2. Tarjetas: Recuperando la forma de caja de GameCube */
+/* 2. Tarjetas: Simplificación de capas */
 body.mobile-os .tarjeta-wrapper {
     width: 100% !important;
-    max-width: 120px !important; /* Limita el ancho para que no se deformen en pantallas grandes */
-    margin: 0 auto !important;
+    max-width: none !important;
+    margin: 0 !important;
+    /* Evitamos que el navegador cree capas 3D innecesarias */
     perspective: none !important;
+    transform: none !important;
 }
 
 body.mobile-os .tarjeta {
     width: 100% !important;
-    /* Mantenemos la proporción de la caja física */
-    aspect-ratio: 3 / 4.2 !important; 
+    aspect-ratio: 3 / 4.2 !important;
     height: auto !important;
-    /* Borde sólido y nítido (consume menos que el translúcido) */
-    border: 2px solid #1a1f4d !important;
-    border-radius: 8px !important;
-    overflow: hidden !important;
-    background-color: #000 !important;
-    /* Optimizaciones de renderizado */
-    contain: paint;
-    will-change: auto;
+    
+    /* Forzamos a que la tarjeta sea un dibujo plano (Bitmap) */
+    /* Esto evita que el scroll se sienta pesado */
+    contain: strict; 
+    border: 1px solid #222 !important;
+    box-shadow: none !important;
+    background: #050505 !important;
 }
 
 body.mobile-os .tarjeta img {
-    width: 100% !important;
-    height: 100% !important;
-    object-fit: cover !important; /* Asegura que la imagen llene la tarjeta sin bordes raros */
+    /* Importante: Evita que la imagen parpadee o laguee */
     display: block !important;
+    content-visibility: auto;
 }
 
 /* 3. Header: Un poco más de aire */
