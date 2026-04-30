@@ -1,6 +1,6 @@
 // 1. LOS IMPORTS
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, addDoc, deleteDoc, doc, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getFirestore, collection, addDoc, deleteDoc, doc, query, orderBy, onSnapshot, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 // 2. CONFIGURACIÓN
 const firebaseConfig = {
@@ -27,7 +27,7 @@ const warningModal = document.getElementById('warningModal');
 const btnOkWarning = document.getElementById('btnOkWarning');
 const infoText = document.getElementById('info-text');
 
-// 4. FUNCIONES MODALES
+// 4. FUNCIONES MODALES DE SISTEMA (ESTILO CLÁSICO)
 function customConfirm(mensaje) {
     return new Promise((resolve) => {
         confirmMessage.innerHTML = mensaje;
@@ -40,10 +40,7 @@ function customConfirm(mensaje) {
 function showWarning() {
     return new Promise((resolve) => {
         warningModal.style.display = 'flex';
-        btnOkWarning.onclick = () => {
-            warningModal.style.display = 'none';
-            resolve();
-        };
+        btnOkWarning.onclick = () => { warningModal.style.display = 'none'; resolve(); };
     });
 }
 
@@ -55,7 +52,7 @@ function showSuccess() {
     });
 }
 
-// 5. CARGAR JUEGOS (TIEMPO REAL CON ONSNAPSHOT)
+// 5. CARGAR JUEGOS (TIEMPO REAL)
 function iniciarEscuchaDB() {
     if (!listaContainer) return;
 
@@ -72,47 +69,146 @@ function iniciarEscuchaDB() {
             item.className = 'db-item';
             item.innerHTML = `
                 <button class="delete-btn" data-id="${idDoc}">X</button>
-                <img src="./portadas discos/${datos.id}.png" class="disco-icon" title="${datos.nombre}" onerror="this.src='https://via.placeholder.com/60?text=No+Disc'">
+                <img src="./portadas discos/${datos.id}.png" 
+                     class="disco-icon" 
+                     title="${datos.nombre}" 
+                     onerror="this.src='./portadas discos/undefinedcd.png'; this.onerror=null;">
             `;
 
-            // EVENTOS DE MOUSE PARA EL RECTÁNGULO DE INFORMACIÓN
-           item.onmouseenter = () => {
-    if (infoText) {
-        // Mostramos Nombre e ID (puedes ajustar el formato aquí)
-        infoText.innerHTML = `${datos.nombre} <span style="font-size: 0.8em; color: var(--gc-cyan-neon); margin-left: 15px;">[${datos.id}]</span>`;
-    }
-};
+            item.onclick = (e) => {
+                if (!e.target.classList.contains('delete-btn')) {
+                    abrirModalDetalle(datos, idDoc);
+                }
+            };
 
-item.onmouseleave = () => {
-    if (infoText) {
-        infoText.innerText = "Zebethweb Database - Select a game";
-    }
-};
+            item.onmouseenter = () => {
+                if (infoText) {
+                    infoText.innerHTML = `${datos.nombre} <span style="font-size: 0.8em; color: var(--gc-cyan-neon); margin-left: 15px;">[${datos.id}]</span>`;
+                }
+            };
+
+            item.onmouseleave = () => {
+                if (infoText) infoText.innerText = "Zebethweb Database - Select a game";
+            };
 
             listaContainer.appendChild(item);
         });
 
-        // Re-vincular eventos de borrar a los nuevos elementos generados
-        vincularBotonesBorrar();
+        vincularBotonesBorrarRapido();
     });
 }
 
-function vincularBotonesBorrar() {
+// 6. LÓGICA DE BORRADO RÁPIDO (BOTÓN X)
+function vincularBotonesBorrarRapido() {
     document.querySelectorAll('.delete-btn').forEach(btn => {
         btn.onclick = async (e) => {
-            e.stopPropagation(); // Evita que el click se confunda con otros eventos
-            const id = e.target.getAttribute('data-id');
-            const confirmar = await customConfirm("The entry will be deleted.<br>Format it now?");
+            e.stopPropagation();
+            const id = btn.getAttribute('data-id');
+            const confirmar = await customConfirm("FAST DELETE:<br>¿Eliminar entrada ahora?");
             
             if(confirmar) {
-                await deleteDoc(doc(db, "juegos", id));
-                await showSuccess(); 
+                try {
+                    await deleteDoc(doc(db, "juegos", id));
+                    await showSuccess(); 
+                } catch (error) { console.error("Error:", error); }
             }
         };
     });
 }
 
-// 6. GUARDAR JUEGO
+// 7. MODAL DETALLE (EDICIÓN E IMÁGENES DE RESPALDO)
+async function abrirModalDetalle(datos, idDoc) {
+    const modal = document.getElementById('modalDetalle');
+    const modalImagen = document.getElementById('modalImagen');
+    const modalDisco = document.getElementById('modalDisco');
+
+    // Configurar respaldo de imágenes
+    if (modalImagen) {
+        modalImagen.onerror = function() {
+            this.src = './portadas/undefined.png';
+            this.onerror = null;
+        };
+        modalImagen.src = `./portadas/${datos.id}.png`;
+    }
+
+    if (modalDisco) {
+        modalDisco.onerror = function() {
+            this.src = './portadas discos/undefinedcd.png';
+            this.onerror = null;
+        };
+        modalDisco.src = `./portadas discos/${datos.id}.png`;
+        modalDisco.classList.add('girando');
+    }
+
+    // Llenar inputs
+    const inputNombre = document.getElementById('editNombre');
+    const inputID = document.getElementById('editID');
+    const inputFormato = document.getElementById('editFormato');
+    const inputURL = document.getElementById('editURL');
+
+    if (inputNombre) inputNombre.value = datos.nombre || "";
+    if (inputID) inputID.value = datos.id || "";
+    if (inputFormato) inputFormato.value = datos.formato || "";
+    if (inputURL) inputURL.value = datos.url || "";
+
+    const fechaTxt = document.getElementById('modalFecha');
+    if (fechaTxt) {
+        fechaTxt.innerText = datos.fecha_subida?.toDate 
+            ? datos.fecha_subida.toDate().toLocaleDateString() 
+            : "N/A";
+    }
+
+    // Botón Actualizar (A)
+    const btnActualizar = document.getElementById('btnActualizarModal');
+    btnActualizar.onclick = async () => {
+        const confirmar = await customConfirm("¿Guardar cambios en la base de datos?");
+        if (confirmar) {
+            try {
+                const juegoRef = doc(db, "juegos", idDoc);
+                await updateDoc(juegoRef, {
+                    nombre: inputNombre.value,
+                    id: inputID.value,
+                    formato: inputFormato.value,
+                    url: inputURL.value
+                });
+                modal.style.display = 'none';
+                await showSuccess();
+            } catch (error) { console.error("Error al actualizar:", error); }
+        }
+    };
+
+    // Botón Borrar (B)
+    const btnBorrarInterno = document.getElementById('btnBorrarDesdeModal');
+    btnBorrarInterno.onclick = async () => {
+        const confirmar = await customConfirm(`¿ELIMINAR PERMANENTEMENTE?<br>${datos.nombre}`);
+        if (confirmar) {
+            await deleteDoc(doc(db, "juegos", idDoc));
+            modal.style.display = 'none';
+            await showSuccess();
+        }
+    };
+
+    // Botón Cerrar (X)
+    const btnCerrar = document.getElementById('btnCerrarModal');
+    btnCerrar.onclick = () => {
+        modal.style.display = 'none';
+        if (modalDisco) modalDisco.classList.remove('girando');
+    };
+
+    modal.style.display = 'flex';
+}
+
+// 8. EVENTOS DE CIERRE
+window.onclick = (event) => {
+    const modal = document.getElementById('modalDetalle');
+    if (event.target === modal) {
+        modal.style.display = 'none';
+        const disco = document.getElementById('modalDisco');
+        if (disco) disco.classList.remove('girando');
+    }
+};
+
+// 9. GUARDAR NUEVO JUEGO
 document.getElementById('btnGuardar').addEventListener('click', async () => {
     const nombre = document.getElementById('nombre').value;
     const id = document.getElementById('id_serial').value;
@@ -128,20 +224,16 @@ document.getElementById('btnGuardar').addEventListener('click', async () => {
         await addDoc(collection(db, "juegos"), {
             nombre, id, formato, url, fecha_subida: new Date()
         });
-        
         await showSuccess();
         limpiarCampos();
-    } catch (e) { 
-        console.error("Error al guardar:", e); 
-    }
+    } catch (e) { console.error("Error al guardar:", e); }
 });
 
-// 7. UTILIDADES
 function limpiarCampos() {
     document.querySelectorAll('.form-container input').forEach(i => i.value = "");
 }
 
 document.getElementById('btnLimpiar').addEventListener('click', limpiarCampos);
 
-// INICIAR ESCUCHA AL CARGAR
+// INICIALIZACIÓN
 iniciarEscuchaDB();

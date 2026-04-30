@@ -49,35 +49,51 @@
     <div id="info-text">Select a game</div>
 </div>
 
+<!-- 1. MODAL DE DETALLE (Independiente) -->
 <div class="modal-overlay" id="modalDetalle" style="display: none;">
     <div class="modal-content">
-        <div class="modal-left" style="position: relative; display: flex; align-items: center; justify-content: center;">
-            <img id="modalImagen" src="" alt="Portada" style="width: 100%; border-radius: 10px; border: 3px solid #fff;">
-            
-            <div style="position: absolute; width: 60%; right: -20px; bottom: -10px; z-index: 2;">
-                <img id="modalDisco" src="" alt="Disco" style="border-radius: 50%; width: 100%; filter: drop-shadow(0 0 10px rgba(0,0,0,0.8));">
-            </div>
-        </div>
+<div class="modal-left" style="position: relative; display: flex; align-items: center; justify-content: center; margin-right: 40px; min-width: 300px;">
+    <img id="modalImagen" src="" alt="Portada" style="width: 100%; border-radius: 10px; border: 3px solid #fff;">
+    
+    <!-- El disco ahora se posiciona un poco más hacia adentro de la portada -->
+    <div style="position: absolute; width: 65%; right: -30px; bottom: -10px; z-index: 2;">
+        <img id="modalDisco" src="" alt="Disco" style="border-radius: 50%; width: 100%; filter: drop-shadow(0 0 15px rgba(0,0,0,0.9));">
+    </div>
+</div>
 
         <div class="modal-right">
-            <h2 id="modalTitulo" class="info-header">TITULO</h2>
+            <div class="info-header">EDITAR ENTRADA</div>
             <div class="info-body">
-                <p>ID: <span id="modalID" style="color: var(--btn-a);"></span></p>
-                <p>FORMATO: <span id="modalFormato" style="color: #fff;"></span></p>
-                <p>FECHA REGISTRO: <span id="modalFecha" style="color: #fff;"></span></p>
+                <label>Nombre del Juego:</label>
+                <input type="text" id="editNombre" class="input-gc">
+                <label>ID / Serial:</label>
+                <input type="text" id="editID" class="input-gc">
+                <label>Formato:</label>
+                <input type="text" id="editFormato" class="input-gc">
+                <label>URL de Descarga/Info:</label>
+                <input type="text" id="editURL" class="input-gc">
+                <p>Subido el: <span id="modalFecha"></span></p>
             </div>
-            
-            <div class="modal-actions">
-                <a id="modalLinkDescarga" href="#" target="_blank" style="text-decoration: none;">
-                    <button class="btn-gc btn-gc-a"><span>(A)</span> DESCARGAR</button>
-                </a>
-                <button class="btn-gc btn-gc-b" id="btnCerrarModal"><span>(B)</span> ATRÁS</button>
-            </div>
+<div class="modal-actions">
+    <button class="btn-gc btn-gc-a" id="btnActualizarModal">
+        <span>(A)</span> ACTUALIZAR
+    </button>
+    
+    <button class="btn-gc btn-gc-b" id="btnBorrarDesdeModal">
+        <span>(B)</span> BORRAR
+    </button>
+
+    <button class="btn-gc btn-gc-x" id="btnCerrarModal" style="background: #0080ff;">
+        <span>(X)</span> CERRAR
+    </button>
+</div>
         </div>
     </div>
 </div>
 
-<div id="confirmModal" class="confirm-overlay" style="display: none;">
+<!-- 2. MODALES DE SISTEMA (FUERA DE TODO, AL FINAL) -->
+
+<div id="confirmModal" class="confirm-overlay" style="display: none; z-index: 9999;">
     <div class="confirm-box">
         <div class="confirm-content">
             <p id="confirmMessage">The data will be deleted.<br>Continue?</p>
@@ -89,7 +105,7 @@
     </div>
 </div>  
 
-<div id="successModal" class="confirm-overlay" style="display: none;">
+<div id="successModal" class="confirm-overlay" style="display: none; z-index: 9999;">
     <div class="confirm-box" style="background: linear-gradient(135deg, #00008b 0%, #1e90ff 100%);">
         <div class="confirm-content">
             <p>SUCCESS:<br>Data has been written.</p>
@@ -100,7 +116,7 @@
     </div>
 </div>
 
-<div id="warningModal" class="confirm-overlay" style="display: none;">
+<div id="warningModal" class="confirm-overlay" style="display: none; z-index: 9999;">
     <div class="confirm-box" style="background: linear-gradient(135deg, #cc7a00 0%, #663d00 100%);">
         <div class="confirm-content">
             <p>⚠️ WARNING:<br>All slots must be filled!</p>
@@ -112,6 +128,5 @@
 </div>
 
 <script type="module" src="script_admin.js"></script>
-
 </body>
 </html>

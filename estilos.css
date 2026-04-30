@@ -582,13 +582,12 @@ body.mobile-os {
 
 /* 1. Centrado del Grid */
 body.mobile-os #grid-container {
-    grid-template-columns: repeat(3, 1fr) !important; /* 4 columnas para el 30% más pequeño */
-    gap: 30px !important;
-    padding: 20px !important;
-    justify-items: center; /* Centra el contenido de cada celda */
+    /* Auto-fit intentará meter las que quepan, pero nunca menos de 100px */
+    gap: 15px !important; /* Gap más pequeño para ganar espacio */
+    padding: 15px !important;
+    justify-content: center !important;
     align-items: start;
 }
-
 /* 2. El envoltorio debe dejar que la rejilla mande */
 body.mobile-os .tarjeta-wrapper {
     width: 100% !important; /* Que ocupe el ancho de su columna */
@@ -611,23 +610,24 @@ body.mobile-os .tarjeta {
 /* 3. Corrección del Modal (Para que NO sobresalga) */
 body.mobile-os .modal-content {
     flex-direction: column !important;
-    width: 85% !important;     /* Casi todo el ancho del cel */
+    width: 90% !important;     
     height: auto !important;
-    max-height: 90vh !important; /* No más alto que el 90% de la pantalla */
+    /* dvh detecta la barra de navegación de Android dinámicamente */
+    max-height: 85dvh !important; 
     padding: 20px !important;
-    overflow-y: auto !important; /* Si el contenido es largo, permite scroll interno */
-    gap: 15px !important;
-    background: rgba(10, 15, 45, 0.98) !important; /* Más opaco para leer mejor */
+    overflow-y: auto !important; 
+    -webkit-overflow-scrolling: touch; /* Scroll suave en móviles */
+    gap: 10px !important;
+    background: rgba(10, 15, 45, 0.98) !important;
+    border: 2px solid rgba(255, 255, 255, 0.2) !important;
 }
 
 /* Ajuste de secciones del modal */
-body.mobile-os .modal-left {
-    flex: none !important;
-    width: 90% !important;
-}
+body.mobile-os .modal-left, 
 body.mobile-os .modal-right {
     flex: none !important;
-    width: 80% !important;
+    width: 100% !important; /* Cambiado de 80/90% a 100% para evitar desvíos */
+    box-sizing: border-box !important;
 }
 
 body.mobile-os .modal-left img {
@@ -642,9 +642,12 @@ body.mobile-os .modal-actions {
 }
 
 body.mobile-os .btn-gc {
-    width: 50% !important;
+    width: 100% !important; /* Botones a lo ancho para fácil acceso con el pulgar */
+    max-width: 250px !important;
+    margin: 0 auto !important;
     justify-content: center !important;
-    padding: 15px !important;
+    padding: 12px !important;
+    font-size: 0.9rem !important;
 }
 
 /* Ocultar elementos molestos en móvil */

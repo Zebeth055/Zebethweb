@@ -4,7 +4,6 @@ const detectOS = () => {
 
     if (isMobile) {
         document.body.classList.add('mobile-os');
-        console.log("MaXteC: Modo Android detectado");
     }
 };
 
