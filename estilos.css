@@ -575,43 +575,57 @@ footer {
 }
 
 
+/* --- ESTILO MÓVIL FORZADO (MODO PORTADA LIMPIA) --- */
+/* Rejilla de 3 columnas estilo catálogo */
+body.mobile-os #grid-container, 
+body.mobile-os .db-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 1px !important;
+    padding: 30px !important;
+}
 
+/* Convertir la tarjeta en un contenedor simple para la imagen */
+body.mobile-os .tarjeta-wrapper {
+    width: 80% !important;
+    margin: 10 !important;
+    perspective: none !important; /* Quitar efectos 3D que marean en móvil */
+}
 
-@media (max-width: 768px) {
-    /* 1. Rejilla ajustada: 3 columnas para que quepan más portadas */
-    #grid-container, .db-grid {
-        grid-template-columns: repeat(2, 1fr) !important; 
-        gap: 10px !important;
-        padding: 15px !important;
-    }
+body.mobile-os .tarjeta {
+    height: auto !important;
+    aspect-ratio: 3 / 4.2; /* Proporción de caja de GameCube */
+    background: transparent !important;
+    border: 1px solid rgba(255,255,255,0.3) !important;
+    box-shadow: none !important;
+    animation: none !important; /* Quitamos el baile en móvil */
+}
 
-    /* 2. Quitar el diseño de 'tarjeta' y dejar solo la imagen */
-    .tarjeta {
-        background: transparent !important; /* Quita el fondo azul */
-        border: 2px solid rgba(255, 255, 255, 0.2) !important; /* Borde sutil */
-        box-shadow: none !important;
-        height: auto !important;
-    }
+/* La imagen ocupa TODO el espacio */
+body.mobile-os .tarjeta img {
+    margin: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover;
+    border-radius: 4px;
+}
 
-    .tarjeta img {
-        margin: 0 !important; /* Imagen a pantalla completa en su slot */
-        width: 100% !important;
-        height: 100% !important;
-        object-fit: cover;
-        border-radius: 5px;
-    }
+/* OCULTAR TODO EL TEXTO DE LA REJILLA */
 
-    /* 3. OCULTAR NOMBRES Y TEXTOS en la rejilla principal */
-    .tarjeta-info, 
-    .tarjeta-wrapper:hover .tarjeta-info,
-    .info-body p, 
-    .header-title {
-        display: none !important; /* Solo queda la imagen */
-    }
+/* Hacer que el buscador sea lo único que se vea arriba */
+body.mobile-os header {
+    padding: 30px;
+    margin: 40px auto;
+}
 
-    /* 4. El Modal de detalles sí debe mantener el texto */
-    #modalDetalle .info-body p,
-    #modalDetalle .info-header {
-        display: block !important;
-    }
+/* --- EL MODAL SIEMPRE DEBE VERSE COMPLETO --- */
+body.mobile-os .modal-content {
+    flex-direction: column;
+    width: 50%;
+    padding: 15px;
+    max-height: 85vh;
+}
+
+body.mobile-os .modal-right .info-header,
+body.mobile-os .modal-right .info-body p {
+    display: block !important; /* Aquí sí queremos ver el nombre y el ID */
 }

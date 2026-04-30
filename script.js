@@ -1,3 +1,15 @@
+const detectOS = () => {
+    const ua = navigator.userAgent;
+    const isMobile = /Android|iPhone|iPad|iPod/i.test(ua);
+
+    if (isMobile) {
+        document.body.classList.add('mobile-os');
+        console.log("MaXteC: Modo Android detectado");
+    }
+};
+
+detectOS();
+
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
