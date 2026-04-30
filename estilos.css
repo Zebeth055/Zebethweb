@@ -576,61 +576,57 @@ footer {
 
 
 
-/* --- MODO RENDIMIENTO EXTREMO (Zebethweb) --- */
-
-body.mobile-os {
-    /* 1. Fondo negro sólido: Los gradientes radiales en el body matan la GPU en scroll */
-    background-image: none !important;
-    background-color: #000 !important;
-    background-attachment: scroll !important;
-}
-
-/* 2. Simplificamos el contenedor del grid */
+/* 1. Grid: Espaciado real y columnas equilibradas */
 body.mobile-os #grid-container {
-    background: none !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)) !important;
-    gap: 15px !important;
-    padding: 10px !important;
+    display: grid !important;
+    /* Ajustamos el mínimo a 105px para que quepan 3 en la mayoría de pantallas sin amontonarse */
+    grid-template-columns: repeat(auto-fill, minmax(105px, 1fr)) !important;
+    /* Gap equilibrado: 20px vertical para separar filas, 12px horizontal */
+    gap: 20px 12px !important; 
+    padding: 15px !important;
+    justify-content: center !important;
+    /* Fondo sólido pero con el degradado radial simple que no laguea */
+    background: radial-gradient(circle at top, #050515 0%, #000 100%) !important;
 }
 
-/* 3. Tarjetas: "Aplanamos" el diseño */
-body.mobile-os .tarjeta {
-    /* Quitamos el borde translúcido por uno sólido */
-    border: 1px solid #333 !important;
-    /* Forzamos al navegador a tratar cada tarjeta como un bloque aislado */
-    contain: strict;
-    box-shadow: none !important;
-    /* Eliminamos el translateZ si causa parpadeo, will-change es más moderno */
-    will-change: transform;
-}
-
-/* 4. IMPORTANTE: Matamos las etiquetas internas */
-/* Si la etiqueta .tarjeta-info tiene blur, lagueará el scroll */
-body.mobile-os .tarjeta-info {
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-    background: rgba(0, 0, 40, 0.9) !important;
-    display: none !important; /* En móvil es mejor que no aparezca al hacer hover */
-}
-
-/* 5. Header: Lo más simple posible */
-body.mobile-os header {
-    position: static !important; /* Ni fixed ni sticky, solo un bloque arriba */
+/* 2. Tarjetas: Recuperando la forma de caja de GameCube */
+body.mobile-os .tarjeta-wrapper {
     width: 100% !important;
-    margin: 0 !important;
-    padding: 10px !important;
-    background: #0a0f28 !important;
-    border: none !important;
-    border-bottom: 2px solid #1a1f4d !important;
-    border-radius: 0 !important;
+    max-width: 120px !important; /* Limita el ancho para que no se deformen en pantallas grandes */
+    margin: 0 auto !important;
+    perspective: none !important;
 }
 
-/* 6. Desactivamos todas las animaciones de GameCube en móvil */
-body.mobile-os .tarjeta:hover img, 
-body.mobile-os .tarjeta:hover .tarjeta-info,
-body.mobile-os .tarjeta-wrapper:hover .tarjeta {
-    animation: none !important;
-    transform: none !important;
+body.mobile-os .tarjeta {
+    width: 100% !important;
+    /* Mantenemos la proporción de la caja física */
+    aspect-ratio: 3 / 4.2 !important; 
+    height: auto !important;
+    /* Borde sólido y nítido (consume menos que el translúcido) */
+    border: 2px solid #1a1f4d !important;
+    border-radius: 8px !important;
+    overflow: hidden !important;
+    background-color: #000 !important;
+    /* Optimizaciones de renderizado */
+    contain: paint;
+    will-change: auto;
+}
+
+body.mobile-os .tarjeta img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important; /* Asegura que la imagen llene la tarjeta sin bordes raros */
+    display: block !important;
+}
+
+/* 3. Header: Un poco más de aire */
+body.mobile-os header {
+    position: relative !important;
+    width: 92% !important;
+    margin: 10px auto 20px !important;
+    padding: 15px !important;
+    background: #0a0f28 !important;
+    border: 2px solid #1a1f4d !important;
+    border-radius: 12px !important;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5) !important;
 }
