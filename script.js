@@ -127,13 +127,27 @@ function renderizarPagina() {
     }
 
     // Dibujamos los juegos
-    juegosVisibles.forEach(p => {
+juegosVisibles.forEach(p => {
         const wrapper = document.createElement('div');
-        wrapper.className = 'tarjeta-wrapper'; // Nace invisible (opacity 0)
+        wrapper.className = 'tarjeta-wrapper'; 
 
         const card = document.createElement('div');
         card.className = 'tarjeta';
-        card.onclick = () => abrirModal(p);
+        
+        // --- AQUÍ ES DONDE VA EL SONIDO ---
+        card.onclick = () => {
+            // 1. Generar número aleatorio entre 1 y 3
+    const randomNum = Math.floor(Math.random() * 3) + 1;
+    
+    // 2. Seleccionar el sonido correspondiente usando el número
+    const selectSound = document.getElementById(`sound-select-${randomNum}`);
+    
+    if (selectSound) {
+        selectSound.currentTime = 0; 
+        selectSound.play().catch(e => console.log("Audio bloqueado:", e));
+    }
+            abrirModal(p); // Llama al modal después del sonido
+        };
 
         card.innerHTML = `
             <img src="${rutaLocalPortadas}${p.id}.png" alt="${p.nombre}" onerror="this.src='https://via.placeholder.com/210x270'">
@@ -303,3 +317,43 @@ document.addEventListener('keydown', (e) => {
 });
 
 cargarDesdeFirebase();
+// --- 11. CONTROL DE VOLUMEN MAESTRO ---
+const volumeSlider = document.getElementById('master-volume');
+
+// 1. Función para el efecto visual de "llenado" (Cian/Azul oscuro)
+function updateVolumeStyle(value) {
+    if (!volumeSlider) return;
+    const percentage = value * 100;
+    volumeSlider.style.background = `linear-gradient(90deg, #00ffff ${percentage}%, #050520 ${percentage}%)`;
+}
+
+// 2. Función para aplicar el volumen a todos los elementos <audio>
+function updateGlobalVolume(volume) {
+    const allAudios = document.querySelectorAll('audio');
+    allAudios.forEach(audio => {
+        if (audio.id === 'bg-music') {
+            audio.volume = volume * 0.4; // Música de fondo más tenue
+        } else {
+            audio.volume = volume; // Efectos y Jingle
+        }
+    });
+}
+
+// 3. Inicialización y Eventos
+if (volumeSlider) {
+    // Recuperar volumen guardado
+    const savedVol = localStorage.getItem('gamecube-volume') || 0.5;
+    volumeSlider.value = savedVol;
+    
+    // Aplicar estilo visual y volumen inicial
+    updateVolumeStyle(savedVol);
+    setTimeout(() => updateGlobalVolume(savedVol), 1000);
+
+    // UN SOLO EventListener para todo
+    volumeSlider.addEventListener('input', (e) => {
+        const val = e.target.value;
+        updateGlobalVolume(val);  // Cambia el sonido
+        updateVolumeStyle(val);   // Cambia el color de la barra
+        localStorage.setItem('gamecube-volume', val); // Guarda
+    });
+}
