@@ -2,6 +2,7 @@
 <html lang="es">
 
     
+    
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -22,8 +23,23 @@
     <link rel="stylesheet" href="estilos.css">
 </head>
 
+<div id="intro-screen">
+<video id="gamecube-intro" playsinline preload="auto">
+    <source src="intro.mp4" type="video/mp4">
+        Tu navegador no soporta videos.
+</video>
+    <button id="start-btn">Power</button>
+</div>   
+    
 <body>
+<audio id="startup-jingle" preload="auto">
+    <source src="sounds/Startup.mp3" type="audio/mpeg">
+</audio>
 
+<audio id="bg-music" loop preload="auto">
+    <source src="sounds/Nintendo GameCube Menu.mp3" type="audio/mpeg">
+</audio>
+    
     <header>
         <div class="header-title">Gamecube Backups</div>
         <div class="controles-orden">

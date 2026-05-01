@@ -199,10 +199,16 @@ header::before {
     transform: rotateX(0deg) rotateY(0deg);
 }
 
-.tarjeta-wrapper:hover .tarjeta {
-    border-color: var(--bordes);
-    /* Aplicamos el baile a TODA la tarjeta (incluyendo bordes) */
-    animation: baileCompleto 4s ease-in-out infinite;
+.tarjeta-wrapper {
+    opacity: 0;
+    transform: translateY(30px); /* Un poco más de recorrido para que se note */
+    transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+/* 2. Estado final: se activan mediante la función animarGrid */
+.tarjeta-wrapper.show {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .tarjeta:hover { 
@@ -584,6 +590,60 @@ footer {
     box-shadow: inset 2px 2px 0 rgba(0,0,0,0.5);
 }
 
+#intro-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999; /* Por encima de todo */
+    transition: opacity 0.8s ease;
+}
+
+#gamecube-intro {
+    width: 100%;
+    max-width: 800px; /* Para que no se pixelee en PC */
+}
+
+/* Clase para ocultar la intro */
+.fade-out {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Estado inicial: ocultos y un poco más abajo */
+.game-card {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+/* Estado final: se activan mediante JS */
+.game-card.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+#start-btn {
+    position: absolute;
+    padding: 15px 30px;
+    background: var(--btn-a); /* Tu verde neón */
+    border: none;
+    border-radius: 50px;
+    font-family: var(--font-main);
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 0 20px var(--btn-a);
+    z-index: 10000;
+}
+
+/* Ocultar el botón cuando el video empiece */
+.hidden { display: none; }
+
 /* --- SISTEMA DE PAGINACIÓN (PC) --- */
 .pagination-container {
     display: flex;
@@ -657,10 +717,19 @@ footer {
     transition: opacity 0.3s ease-in-out;
 }
 
+/* Estado inicial: invisible */
 .tarjeta-wrapper {
-    /* Aplicamos la animación a cada tarjeta con un pequeño retraso */
-    animation: fadeInCard 0.4s ease forwards;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
 }
+
+/* Estado activo: visible */
+.tarjeta-wrapper.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
 
 /* Clase para el efecto de desvanecimiento al cambiar de página */
 .grid-fade-out {

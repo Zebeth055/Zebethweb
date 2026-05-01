@@ -11,6 +11,55 @@ const firebaseConfig = {
     appId: "1:497969896150:web:9fc8cecef549fa2d284777"
 };
 
+const startBtn = document.getElementById('start-btn');
+const intro = document.getElementById('intro-screen');
+const video = document.getElementById('gamecube-intro');
+const jingle = document.getElementById('startup-jingle');
+const bgMusic = document.getElementById('bg-music');
+let introTerminada = false; // Esta es la llave
+
+// PASO 1: Iniciar video al presionar botón
+startBtn.addEventListener('click', () => {
+    startBtn.style.display = 'none';
+    
+    // Configuración para Android
+    video.muted = false;
+    video.volume = 1.0;
+    
+    video.play().catch(error => {
+        video.play();
+    });
+});
+
+// PASO 2: Al terminar video -> Jingle y Desvanecimiento
+video.onended = () => {
+    intro.classList.add('fade-out');
+    jingle.play();
+    
+    introTerminada = true; // <--- Abrimos la llave aquí
+    animarGrid(); // Disparamos la animación manualmente esta primera vez
+
+    setTimeout(() => {
+        if(intro) intro.remove();
+    }, 800);
+};
+
+function animarGrid() {
+    const cards = document.querySelectorAll('.tarjeta-wrapper:not(.show)');
+    
+    cards.forEach((card, index) => {
+        setTimeout(() => {
+            card.classList.add('show');
+        }, 50 * index); // 50ms para un efecto cascada más fluido
+    });
+}
+
+// PASO 3: Al terminar Jingle -> Música de fondo
+jingle.onended = () => {
+    bgMusic.volume = 0.4;
+    bgMusic.play();
+};
+
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
@@ -68,28 +117,41 @@ function renderizarPagina() {
     const fin = inicio + juegosPorPagina;
     const juegosVisibles = juegosFiltrados.slice(inicio, fin);
 
+    // Si no hay juegos (ej. búsqueda sin éxito)
     if (juegosVisibles.length === 0) {
         container.innerHTML = `<div style="color:white; grid-column: 1/-1; text-align:center; padding: 50px; font-family: 'JetBrains Mono', monospace;">
                                 [ SIN DATOS EN ESTA SECCIÓN ]
                                </div>`;
+        actualizarControlesPaginacion();
+        return;
     }
 
+    // Dibujamos los juegos
     juegosVisibles.forEach(p => {
         const wrapper = document.createElement('div');
-        wrapper.className = 'tarjeta-wrapper';
-        
+        wrapper.className = 'tarjeta-wrapper'; // Nace invisible (opacity 0)
+
         const card = document.createElement('div');
         card.className = 'tarjeta';
         card.onclick = () => abrirModal(p);
-        
+
         card.innerHTML = `
             <img src="${rutaLocalPortadas}${p.id}.png" alt="${p.nombre}" onerror="this.src='https://via.placeholder.com/210x270'">
             <div class="tarjeta-info">${p.nombre}</div>
         `;
-        
+
         wrapper.appendChild(card);
         container.appendChild(wrapper);
     });
+
+    // --- LA LLAVE DE SEGURIDAD ---
+    // Si la intro ya terminó (o sea, estamos buscando u ordenando), animamos ya.
+    // Si NO ha terminado, no hacemos nada aquí, porque el "video.onended" lo hará después.
+    if (introTerminada) {
+        requestAnimationFrame(() => {
+            animarGrid();
+        });
+    }
 
     actualizarControlesPaginacion();
 }
