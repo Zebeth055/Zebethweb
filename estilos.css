@@ -143,14 +143,24 @@ header::before {
     /* Tinte cian en el texto de búsqueda */
     text-shadow: 0 0 5px rgba(0, 255, 204, 0.5);
 }
-
-#grid-container {
-    padding: 40px 20px 120px;
+.grid-container {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(30px, 240px));
-    gap: 40px;
-    justify-content: center;
+    /* Mantenemos tu lógica de auto-relleno profesional */
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 25px; /* Un poco más de espacio entre tarjetas mejora la estética */
+    
+    /* SOLUCIÓN AL PEGADO DE ESQUINAS: */
+    width: 92%;           /* No ocupa el 100%, así deja aire a los lados */
+    max-width: 1400px;    /* Evita que en pantallas gigantes las tarjetas se separen demasiado */
+    margin: 40px auto;    /* 'auto' lo centra horizontalmente y 40px le da aire arriba/abajo */
+    
+    padding: 20px;
+    justify-content: center; 
+    align-content: start;
+    min-height: 80vh;
+    transition: opacity 0.3s ease-in-out;
 }
+
 
 /* 1. El "Envoltorio" (Maneja el subir/bajar y la sombra) */
 .tarjeta-wrapper {
@@ -574,6 +584,89 @@ footer {
     box-shadow: inset 2px 2px 0 rgba(0,0,0,0.5);
 }
 
+/* --- SISTEMA DE PAGINACIÓN (PC) --- */
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    padding: 20px 0;
+    margin-top: 5px;
+}
+
+.btn-page {
+    background: #0a0f28;
+    border: 2px solid #1a1f4d;
+    color: #fff;
+    padding: 10px 25px;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-radius: 4px;
+}
+
+.btn-page:hover:not(:disabled) {
+    background: #1a1f4d;
+    border-color: #4ed9ff;
+    color: #4ed9ff;
+    box-shadow: 0 0 15px rgba(78, 217, 255, 0.3);
+}
+
+.btn-page:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    filter: grayscale(1);
+}
+
+#page-info {
+    color: #4ed9ff;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+/* --- FOOTER GUIDE (PC) --- */
+
+
+.guide-item {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+/* Animación de entrada para las tarjetas */
+@keyframes fadeInCard {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    padding: 20px;
+    /* Evita que el contenedor colapse y haga saltar el footer */
+    min-height: 70vh; 
+    transition: opacity 0.3s ease-in-out;
+}
+
+.tarjeta-wrapper {
+    /* Aplicamos la animación a cada tarjeta con un pequeño retraso */
+    animation: fadeInCard 0.4s ease forwards;
+}
+
+/* Clase para el efecto de desvanecimiento al cambiar de página */
+.grid-fade-out {
+    opacity: 0;
+}
+
 
 /* --- android ---- */
 /* body.mobile-os
@@ -751,7 +844,7 @@ body.mobile-os #modalDisco {
 }
 
 
-header {
+body.mobile-os header {
     display: flex !important;
     flex-direction: column !important; /* Apilamos para dar espacio al título */
     align-items: center !important;
@@ -767,7 +860,7 @@ header {
 }
 
 /* Título con efecto de brillo (Glow) */
-header h1 {
+body.mobile-os header h1 {
     font-size: 1.8rem !important;
     color: #fff !important;
     text-align: center !important;
@@ -779,7 +872,7 @@ header h1 {
 }
 
 /* Contenedor de controles (A-Z y Buscador) */
-.header-controls {
+body.mobile-os.header-controls {
     display: flex !important;
     width: 100% !important;
     justify-content: center !important;
@@ -788,7 +881,7 @@ header h1 {
 }
 
 /* Botón A-Z Estilo Consola */
-#sort-btn {
+body.mobile-os #sort-btn {
     background: linear-gradient(45deg, #2a0a5e, #4b0082) !important;
     border: 2px solid #fff !important;
     border-radius: 8px !important;
@@ -801,13 +894,13 @@ header h1 {
 }
 
 /* Barra de Búsqueda Estilo Tecnológico */
-.search-container {
+body.mobile-os .search-container {
     flex: 1 !important;
     max-width: 200px !important;
     position: relative !important;
 }
 
-#search-input {
+body.mobile-os #search-input {
     width: 100% !important;
     background: rgba(0, 0, 0, 0.4) !important;
     border: 2px solid #1a1f4d !important;
@@ -819,6 +912,7 @@ header h1 {
     outline: none !important;
 }
 
-#search-input::placeholder {
+body.mobile-os #search-input::placeholder {
     color: rgba(78, 217, 255, 0.4) !important;
 }
+

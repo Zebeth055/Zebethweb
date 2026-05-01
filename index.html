@@ -25,8 +25,19 @@
         </div>
     </header>
 
-    <div id="grid-container" class="grid-container"></div>
+<main>
+        <!-- Contenedor principal de juegos -->
+        <div id="grid-container" class="grid-container"></div>
 
+        <!-- Sistema de Paginación -->
+        <div class="pagination-container">
+            <button class="btn-page" id="prev-page">ANTERIOR</button>
+            <span id="page-info">PÁGINA 1</span>
+            <button class="btn-page" id="next-page">SIGUIENTE</button>
+        </div>
+    </main>
+    
+    
     <div class="modal-overlay" id="modalDetalle">
         <div class="modal-content">
             <div class="modal-left" style="position: relative; display: flex; align-items: center; justify-content: center;">
@@ -54,11 +65,15 @@
         </div>
     </div>
 
+    <!-- Guía de controles inferior -->
+    <p>
+        </p>
+    <p>
+        </p>
     <div class="footer-guide">
-        <div style="color:var(--btn-a)"> (A) DETALLES</div>
-        <div style="color:var(--btn-b)"> (B) SALIR</div>
     </div>        
+
     <script type="module" src="script.js"></script>
-    
 </body>
 </html>
+
