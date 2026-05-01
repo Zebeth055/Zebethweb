@@ -674,28 +674,31 @@ footer {
 
 /* 1. Grid Estático: Máximo rendimiento en móvil */
 body.mobile-os #grid-container {
-    /* En lugar de auto-fill, forzamos 2 columnas fijas */
-    /* Esto es drásticamente más rápido de procesar */
     display: grid !important;
-    grid-template-columns: 1fr 1fr !important; 
-    gap: 15px !important;
-    padding: 15px !important;
+    /* Forzamos dos columnas exactamente iguales */
+    grid-template-columns: repeat(2, 1fr) !important; 
     
-    /* Eliminamos cualquier cálculo de fondo extra */
-    background: #000 !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
+    /* Centrado del contenedor respecto a la pantalla */
+    width: 95% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    
+    /* Centrado de las tarjetas dentro de sus columnas */
+    justify-items: center !important; 
+    align-items: start !important;
+    
+    gap: 15px !important;
+    padding: 10px 0 !important;
 }
 
-/* 2. Tarjetas: Simplificación de capas */
 body.mobile-os .tarjeta-wrapper {
-    width: 100% !important;
-    max-width: none !important;
+    /* Aseguramos que el envoltorio no tenga desplazamientos raros */
     margin: 0 !important;
-    /* Evitamos que el navegador cree capas 3D innecesarias */
-    perspective: none !important;
-    transform: none !important;
+    width: 100% !important;
+    display: flex !important;
+    justify-content: center !important;
 }
+
 body.mobile-os .tarjeta {
     width: 100% !important;
     aspect-ratio: 3 / 4.2 !important;
@@ -724,14 +727,15 @@ body.mobile-os z.tarjeta-info {
 
 /* 3. Header: Un poco más de aire */
 body.mobile-os header {
-    position: relative !important;
-    width: 92% !important;
-    margin: 10px auto 20px !important;
-    padding: 15px !important;
     background: #0a0f28 !important;
     border: 2px solid #1a1f4d !important;
     border-radius: 12px !important;
     box-shadow: 0 4px 10px rgba(0,0,0,0.5) !important;
+    margin: 0 auto 20px; /* Cambiamos 20px arriba por 0 */
+    width: 90%;
+    max-width: 1200px;
+    position: sticky;
+    top: 0
 }
 
 body.mobile-os .modal-content {
@@ -915,4 +919,5 @@ body.mobile-os #search-input {
 body.mobile-os #search-input::placeholder {
     color: rgba(78, 217, 255, 0.4) !important;
 }
+
 
