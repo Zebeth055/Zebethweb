@@ -732,7 +732,7 @@ body.mobile-os header {
     border-radius: 12px !important;
     box-shadow: 0 4px 10px rgba(0,0,0,0.5) !important;
     margin: 0 auto 20px; /* Cambiamos 20px arriba por 0 */
-    width: 90%;
+    width: auto;
     max-width: 1200px;
     position: sticky;
     top: 0
