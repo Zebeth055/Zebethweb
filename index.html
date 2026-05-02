@@ -1,164 +1,156 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>GameCube Backup</title>
 
-    
-    
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GameCube Backup</title>
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="GameCube Backup" />
+        <meta property="og:description" content="A Nintendo Gamecube Backup." />
+        <meta
+            property="og:image"
+            content="https://github.com/Zebeth055/Zebethweb/blob/main/rect3.png?raw=true" />
+        <meta property="og:url" content="https://zebeth055.github.io/Zebethweb/" />
+        <meta property="theme-color" content="#5910a8" />
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="GameCube Backup">
-<meta property="og:description" content="A Nintendo Gamecube Backup.">
-<meta property="og:image" content="https://assets.nintendo.com/image/upload/q_auto/f_auto/store/software/switch2/70010000096799/f3fe450c8ff6c4feea0ab0524fd2de64933ebeea352582feba036f11b6219664">
-<meta property="og:url" content="https://zebeth055.github.io/Zebethweb/">
-<meta property="theme-color" content="#5910a8">
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="GameCube Backup" />
+        <meta name="twitter:description" content="A Nintendo Gamecube Backup." />
+        <meta
+            name="twitter:image"
+            content="https://github.com/Zebeth055/Zebethweb/blob/main/rect3.png?raw=true" />
 
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="GameCube Backup">
-<meta name="twitter:description" content="A Nintendo Gamecube Backup.">
-<meta name="twitter:image" content="https://assets.nintendo.com/image/upload/q_auto/f_auto/store/software/switch2/70010000096799/f3fe450c8ff6c4feea0ab0524fd2de64933ebeea352582feba036f11b6219664">
-    
-    <link rel="stylesheet" href="estilos.css">
-</head>
+        <link rel="stylesheet" href="estilos.css" />
+    </head>
 
-<div id="intro-screen">
-<video id="gamecube-intro" playsinline preload="auto">
-    <source src="intro.mp4" type="video/mp4">
-        Tu navegador no soporta videos.
-</video>
-    <button id="start-btn">Power</button>
-</div>   
-    
-<body>
-<audio id="startup-jingle" preload="auto">
-    <source src="sounds/Startup.mp3" type="audio/mpeg">
-</audio>
-<audio id="sound-select-1" src="./sounds/Option Move 1.mp3" preload="auto"></audio>
-<audio id="sound-select-2" src="./sounds/Option Move 2.mp3" preload="auto"></audio>
-<audio id="sound-select-3" src="./sounds/Option Move 3.mp3" preload="auto"></audio>
-<audio id="sound-error" src="./sounds/Error.mp3" preload="auto"></audio>
-<audio id="sound-next" src="./sounds/Menu Back.mp3" preload="auto"></audio>
-<audio id="sound-prev" src="./sounds/Menu Select.mp3" preload="auto"></audio>
-    
-    
-    
-<audio id="bg-music" loop preload="auto">
-    <source src="sounds/Nintendo GameCube Menu.mp3" type="audio/mpeg">
-</audio>
-    
-    <header>
-        <div class="header-title">Gamecube Backups</div>
-        <div class="controles-orden">
-            <div class="select-wrapper">
-                <select id="selectOrden" class="estilo-retro">
-                    <option value="az">A - Z</option>
-                    <option value="za">Z - A</option>
-                    <option value="peso">Peso</option>
-                </select>
-            </div>
-        </div>
-<div class="gc-volume-wrapper">
-    <span class="gc-volume-label">VOL.</span>
-    <input type="range" id="master-volume" min="0" max="1" step="0.05" value="0.5">
-</div>
-        <div class="search-container">
-            <input type="text" id="inputBuscador" placeholder="[ BUSCAR_DATOS ]">
-        </div>
-        <div class="admin-header-zone">
-        <button id="btn-admin-login" class="gc-btn-mini">
-            <span class="btn-icon-admin"></span> ADMIN
-        </button>
+    <div id="intro-screen">
+        <video id="gamecube-intro" playsinline preload="auto">
+            <source src="intro.mp4" type="video/mp4" />
+            Tu navegador no soporta videos.
+        </video>
+        <button id="start-btn">Power</button>
     </div>
-    </header>
 
-<main>
-        <!-- Contenedor principal de juegos -->
-        <div id="grid-container" class="grid-container"></div>
+    <body>
+        <audio id="startup-jingle" preload="auto">
+            <source src="sounds/Startup.mp3" type="audio/mpeg" />
+        </audio>
+        <audio id="sound-select-1" src="./sounds/Option Move 1.mp3" preload="auto"></audio>
+        <audio id="sound-select-2" src="./sounds/Option Move 2.mp3" preload="auto"></audio>
+        <audio id="sound-select-3" src="./sounds/Option Move 3.mp3" preload="auto"></audio>
+        <audio id="sound-error" src="./sounds/Error.mp3" preload="auto"></audio>
+        <audio id="sound-next" src="./sounds/Menu Back.mp3" preload="auto"></audio>
+        <audio id="sound-prev" src="./sounds/Menu Select.mp3" preload="auto"></audio>
 
-        <!-- Sistema de Paginación -->
-        <div class="pagination-container">
-            <button class="btn-page" id="prev-page">ANTERIOR</button>
-            <span id="page-info">PÁGINA 1</span>
-            <button class="btn-page" id="next-page">SIGUIENTE</button>
-        </div>
-    </main>
-    
-    
-    <div class="modal-overlay" id="modalDetalle">
-        <div class="modal-content">
-            <div class="modal-left" style="position: relative; display: flex; align-items: center; justify-content: center;">
-                <img id="modalImagen" src="" alt="Portada">
-                
-                <div style="position: absolute; width: 65%; right: -25px; bottom: -15px; z-index: 2;">
-                    <img id="modalDisco" src="" alt="Disco">
+        <audio id="bg-music" loop preload="auto">
+            <source src="sounds/Nintendo GameCube Menu.mp3" type="audio/mpeg" />
+        </audio>
+
+        <header>
+            <div class="header-title">Gamecube Backups</div>
+            <div class="controles-orden">
+                <div class="select-wrapper">
+                    <select id="selectOrden" class="estilo-retro">
+                        <option value="az">A - Z</option>
+                        <option value="za">Z - A</option>
+                        <option value="peso">Peso</option>
+                    </select>
                 </div>
             </div>
+            <div class="gc-volume-wrapper">
+                <span class="gc-volume-label">VOL.</span>
+                <input type="range" id="master-volume" min="0" max="1" step="0.05" value="0.5" />
+            </div>
+            <div class="search-container">
+                <input type="text" id="inputBuscador" placeholder="[ BUSCAR_DATOS ]" />
+            </div>
+            <div class="admin-header-zone">
+                <button id="btn-admin-login" class="gc-btn-mini"><span class="btn-icon-admin"></span> ADMIN</button>
+            </div>
+        </header>
 
-            <div class="modal-right">
-                <h2 id="modalTitulo" class="info-header">TITULO</h2>
-                <div class="info-body">
-                    ID: <span id="modalID" style="color: var(--btn-a);"></span><br>
-                    FORMATO: <span id="modalFormato" style="color: #fff;"></span><br>
-                    COMPRESIÓN: <span id="modalCompresion" style="color: #fff;"></span><br>
+        <main>
+            <!-- Contenedor principal de juegos -->
+            <div id="grid-container" class="grid-container"></div>
+
+            <!-- Sistema de Paginación -->
+            <div class="pagination-container">
+                <button class="btn-page" id="prev-page">ANTERIOR</button>
+                <span id="page-info">PÁGINA 1</span>
+                <button class="btn-page" id="next-page">SIGUIENTE</button>
+            </div>
+        </main>
+
+        <div class="modal-overlay" id="modalDetalle">
+            <div class="modal-content">
+                <div
+                    class="modal-left"
+                    style="position: relative; display: flex; align-items: center; justify-content: center">
+                    <img id="modalImagen" src="" alt="Portada" />
+
+                    <div style="position: absolute; width: 65%; right: -25px; bottom: -15px; z-index: 2">
+                        <img id="modalDisco" src="" alt="Disco" />
+                    </div>
                 </div>
-                <br>
-                
-                <div class="modal-actions">
-                    <button class="btn-gc btn-gc-a"><span>(A)</span> CONTINUAR</button>
-                    <button class="btn-gc btn-gc-b" onclick="cerrarModal()"><span>(B)</span> ATRÁS</button>
+
+                <div class="modal-right">
+                    <h2 id="modalTitulo" class="info-header">TITULO</h2>
+                    <div class="info-body">
+                        ID: <span id="modalID" style="color: var(--btn-a)"></span><br />
+                        FORMATO: <span id="modalFormato" style="color: #fff"></span><br />
+                        COMPRESIÓN: <span id="modalCompresion" style="color: #fff"></span><br />
+                    </div>
+                    <br />
+
+                    <div class="modal-actions">
+                        <button class="btn-gc btn-gc-a"><span>(A)</span> CONTINUAR</button>
+                        <button class="btn-gc btn-gc-b" onclick="cerrarModal()"><span>(B)</span> ATRÁS</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Guía de controles inferior -->
-    <p>
-        </p>
-    <p>
-        </p>
-    <div class="footer-guide">
-    </div>        
+        <!-- Guía de controles inferior -->
+        <p></p>
+        <p></p>
+        <div class="footer-guide"></div>
 
-    <div id="modalLogin" class="modal-base">
-    <div class="modal-contenido-retro">
-        <h2 class="modal-titulo-retro">SYSTEM ACCESS</h2>
-        
-        <div class="login-form">
-            <div class="input-group-retro">
-                <label>USER_ID:</label>
-                <input type="email" id="loginEmail" placeholder="example@mail.com">
+        <div id="modalLogin" class="modal-base">
+            <div class="modal-contenido-retro">
+                <h2 class="modal-titulo-retro">SYSTEM ACCESS</h2>
+
+                <div class="login-form">
+                    <div class="input-group-retro">
+                        <label>USER_ID:</label>
+                        <input type="email" id="loginEmail" placeholder="example@mail.com" />
+                    </div>
+                    <div class="input-group-retro">
+                        <label>ACCESS_CODE:</label>
+                        <input type="password" id="loginPass" placeholder="••••••••" />
+                    </div>
+                </div>
+
+                <div class="modal-footer-retro">
+                    <button id="btn-cancel-login" class="btn-gc-retro b">
+                        <span class="btn-icon b">B</span> CANCEL
+                    </button>
+                    <button id="btn-confirm-login" class="btn-gc-retro a">
+                        <span class="btn-icon a">A</span> CONFIRM
+                    </button>
+                </div>
             </div>
-            <div class="input-group-retro">
-                <label>ACCESS_CODE:</label>
-                <input type="password" id="loginPass" placeholder="••••••••">
+        </div>
+        <div id="modalAlert" class="modal-base">
+            <div class="modal-contenido-retro alert-style">
+                <h2 id="alertTitle" class="modal-titulo-retro">SYSTEM ERROR</h2>
+                <p id="alertMessage" class="modal-text-retro">DESCRIPTION OF THE ERROR GOES HERE.</p>
+
+                <div class="modal-footer-retro">
+                    <button id="btn-close-alert" class="btn-gc-retro a"><span class="btn-icon a">A</span> OK</button>
+                </div>
             </div>
         </div>
-
-        <div class="modal-footer-retro">
-            <button id="btn-cancel-login" class="btn-gc-retro b">
-                <span class="btn-icon b">B</span> CANCEL
-            </button>
-            <button id="btn-confirm-login" class="btn-gc-retro a">
-                <span class="btn-icon a">A</span> CONFIRM
-            </button>
-        </div>
-    </div>
-</div>
-    <div id="modalAlert" class="modal-base">
-    <div class="modal-contenido-retro alert-style">
-        <h2 id="alertTitle" class="modal-titulo-retro">SYSTEM ERROR</h2>
-        <p id="alertMessage" class="modal-text-retro">DESCRIPTION OF THE ERROR GOES HERE.</p>
-        
-        <div class="modal-footer-retro">
-            <button id="btn-close-alert" class="btn-gc-retro a">
-                <span class="btn-icon a">A</span> OK
-            </button>
-        </div>
-    </div>
-</div>
-    <script type="module" src="script.js"></script>
-</body>
+        <script type="module" src="script.js"></script>
+    </body>
 </html>
-

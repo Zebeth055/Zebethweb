@@ -3,10 +3,10 @@
     --gc-grid: rgba(255, 255, 255, 0.21);
     --btn-b: #ff3366;
     --font-main: "Arial Rounded MT Bold", "Helvetica", sans-serif;
-    --gc-blue-deep: #0e11c5;   /* Azul cobalto intenso de la base */
-    --gc-blue-dark: #07096e;   /* Azul oscuro para degradados y fondos */
-    --gc-blue-slots: #030832;  /* Azul casi negro para el fondo del grid */
-    --gc-cyan-neón: #00ffff;   /* Cian neón para bordes activos y texto */
+    --gc-blue-deep: #0e11c5; /* Azul cobalto intenso de la base */
+    --gc-blue-dark: #07096e; /* Azul oscuro para degradados y fondos */
+    --gc-blue-slots: #030832; /* Azul casi negro para el fondo del grid */
+    --gc-cyan-neón: #00ffff; /* Cian neón para bordes activos y texto */
     --gc-blue-bright: #3f60ff; /* Azul claro para brillos secundarios */
     --btn-a: #00ff5d; /* Reutilizamos tu variable A */
     --bordes: #000dda;
@@ -15,9 +15,8 @@
     --glass-border: rgba(100, 200, 255, 0.25); /* Borde con tinte cian */
     --gc-blue-glow: rgba(0, 15se0, 255, 0.5); /* Brillo interno azul neón */
     --gc-cyan-glow: rgba(0, 255, 255, 0.2); /* Brillo secundario para aristas */
-    
+
     --glow-blue: 0 0 10px rgba(65, 105, 225, 0.8);
-    
 }
 
 @keyframes girarDiscoWii {
@@ -46,9 +45,12 @@ body {
     font-family: var(--font-main);
     background-color: var(--gc-dark);
     background-image: radial-gradient(circle, transparent 0%, rgba(0, 0, 0, 1) 90%),
-    linear-gradient(var(--gc-grid) 2px, transparent 2px),
-    linear-gradient(90deg, var(--gc-grid) 2px, transparent 2px);
-    background-size: 100% 100%, 30px 30px, 30px 30px;
+        linear-gradient(var(--gc-grid) 2px, transparent 2px),
+        linear-gradient(90deg, var(--gc-grid) 2px, transparent 2px);
+    background-size:
+        100% 100%,
+        30px 30px,
+        30px 30px;
     background-attachment: fixed;
     color: #ffffff;
     min-height: 100vh;
@@ -61,7 +63,7 @@ body {
     color: #fff;
     text-transform: none; /* Nintendo no usa puras mayúsculas en ese logo */
     letter-spacing: -1px;
-    filter: drop-shadow(0 0 5px rgba(255,255,255,0.5));
+    filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
 }
 
 header {
@@ -73,22 +75,22 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    
+
     /* Desenfoque de Vidrio */
     backdrop-filter: blur(18px);
     -webkit-backdrop-filter: blur(18px);
-    
+
     /* Borde Cristalino con tinte azul */
     border: 3px solid var(--glass-border);
     border-radius: 18px;
-    
+
     /* Múltiples Sombras Internas para Profundidad de Vidrio */
-    box-shadow: 
-        inset 0 0 20px var(--gc-blue-glow),      /* Brillo azul principal */
-        inset 5px 5px 10px var(--gc-cyan-glow),  /* Reflejo cian en arista */
-        inset -2px -2px 5px rgba(255,255,255,0.05), /* Ligero reflejo blanco opuesto */
-        0 15px 35px rgba(0,0,0,0.8);             /* Sombra real */
-        
+    box-shadow:
+        inset 0 0 20px var(--gc-blue-glow),
+        /* Brillo azul principal */ inset 5px 5px 10px var(--gc-cyan-glow),
+        /* Reflejo cian en arista */ inset -2px -2px 5px rgba(255, 255, 255, 0.05),
+        /* Ligero reflejo blanco opuesto */ 0 15px 35px rgba(0, 0, 0, 0.8); /* Sombra real */
+
     position: sticky;
     top: 20px;
     z-index: 100;
@@ -99,8 +101,17 @@ header {
 header::before {
     content: "";
     position: absolute;
-    top: -50%; left: -50%; width: 200%; height: 200%;
-    background: linear-gradient(45deg, transparent 40%, rgba(255,255,255,0.1) 45%, rgba(100,200,255,0.1) 50%, transparent 60%);
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        45deg,
+        transparent 40%,
+        rgba(255, 255, 255, 0.1) 45%,
+        rgba(100, 200, 255, 0.1) 50%,
+        transparent 60%
+    );
     pointer-events: none;
     transform: rotate(-15deg);
 }
@@ -108,12 +119,12 @@ header::before {
 .header-title {
     font-size: 1.9rem;
     color: #fff;
-    text-transform: none; 
+    text-transform: none;
     letter-spacing: -1px;
     font-weight: bold;
     /* Brillo de texto azulado */
     text-shadow: 0 0 10px rgba(0, 150, 255, 0.7);
-    filter: drop-shadow(0 0 2px rgba(255,255,255,0.5));
+    filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.5));
 }
 
 .search-container {
@@ -122,7 +133,9 @@ header::before {
     border-radius: 50px;
     padding: 8px 25px;
     /* Efecto de slot incrustado */
-    box-shadow: inset 0 3px 6px rgba(0,0,0,0.9), 0 1px 0 rgba(255,255,255,0.05);
+    box-shadow:
+        inset 0 3px 6px rgba(0, 0, 0, 0.9),
+        0 1px 0 rgba(255, 255, 255, 0.05);
     display: flex;
     align-items: center;
     transition: all 0.3s ease;
@@ -130,7 +143,9 @@ header::before {
 
 .search-container:focus-within {
     border-color: var(--btn-a);
-    box-shadow: 0 0 15px rgba(0, 255, 204, 0.4), inset 0 3px 6px rgba(0,0,0,0.9);
+    box-shadow:
+        0 0 15px rgba(0, 255, 204, 0.4),
+        inset 0 3px 6px rgba(0, 0, 0, 0.9);
 }
 
 .search-container input {
@@ -148,15 +163,15 @@ header::before {
     /* auto-fit hará que las columnas se expandan para llenar el espacio */
     grid-template-columns: repeat(auto-fit, minmax(180px, 210px));
     gap: 25px;
-    
+
     width: 95%;
     max-width: 1400px;
     margin: 40px auto; /* El auto horizontal es vital */
-    
+
     /* CENTRADO TOTAL */
     justify-content: center; /* Centra el bloque de celdas */
-    justify-items: center;    /* Centra cada tarjeta en su celda */
-    
+    justify-items: center; /* Centra cada tarjeta en su celda */
+
     padding: 20px;
     box-sizing: border-box; /* Evita que el padding sume al ancho total */
 }
@@ -175,25 +190,26 @@ header::before {
 }
 
 /* 2. La Tarjeta Real (Maneja el diseño y el baile) */
-.tarjeta { 
+.tarjeta {
     width: 100%;
     height: 295px; /* Calculado para que no se corte (210 * 1.4) */
-    background-color: #0055a3; 
+    background-color: #0055a3;
     border: 4px solid #000;
-    border-radius: 10px; 
-    overflow: hidden; 
+    border-radius: 10px;
+    overflow: hidden;
     position: relative;
     cursor: pointer;
-    box-shadow: 
-        inset 0 2px 10px rgba(0,0,0,0.8), /* Profundidad interna */
-        0 4px 15px rgba(0,0,0,0.5); /* Sombra externa */
-    
+    box-shadow:
+        inset 0 2px 10px rgba(0, 0, 0, 0.8),
+        /* Profundidad interna */ 0 4px 15px rgba(0, 0, 0, 0.5); /* Sombra externa */
+
     /* Brillo CyanNeón sutil en estado normal (como las ranuras que brillan) */
-    filter: drop-shadow(0 0 1px rgba(0, 255, 255, 0.2)); 
-    
+    filter: drop-shadow(0 0 1px rgba(0, 255, 255, 0.2));
 
     /* Transición suave para que los bordes regresen a su ángulo original al quitar el mouse */
-    transition: transform 0.6s ease-out, border-color 0.3s;
+    transition:
+        transform 0.6s ease-out,
+        border-color 0.3s;
     transform-style: preserve-3d;
     transform: rotateX(0deg) rotateY(0deg);
 }
@@ -201,7 +217,9 @@ header::before {
 .tarjeta-wrapper {
     opacity: 0;
     transform: translateY(30px); /* Un poco más de recorrido para que se note */
-    transition: opacity 0.8s ease, transform 0.8s ease;
+    transition:
+        opacity 0.8s ease,
+        transform 0.8s ease;
 }
 
 /* 2. Estado final: se activan mediante la función animarGrid */
@@ -210,22 +228,22 @@ header::before {
     transform: translateY(0);
 }
 
-.tarjeta:hover { 
-    border-color: var(--btn-a);
+.tarjeta:hover {
+    border-color: rgba(12, 15, 161, 0.5);
     /* Solo sube y se inclina un poco */
     transform: perspective(1000px) translateY(-15px) rotateX(5deg);
-    box-shadow: 15px 25px 20px rgba(0,0,0,0.4);
+    box-shadow: 15px 25px 20px rgba(0, 0, 0, 0.4);
 }
 
 .tarjeta img {
     object-fit: fill;
     /* Evita que se vea estático */
-    transition: transform 0.5s ease; 
+    transition: transform 0.5s ease;
     border-radius: 1px; /* Pequeño ajuste para que encaje bien en el slot */
     margin: 4px; /* Espacio para el brillo de fondo de la tarjeta */
     width: calc(100% - 8px); /* Ajuste de ancho por el margin */
     height: calc(100% - 8px); /* Ajuste de alto por el margin */
-    box-shadow: inset 0 0 5px rgba(0,255,255,0.1);
+    box-shadow: inset 0 0 5px rgba(0, 255, 255, 0.1);
 }
 
 .tarjeta-info {
@@ -241,17 +259,17 @@ header::before {
     font-size: 0.9rem;
     text-transform: uppercase;
     color: white;
-    
+
     /* --- EFECTO BLUR (CRISTAL) --- */
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px); /* Para compatibilidad con Safari */
-    
+
     /* ESTADO INICIAL: Escondido */
     opacity: 0;
-    transform: translateY(10px); 
+    transform: translateY(10px);
     transition: all 0.3s ease-in-out;
     z-index: 10;
-    overflow: hidden; 
+    overflow: hidden;
 }
 
 .tarjeta-info::before {
@@ -261,12 +279,7 @@ header::before {
     left: -150%; /* Empezamos fuera de la vista a la izquierda */
     width: 100%;
     height: 100%;
-    background: linear-gradient(
-        120deg, 
-        transparent, 
-        rgba(255, 255, 255, 0.3), 
-        transparent
-    );
+    background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.3), transparent);
     transition: all 0.6s;
     pointer-events: none;
 }
@@ -388,16 +401,16 @@ header::before {
     color: #fff;
 }
 
-
 /* --- ANIMACIÓN FLOTANTE ESTILO GAMECUBE --- */
 /* Aplicamos el baile a todo lo que esté dentro de la tarjeta al hacer hover */
-.tarjeta:hover img, 
+.tarjeta:hover img,
 .tarjeta:hover .tarjeta-info {
     animation: baileInterno 4s ease-in-out infinite;
 }
 
 @keyframes baileInterno {
-    0%, 100% {
+    0%,
+    100% {
         transform: rotateY(-3deg) rotateZ(0deg);
     }
     50% {
@@ -410,7 +423,7 @@ header::before {
     background: rgba(255, 255, 255, 0.05);
     padding: 2px 5px;
     border-radius: 4px;
-}/* Contenedor para alinear buscador y select */
+} /* Contenedor para alinear buscador y select */
 .buscador-container {
     display: flex;
     gap: 15px;
@@ -426,7 +439,7 @@ header::before {
     border: 2px solid #333;
     padding: 8px 15px;
     border-radius: 5px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
     cursor: pointer;
     outline: none;
     transition: all 0.3s ease;
@@ -441,24 +454,26 @@ header::before {
 /* Contenedor para la flecha personalizada */
 .select-wrapper .estilo-retro {
     /* Fondo: Degradado azul/púrpura + rejilla técnica de GameCube */
-    background: 
-        linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    background: linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
         linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
         linear-gradient(180deg, #1100aa 0%, #330066 100%);
-    background-size: 15px 15px, 15px 15px, 100% 100%;
-    
+    background-size:
+        15px 15px,
+        15px 15px,
+        100% 100%;
+
     /* El Marco: Borde blanco nítido con sombras negras de profundidad */
     border: 2px solid #ffffff;
-    box-shadow: 
-        0 0 0 2px #000,           /* Borde exterior negro */
-        inset 0 0 0 1px #000;     /* Línea interna negra */
-    
+    box-shadow:
+        0 0 0 2px #000,
+        /* Borde exterior negro */ inset 0 0 0 1px #000; /* Línea interna negra */
+
     /* Tipografía de consola */
     color: #ffffff;
     font-weight: bold;
     text-transform: uppercase;
     text-shadow: 2px 2px 0px #000; /* Sombra sólida retro */
-    
+
     padding: 8px 35px 8px 15px;
     border-radius: 4px;
     appearance: none; /* Quitamos flecha por defecto */
@@ -467,7 +482,7 @@ header::before {
 }
 
 .select-wrapper::after {
-    content: '▼';
+    content: "▼";
     font-size: 10px;
     top: 50%;
     right: 10px;
@@ -478,7 +493,7 @@ header::before {
 }
 
 .select-wrapper::after {
-    content: '▼';
+    content: "▼";
     position: absolute;
     right: 12px;
     top: 50%;
@@ -492,8 +507,8 @@ header::before {
 /* Efecto al pasar el cursor (Hover) */
 .select-wrapper .estilo-retro:hover {
     border-color: #00ffff;
-    box-shadow: 
-        0 0 10px rgba(0, 255, 255, 0.5), 
+    box-shadow:
+        0 0 10px rgba(0, 255, 255, 0.5),
         0 0 0 2px #000;
 }
 /* Estilo para las opciones dentro del desplegable */
@@ -502,7 +517,6 @@ header::before {
     color: white;
 }
 
-
 footer {
     /* 1. Dimensiones y Posición */
     width: 95%;
@@ -510,21 +524,23 @@ footer {
     margin: 40px auto;
     padding: 15px 25px;
     position: relative;
-    
+
     /* 2. Fondo: Degradado de Azul Cobalto a Púrpura Profundo + Cuadrícula */
     background: 
         /* El patrón de rejilla (ajusta el color rgba para que sea sutil) */
-        linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px),
-        /* El degradado de color base de la imagen */
-        linear-gradient(180deg, #1100aa 0%, #330066 100%);
-    background-size: 20px 20px, 20px 20px, 100% 100%;
-    
+        linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+        /* El degradado de color base de la imagen */ linear-gradient(180deg, #1100aa 0%, #330066 100%);
+    background-size:
+        20px 20px,
+        20px 20px,
+        100% 100%;
+
     /* 3. El Borde Doble (Característico de GameCube) */
     border: 3px solid #ffffff; /* Borde exterior blanco */
-    outline: 2px solid #555;   /* Borde exterior gris oscuro/negro para dar profundidad */
+    outline: 2px solid #555; /* Borde exterior gris oscuro/negro para dar profundidad */
     box-shadow: inset 0 0 0 2px #000; /* Línea negra interna para separar el borde del fondo */
-    
+
     /* 4. Tipografía y Alineación */
     display: flex;
     justify-content: space-around;
@@ -534,19 +550,16 @@ footer {
     text-shadow: 2px 2px 0px #000; /* Sombra de texto sólida como en la consola */
 }
 
-
 .footer-guide {
     position: fixed;
     bottom: 0;
     left: 0;
     width: 100%;
     z-index: 100;
-    
-    background: 
-        linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+
+    background: linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
         linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
         linear-gradient(180deg, #1100aa 0%, #330066 100%);
-    
 
     /* 2. El Marco: Borde blanco nítido y sombra negra */
     border-top: 3px solid #ffffff;
@@ -555,13 +568,13 @@ footer {
     display: flex;
     justify-content: center;
     gap: 60px;
-    
+
     /* 4. Texto: Sombra sólida estilo retro */
     color: #ffffff;
     font-weight: bold;
     text-transform: uppercase;
     letter-spacing: 1px;
-    }
+}
 
 /* Opcional: Si tienes iconos de botones (A, B, etc.) dentro */
 .footer-guide span {
@@ -569,7 +582,7 @@ footer {
     padding: 2px 8px;
     background: rgba(0, 0, 0, 0.4);
     margin-right: 8px;
-    }
+}
 
 /* Estilo para los elementos internos del footer (Select, Finish, Confirm) */
 .footer-item {
@@ -585,8 +598,8 @@ footer {
 .footer-btn-icon {
     border: 2px solid #fff;
     padding: 2px 8px;
-    background: rgba(0,0,0,0.3);
-    box-shadow: inset 2px 2px 0 rgba(0,0,0,0.5);
+    background: rgba(0, 0, 0, 0.3);
+    box-shadow: inset 2px 2px 0 rgba(0, 0, 0, 0.5);
 }
 
 #intro-screen {
@@ -618,7 +631,9 @@ footer {
 .game-card {
     opacity: 0;
     transform: translateY(20px);
-    transition: opacity 0.6s ease, transform 0.6s ease;
+    transition:
+        opacity 0.6s ease,
+        transform 0.6s ease;
 }
 
 /* Estado final: se activan mediante JS */
@@ -641,7 +656,9 @@ footer {
 }
 
 /* Ocultar el botón cuando el video empiece */
-.hidden { display: none; }
+.hidden {
+    display: none;
+}
 
 /* --- SISTEMA DE PAGINACIÓN (PC) --- */
 .pagination-container {
@@ -658,7 +675,7 @@ footer {
     border: 2px solid #1a1f4d;
     color: #fff;
     padding: 10px 25px;
-    font-family: 'JetBrains Mono', monospace;
+    font-family: "JetBrains Mono", monospace;
     font-weight: bold;
     cursor: pointer;
     transition: all 0.2s ease;
@@ -680,16 +697,15 @@ footer {
 
 #page-info {
     color: #4ed9ff;
-    font-family: 'JetBrains Mono', monospace;
+    font-family: "JetBrains Mono", monospace;
     font-weight: bold;
     font-size: 1.1rem;
 }
 
 /* --- FOOTER GUIDE (PC) --- */
 
-
 .guide-item {
-    font-family: 'JetBrains Mono', monospace;
+    font-family: "JetBrains Mono", monospace;
     font-size: 0.9rem;
     font-weight: bold;
 }
@@ -712,7 +728,7 @@ footer {
     gap: 20px;
     padding: 20px;
     /* Evita que el contenedor colapse y haga saltar el footer */
-    min-height: 70vh; 
+    min-height: 70vh;
     transition: opacity 0.3s ease-in-out;
 }
 
@@ -720,7 +736,9 @@ footer {
 .tarjeta-wrapper {
     opacity: 0;
     transform: translateY(30px);
-    transition: opacity 0.5s ease, transform 0.5s ease;
+    transition:
+        opacity 0.5s ease,
+        transform 0.5s ease;
 }
 
 /* Estado activo: visible */
@@ -728,7 +746,6 @@ footer {
     opacity: 1;
     transform: translateY(0);
 }
-
 
 /* Clase para el efecto de desvanecimiento al cambiar de página */
 .grid-fade-out {
@@ -742,7 +759,9 @@ footer {
     background: rgba(0, 0, 0, 0.6);
     padding: 8px 18px;
     border: 2px solid #ffffff; /* Marco blanco nítido */
-    box-shadow: inset 0 0 0 2px #000, 0 0 15px rgba(0, 150, 255, 0.3);
+    box-shadow:
+        inset 0 0 0 2px #000,
+        0 0 15px rgba(0, 150, 255, 0.3);
     border-radius: 4px;
     position: relative;
 }
@@ -796,7 +815,6 @@ footer {
     background: #050520; /* Fondo base azul oscuro */
 }
 
-
 .admin-access-container {
     position: absolute;
     top: 20px;
@@ -814,7 +832,9 @@ footer {
     font-weight: bold;
     letter-spacing: 1px;
     cursor: pointer;
-    box-shadow: inset 0 0 0 2px #000, 0 0 10px rgba(0, 150, 255, 0.3);
+    box-shadow:
+        inset 0 0 0 2px #000,
+        0 0 10px rgba(0, 150, 255, 0.3);
     transition: all 0.2s ease;
     display: flex;
     align-items: center;
@@ -832,7 +852,9 @@ footer {
 
 .gc-btn-mini:hover {
     border-color: var(--gc-cian-neón);
-    box-shadow: inset 0 0 0 2px #000, 0 0 15px var(--gc-cian-neón);
+    box-shadow:
+        inset 0 0 0 2px #000,
+        0 0 15px var(--gc-cian-neón);
     transform: scale(1.05);
 }
 
@@ -840,14 +862,14 @@ footer {
     transform: scale(0.95);
 }
 
-
-
-
 /* Estructura Base del Modal */
 .modal-base {
     display: none;
     position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     background: rgba(0, 0, 0, 0.85);
     z-index: 1000;
     justify-content: center;
@@ -858,7 +880,9 @@ footer {
 .modal-contenido-retro {
     background: #030832; /* Azul slots */
     border: 3px solid #ffffff;
-    box-shadow: inset 0 0 0 2px #000, 0 0 25px rgba(0, 150, 255, 0.5);
+    box-shadow:
+        inset 0 0 0 2px #000,
+        0 0 25px rgba(0, 150, 255, 0.5);
     padding: 25px;
     width: 350px;
     border-radius: 4px;
@@ -891,7 +915,7 @@ footer {
     border: 1px solid #ffffff;
     padding: 10px;
     color: #00ffff;
-    font-family: 'JetBrains Mono', monospace;
+    font-family: "JetBrains Mono", monospace;
     box-sizing: border-box;
 }
 
@@ -914,19 +938,21 @@ footer {
     font-size: 0.8rem;
 }
 
-.btn-gc-retro:hover { transform: scale(1.1); }
+.btn-gc-retro:hover {
+    transform: scale(1.1);
+}
 
 /* Estilo base del botón para que el triángulo se posicione bien */
 .btn-gc-retro {
     position: relative;
     padding-left: 25px; /* Espacio para el triángulo */
     transition: all 0.2s ease;
-    filter: drop-shadow(0 0 2px rgba(0,0,0,0.5));
+    filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.5));
 }
 
 /* El triángulo oculto por defecto */
 .btn-gc-retro::before {
-    content: '';
+    content: "";
     position: absolute;
     left: 0;
     top: 50%;
@@ -938,11 +964,13 @@ footer {
     border-left: 12px solid #ffaa00; /* Naranja GameCube */
     opacity: 0;
     filter: drop-shadow(0 0 5px #ffaa00);
-    transition: opacity 0.2s ease, left 0.2s ease;
+    transition:
+        opacity 0.2s ease,
+        left 0.2s ease;
 }
 
 /* Efecto al pasar el mouse (Hover) o al estar enfocado */
-.btn-gc-retro:hover::beforeA,
+.btn-gc-retro:hover::beforea,
 .btn-gc-retro:focus::before {
     opacity: 1;
     left: -5px; /* Pequeño desplazamiento al aparecer */
@@ -961,11 +989,13 @@ footer {
 /* Clase especial para alertas */
 .alert-style {
     border-color: #ffaa00 !important; /* Naranja de advertencia */
-    box-shadow: inset 0 0 0 2px #000, 0 0 30px rgba(255, 170, 0, 0.4) !important;
+    box-shadow:
+        inset 0 0 0 2px #000,
+        0 0 30px rgba(255, 170, 0, 0.4) !important;
 }
 
 .modal-text-retro {
-    font-family: 'JetBrains Mono', monospace;
+    font-family: "JetBrains Mono", monospace;
     font-size: 0.9rem;
     color: #fff;
     margin: 20px 0;
@@ -985,26 +1015,31 @@ footer {
 /* --- Ajustes Android ---- */
 body.mobile-os .grid-container {
     display: grid !important;
-    /* En móvil, 2 columnas fijas centradas */
-    grid-template-columns: repeat(2, 1fr) !important; 
-    
-    width: 90% !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
-    
-    /* Centra el contenido de las celdas */
-    justify-items: center !important; 
+    /* 2 columnas iguales */
+    grid-template-columns: repeat(2, 1fr) !important;
+
+    /* Cambiamos el ancho a 100% y usamos padding para el aire lateral */
+    width: 100% !important;
+    max-width: 100vw !important;
+    margin: 0 auto !important;
+
+    /* Esto asegura que el grid se centre si sobra espacio */
+    justify-content: center !important;
+    justify-items: center !important;
     align-items: start !important;
-    
+
+    /* Espaciado */
     gap: 15px !important;
-    padding: 10px 0 !important;
+    padding: 20px 10px !important; /* 10px a los lados de margen interno */
+    box-sizing: border-box !important;
 }
 
 /* Forzar que las tarjetas no se desborden */
 body.mobile-os .tarjeta-wrapper {
     margin: 0 !important;
     width: 100% !important;
-    max-width: 180px; /* Evita que crezcan demasiado en pantallas anchas de móvil */
+    /* Un poco menos de ancho máximo para que no se peguen al borde del celular */
+    max-width: 165px !important;
     display: flex !important;
     justify-content: center !important;
 }
@@ -1013,21 +1048,21 @@ body.mobile-os .tarjeta {
     width: 100% !important;
     aspect-ratio: 3 / 4.2 !important;
     height: auto !important;
-    
+
     /* Forzamos a que la tarjeta sea un dibujo plano (Bitmap) */
     /* Esto evita que el scroll se sienta pesado */
-    contain: strict; 
+    contain: strict;
     border: 1px solid #222 !important;
     box-shadow: none !important;
     background: #050505 !important;
 }
 
- body.mobile-os .tarjeta img {
+body.mobile-os .tarjeta img {
     width: 100% !important;
     height: 100% !important;
     object-fit: cover !important;
     /* Evita el suavizado costoso durante el scroll */
-    image-rendering: auto; 
+    image-rendering: auto;
 }
 
 /* Ocultamos la info flotante para que el scroll sea pura seda */
@@ -1040,12 +1075,15 @@ body.mobile-os header {
     background: #0a0f28 !important;
     border: 2px solid #1a1f4d !important;
     border-radius: 12px !important;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.5) !important;
-    margin: 0 auto 20px; /* Cambiamos 20px arriba por 0 */
-    width: auto;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5) !important;
     max-width: 1200px;
     position: sticky;
-    top: 0
+    top: 0;
+    box-sizing: border-box !important; /* Crucial */
+    width: 94% !important; /* Deja un pequeño margen para que respire */
+    margin: 10px auto !important;
+    left: 0;
+    right: 0;
 }
 
 body.mobile-os .modal-content {
@@ -1054,10 +1092,10 @@ body.mobile-os .modal-content {
     max-width: 380px !important;
     /* Los bordes deben ser muy redondeados como en la foto */
     border: 2px solid rgba(255, 255, 255, 0.2) !important;
-    border-radius: 28px !important; 
+    border-radius: 28px !important;
     padding: 25px !important;
     display: flex !important;
-    flex-direction: column !important; 
+    flex-direction: column !important;
     gap: 0 !important; /* Manejaremos el espacio con márgenes */
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9) !important;
     backdrop-filter: blur(15px);
@@ -1077,20 +1115,20 @@ body.mobile-os .modal-left img {
     width: 180px !important;
     height: auto !important;
     border-radius: 15px !important;
-    border: 4px solid #ffffff !important; 
+    border: 4px solid #ffffff !important;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6) !important;
     z-index: 2;
 }
 
 /* Ajuste del Mini-DVD asomando (Disco) */
 body.mobile-os .modal-left div[style*="position: absolute"] {
-    width: 150px !important;  /* Reducimos de 150 a 120 para que no sea gigante */
+    width: 150px !important; /* Reducimos de 150 a 120 para que no sea gigante */
     height: 150px !important;
-    right: 10% !important;    /* Ajustado para "pegarse" más a la portada como en la foto */
+    right: 10% !important; /* Ajustado para "pegarse" más a la portada como en la foto */
     bottom: -10px !important;
     z-index: 3 !important;
     background: transparent !important; /* Aseguramos que no tenga fondo propio */
-    filter: drop-shadow(0 8px 15px rgba(0,0,0,0.6)) !important;
+    filter: drop-shadow(0 8px 15px rgba(0, 0, 0, 0.6)) !important;
 }
 
 /* Sección de Información (Abajo) */
@@ -1099,12 +1137,12 @@ body.mobile-os .modal-right {
     border-radius: 22px !important;
     padding: 5px !important;
     border: 1px solid rgba(255, 255, 255, 0.08) !important;
-    width: auto!important;
+    width: auto !important;
 }
 
 /* Título Verde Neón */
 body.mobile-os .modal-right h2 {
-    color: #00ff7f !important; 
+    color: #00ff7f !important;
     font-size: 1.6rem !important;
     margin-bottom: 20px !important;
     border-bottom: 4px solid rgba(0, 255, 127, 0.3) !important;
@@ -1113,7 +1151,7 @@ body.mobile-os .modal-right h2 {
 
 /* Etiquetas e ID */
 body.mobile-os .modal-right p {
-    font-family: 'JetBrains Mono', monospace; /* Si la usas, se ve muy técnico */
+    font-family: "JetBrains Mono", monospace; /* Si la usas, se ve muy técnico */
     font-size: 0.85rem !important;
     margin: 10px 0 !important;
 }
@@ -1125,7 +1163,6 @@ body.mobile-os .modal-right span {
     color: #ffffff !important;
 }
 
-
 body.mobile-os .modal-actions {
     display: flex !important;
     justify-content: space-between !important;
@@ -1135,7 +1172,7 @@ body.mobile-os .modal-actions {
 
 body.mobile-os .btn-gc {
     flex: 1 !important; /* Hace que ambos botones midan lo mismo */
-    border-radius: 50px !important; 
+    border-radius: 50px !important;
     padding: 12px 5px !important;
     font-size: 0.8rem !important;
     font-weight: bold !important;
@@ -1157,7 +1194,6 @@ body.mobile-os #modalDisco {
     background: none !important;
 }
 
-
 body.mobile-os header {
     display: flex !important;
     flex-direction: column !important; /* Apilamos para dar espacio al título */
@@ -1170,7 +1206,6 @@ body.mobile-os header {
     width: 100% !important;
     margin: 0 0 20px 0 !important;
     position: relative !important;
-
 }
 
 /* Título con efecto de brillo (Glow) */
@@ -1180,8 +1215,9 @@ body.mobile-os header h1 {
     text-align: center !important;
     line-height: 1.1 !important;
     margin: 0 !important;
-    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5), 
-                 0 0 20px rgba(65, 105, 225, 0.4) !important;
+    text-shadow:
+        0 0 10px rgba(255, 255, 255, 0.5),
+        0 0 20px rgba(65, 105, 225, 0.4) !important;
     font-weight: 800 !important;
 }
 
@@ -1221,7 +1257,7 @@ body.mobile-os #search-input {
     border-radius: 50px !important; /* Forma de cápsula como en la imagen */
     padding: 8px 15px !important;
     color: #4ed9ff !important; /* Azul tecnológico */
-    font-family: 'JetBrains Mono', monospace !important;
+    font-family: "JetBrains Mono", monospace !important;
     font-size: 0.8rem !important;
     outline: none !important;
 }
@@ -1229,5 +1265,3 @@ body.mobile-os #search-input {
 body.mobile-os #search-input::placeholder {
     color: rgba(78, 217, 255, 0.4) !important;
 }
-
-
