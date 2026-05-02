@@ -145,22 +145,21 @@ header::before {
 }
 .grid-container {
     display: grid;
-    /* Mantenemos tu lógica de auto-relleno profesional */
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 25px; /* Un poco más de espacio entre tarjetas mejora la estética */
+    /* auto-fit hará que las columnas se expandan para llenar el espacio */
+    grid-template-columns: repeat(auto-fit, minmax(180px, 210px));
+    gap: 25px;
     
-    /* SOLUCIÓN AL PEGADO DE ESQUINAS: */
-    width: 92%;           /* No ocupa el 100%, así deja aire a los lados */
-    max-width: 1400px;    /* Evita que en pantallas gigantes las tarjetas se separen demasiado */
-    margin: 40px auto;    /* 'auto' lo centra horizontalmente y 40px le da aire arriba/abajo */
+    width: 95%;
+    max-width: 1400px;
+    margin: 40px auto; /* El auto horizontal es vital */
+    
+    /* CENTRADO TOTAL */
+    justify-content: center; /* Centra el bloque de celdas */
+    justify-items: center;    /* Centra cada tarjeta en su celda */
     
     padding: 20px;
-    justify-content: center; 
-    align-content: start;
-    min-height: 80vh;
-    transition: opacity 0.3s ease-in-out;
+    box-sizing: border-box; /* Evita que el padding sume al ancho total */
 }
-
 
 /* 1. El "Envoltorio" (Maneja el subir/bajar y la sombra) */
 .tarjeta-wrapper {
@@ -797,22 +796,203 @@ footer {
     background: #050520; /* Fondo base azul oscuro */
 }
 
+
+.admin-access-container {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 100;
+}
+
+.gc-btn-mini {
+    background: rgba(0, 0, 0, 0.7);
+    color: #fff;
+    border: 2px solid #ffffff;
+    padding: 8px 15px;
+    font-family: "Arial Rounded MT Bold", sans-serif;
+    font-size: 0.7rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+    cursor: pointer;
+    box-shadow: inset 0 0 0 2px #000, 0 0 10px rgba(0, 150, 255, 0.3);
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Icono pequeño que simula un puerto de mando */
+.btn-icon-admin {
+    width: 10px;
+    height: 10px;
+    background: var(--btn-a); /* Tu verde neón */
+    border-radius: 50%;
+    box-shadow: 0 0 5px var(--btn-a);
+}
+
+.gc-btn-mini:hover {
+    border-color: var(--gc-cian-neón);
+    box-shadow: inset 0 0 0 2px #000, 0 0 15px var(--gc-cian-neón);
+    transform: scale(1.05);
+}
+
+.gc-btn-mini:active {
+    transform: scale(0.95);
+}
+
+
+
+
+/* Estructura Base del Modal */
+.modal-base {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+/* El cuadro de diálogo estilo GameCube */
+.modal-contenido-retro {
+    background: #030832; /* Azul slots */
+    border: 3px solid #ffffff;
+    box-shadow: inset 0 0 0 2px #000, 0 0 25px rgba(0, 150, 255, 0.5);
+    padding: 25px;
+    width: 350px;
+    border-radius: 4px;
+    text-align: center;
+}
+
+.modal-titulo-retro {
+    color: var(--gc-cian-neón);
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 0px #000;
+}
+
+/* Inputs con estilo técnico */
+.input-group-retro {
+    text-align: left;
+    margin-bottom: 15px;
+}
+
+.input-group-retro label {
+    display: block;
+    font-size: 0.7rem;
+    color: #aaa;
+    margin-bottom: 5px;
+}
+
+.input-group-retro input {
+    width: 100%;
+    background: #000;
+    border: 1px solid #ffffff;
+    padding: 10px;
+    color: #00ffff;
+    font-family: 'JetBrains Mono', monospace;
+    box-sizing: border-box;
+}
+
+/* Botones A y B */
+.modal-footer-retro {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 25px;
+}
+
+.btn-gc-retro {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: bold;
+    font-size: 0.8rem;
+}
+
+.btn-gc-retro:hover { transform: scale(1.1); }
+
+/* Estilo base del botón para que el triángulo se posicione bien */
+.btn-gc-retro {
+    position: relative;
+    padding-left: 25px; /* Espacio para el triángulo */
+    transition: all 0.2s ease;
+    filter: drop-shadow(0 0 2px rgba(0,0,0,0.5));
+}
+
+/* El triángulo oculto por defecto */
+.btn-gc-retro::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid transparent;
+    border-left: 12px solid #ffaa00; /* Naranja GameCube */
+    opacity: 0;
+    filter: drop-shadow(0 0 5px #ffaa00);
+    transition: opacity 0.2s ease, left 0.2s ease;
+}
+
+/* Efecto al pasar el mouse (Hover) o al estar enfocado */
+.btn-gc-retro:hover::beforeA,
+.btn-gc-retro:focus::before {
+    opacity: 1;
+    left: -5px; /* Pequeño desplazamiento al aparecer */
+}
+
+.btn-gc-retro:hover {
+    color: #ffcc00; /* El texto también brilla un poco en naranja */
+    text-shadow: 0 0 8px rgba(255, 170, 0, 0.6);
+}
+
+/* Ajuste específico para los iconos A/B dentro de los botones */
+.btn-gc-retro .btn-icon {
+    margin-left: 5px;
+}
+
+/* Clase especial para alertas */
+.alert-style {
+    border-color: #ffaa00 !important; /* Naranja de advertencia */
+    box-shadow: inset 0 0 0 2px #000, 0 0 30px rgba(255, 170, 0, 0.4) !important;
+}
+
+.modal-text-retro {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.9rem;
+    color: #fff;
+    margin: 20px 0;
+    line-height: 1.4;
+    text-transform: uppercase;
+}
+
+#alertTitle {
+    color: #ffaa00; /* Título en naranja */
+}
+
 /* --- android ---- */
 /* body.mobile-os
 
 
 /* 1. Grid Estático: Máximo rendimiento en móvil */
-body.mobile-os #grid-container {
+/* --- Ajustes Android ---- */
+body.mobile-os .grid-container {
     display: grid !important;
-    /* Forzamos dos columnas exactamente iguales */
+    /* En móvil, 2 columnas fijas centradas */
     grid-template-columns: repeat(2, 1fr) !important; 
     
-    /* Centrado del contenedor respecto a la pantalla */
-    width: 95% !important;
+    width: 90% !important;
     margin-left: auto !important;
     margin-right: auto !important;
     
-    /* Centrado de las tarjetas dentro de sus columnas */
+    /* Centra el contenido de las celdas */
     justify-items: center !important; 
     align-items: start !important;
     
@@ -820,10 +1000,11 @@ body.mobile-os #grid-container {
     padding: 10px 0 !important;
 }
 
+/* Forzar que las tarjetas no se desborden */
 body.mobile-os .tarjeta-wrapper {
-    /* Aseguramos que el envoltorio no tenga desplazamientos raros */
     margin: 0 !important;
     width: 100% !important;
+    max-width: 180px; /* Evita que crezcan demasiado en pantallas anchas de móvil */
     display: flex !important;
     justify-content: center !important;
 }

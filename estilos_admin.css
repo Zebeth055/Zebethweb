@@ -406,3 +406,111 @@ input:not(.input-gc) {
     border-radius: 50%;
     border: 2px solid #fff;
 }
+
+.admin-monitor {
+    background: #050520;
+    border: 3px solid #fff;
+    padding: 10px;
+    margin-top: 20px;
+    box-shadow: 0 0 15px rgba(0, 150, 255, 0.3);
+}
+
+.monitor-header {
+    background: #000;
+    color: var(--gc-cian-neón);
+    padding: 5px 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #fff;
+    margin-bottom: 10px;
+}
+
+.preview-frame {
+    width: 100%;
+    height: 600px; /* Ajusta esto según tu espacio */
+    border: none;
+    background: #000;
+}
+
+.gc-btn-mini-refresh {
+    background: rgba(255, 170, 0, 0.1); /* Fondo sutil naranja */
+    color: #ffaa00; /* Texto naranja GameCube */
+    border: 1px solid #ffaa00;
+    padding: 4px 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    text-transform: uppercase;
+}
+
+/* El pequeño indicador de "foco" */
+.gc-btn-mini-refresh::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    background: #ffaa00;
+    border-radius: 50%;
+    box-shadow: 0 0 5px #ffaa00;
+    opacity: 0.5;
+}
+
+.gc-btn-mini-refresh:hover {
+    background: #ffaa00;
+    color: #000;
+    box-shadow: 0 0 15px rgba(255, 170, 0, 0.5);
+}
+
+.gc-btn-mini-refresh:hover::before {
+    background: #000;
+    box-shadow: none;
+    opacity: 1;
+}
+
+.gc-btn-mini-refresh:active {
+    transform: scale(0.95);
+}
+
+/* Elimina el margen inferior del contenedor principal */
+.main-container {
+    margin-bottom: 0 !important;
+    padding-bottom: 0px; /* Un poco de aire sutil */
+}
+
+/* Ajusta el Monitor para que se pegue arriba */
+.monitor-header {
+    margin-top: 0 !important; /* Quita cualquier separación con el panel de arriba */
+    background: #000;
+    border: 3px solid #fff;
+    border-bottom: none; /* Une visualmente el header con la pantalla */
+    margin-bottom: 0 !important;
+}
+
+.monitor-screen {
+    border: 3px solid #fff;
+    border-top: none; /* Termina de unir el header con el frame */
+    margin-top: 0 !important;
+    line-height: 0; /* Evita espacios extra debajo de elementos inline */
+}
+
+.preview-frame {
+    display: block; /* Evita el pequeño espacio inferior de los elementos inline-block */
+    width: 100%;
+    height: 500px; /* Ajusta según necesites */
+    margin-bottom: 0;
+}
+
+/* El info-display suele tener márgenes automáticos, quítalos */
+.info-display {
+    margin-top: 5px !important; /* Separación mínima con el monitor */
+    padding: 5px;
+}

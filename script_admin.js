@@ -27,7 +27,7 @@ const warningModal = document.getElementById('warningModal');
 const btnOkWarning = document.getElementById('btnOkWarning');
 const infoText = document.getElementById('info-text');
 
-// 4. FUNCIONES MODALES DE SISTEMA (ESTILO CLÁSICO)
+// 4. FUNCIONES MODALES DE SISTEMA
 function customConfirm(mensaje) {
     return new Promise((resolve) => {
         confirmMessage.innerHTML = mensaje;
@@ -83,7 +83,8 @@ function iniciarEscuchaDB() {
 
             item.onmouseenter = () => {
                 if (infoText) {
-                    infoText.innerHTML = `${datos.nombre} <span style="font-size: 0.8em; color: var(--gc-cyan-neon); margin-left: 15px;">[${datos.id}]</span>`;
+                    // Usamos color cian neon para el ID como en tu diseño
+                    infoText.innerHTML = `${datos.nombre} <span style="font-size: 0.8em; color: #00ffff; margin-left: 15px;">[${datos.id}]</span>`;
                 }
             };
 
@@ -98,7 +99,7 @@ function iniciarEscuchaDB() {
     });
 }
 
-// 6. LÓGICA DE BORRADO RÁPIDO (BOTÓN X)
+// 6. LÓGICA DE BORRADO RÁPIDO
 function vincularBotonesBorrarRapido() {
     document.querySelectorAll('.delete-btn').forEach(btn => {
         btn.onclick = async (e) => {
@@ -116,31 +117,18 @@ function vincularBotonesBorrarRapido() {
     });
 }
 
-// 7. MODAL DETALLE (EDICIÓN E IMÁGENES DE RESPALDO)
+// 7. MODAL DETALLE
 async function abrirModalDetalle(datos, idDoc) {
     const modal = document.getElementById('modalDetalle');
     const modalImagen = document.getElementById('modalImagen');
     const modalDisco = document.getElementById('modalDisco');
 
-    // Configurar respaldo de imágenes
-    if (modalImagen) {
-        modalImagen.onerror = function() {
-            this.src = './portadas/undefined.png';
-            this.onerror = null;
-        };
-        modalImagen.src = `./portadas/${datos.id}.png`;
-    }
-
+    if (modalImagen) modalImagen.src = `./portadas/${datos.id}.png`;
     if (modalDisco) {
-        modalDisco.onerror = function() {
-            this.src = './portadas discos/undefinedcd.png';
-            this.onerror = null;
-        };
         modalDisco.src = `./portadas discos/${datos.id}.png`;
         modalDisco.classList.add('girando');
     }
 
-    // Llenar inputs
     const inputNombre = document.getElementById('editNombre');
     const inputID = document.getElementById('editID');
     const inputFormato = document.getElementById('editFormato');
@@ -158,14 +146,11 @@ async function abrirModalDetalle(datos, idDoc) {
             : "N/A";
     }
 
-    // Botón Actualizar (A)
-    const btnActualizar = document.getElementById('btnActualizarModal');
-    btnActualizar.onclick = async () => {
+    document.getElementById('btnActualizarModal').onclick = async () => {
         const confirmar = await customConfirm("¿Guardar cambios en la base de datos?");
         if (confirmar) {
             try {
-                const juegoRef = doc(db, "juegos", idDoc);
-                await updateDoc(juegoRef, {
+                await updateDoc(doc(db, "juegos", idDoc), {
                     nombre: inputNombre.value,
                     id: inputID.value,
                     formato: inputFormato.value,
@@ -177,9 +162,7 @@ async function abrirModalDetalle(datos, idDoc) {
         }
     };
 
-    // Botón Borrar (B)
-    const btnBorrarInterno = document.getElementById('btnBorrarDesdeModal');
-    btnBorrarInterno.onclick = async () => {
+    document.getElementById('btnBorrarDesdeModal').onclick = async () => {
         const confirmar = await customConfirm(`¿ELIMINAR PERMANENTEMENTE?<br>${datos.nombre}`);
         if (confirmar) {
             await deleteDoc(doc(db, "juegos", idDoc));
@@ -188,9 +171,7 @@ async function abrirModalDetalle(datos, idDoc) {
         }
     };
 
-    // Botón Cerrar (X)
-    const btnCerrar = document.getElementById('btnCerrarModal');
-    btnCerrar.onclick = () => {
+    document.getElementById('btnCerrarModal').onclick = () => {
         modal.style.display = 'none';
         if (modalDisco) modalDisco.classList.remove('girando');
     };
@@ -213,7 +194,7 @@ document.getElementById('btnGuardar').addEventListener('click', async () => {
     const nombre = document.getElementById('nombre').value;
     const id = document.getElementById('id_serial').value;
     const formato = document.getElementById('formato').value;
-    const url = document.getElementById('link_descarga').value;
+    const url = document.getElementById('link_descarga').value; // Mapeo correcto al ID del HTML
 
     if (!nombre.trim() || !id.trim() || !formato.trim() || !url.trim()) {
         await showWarning(); 
@@ -230,10 +211,32 @@ document.getElementById('btnGuardar').addEventListener('click', async () => {
 });
 
 function limpiarCampos() {
-    document.querySelectorAll('.form-container input').forEach(i => i.value = "");
+    document.querySelectorAll('.left-panel input').forEach(i => i.value = "");
 }
 
 document.getElementById('btnLimpiar').addEventListener('click', limpiarCampos);
 
-// INICIALIZACIÓN
+// 10. LÓGICA DEL MONITOR REFRESH
+const refreshBtn = document.getElementById('btn-refresh-preview');
+const iframe = document.getElementById('preview-iframe');
+
+if (refreshBtn && iframe) {
+    refreshBtn.onclick = () => {
+        const originalText = refreshBtn.innerHTML;
+        refreshBtn.innerHTML = "RELOADING...";
+        refreshBtn.style.opacity = "0.5";
+        refreshBtn.disabled = true;
+
+        const currentSrc = iframe.src.split('?')[0];
+        iframe.src = `${currentSrc}?t=${new Date().getTime()}`;
+
+        setTimeout(() => {
+            refreshBtn.innerHTML = originalText;
+            refreshBtn.style.opacity = "1";
+            refreshBtn.disabled = false;
+        }, 600);
+    };
+}
+
+// 11. INICIALIZACIÓN
 iniciarEscuchaDB();

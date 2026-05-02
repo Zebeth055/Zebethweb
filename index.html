@@ -38,6 +38,10 @@
 <audio id="sound-select-1" src="./sounds/Option Move 1.mp3" preload="auto"></audio>
 <audio id="sound-select-2" src="./sounds/Option Move 2.mp3" preload="auto"></audio>
 <audio id="sound-select-3" src="./sounds/Option Move 3.mp3" preload="auto"></audio>
+<audio id="sound-error" src="./sounds/Error.mp3" preload="auto"></audio>
+<audio id="sound-next" src="./sounds/Menu Back.mp3" preload="auto"></audio>
+<audio id="sound-prev" src="./sounds/Menu Select.mp3" preload="auto"></audio>
+    
     
     
 <audio id="bg-music" loop preload="auto">
@@ -62,7 +66,11 @@
         <div class="search-container">
             <input type="text" id="inputBuscador" placeholder="[ BUSCAR_DATOS ]">
         </div>
-        
+        <div class="admin-header-zone">
+        <button id="btn-admin-login" class="gc-btn-mini">
+            <span class="btn-icon-admin"></span> ADMIN
+        </button>
+    </div>
     </header>
 
 <main>
@@ -113,6 +121,43 @@
     <div class="footer-guide">
     </div>        
 
+    <div id="modalLogin" class="modal-base">
+    <div class="modal-contenido-retro">
+        <h2 class="modal-titulo-retro">SYSTEM ACCESS</h2>
+        
+        <div class="login-form">
+            <div class="input-group-retro">
+                <label>USER_ID:</label>
+                <input type="email" id="loginEmail" placeholder="example@mail.com">
+            </div>
+            <div class="input-group-retro">
+                <label>ACCESS_CODE:</label>
+                <input type="password" id="loginPass" placeholder="••••••••">
+            </div>
+        </div>
+
+        <div class="modal-footer-retro">
+            <button id="btn-cancel-login" class="btn-gc-retro b">
+                <span class="btn-icon b">B</span> CANCEL
+            </button>
+            <button id="btn-confirm-login" class="btn-gc-retro a">
+                <span class="btn-icon a">A</span> CONFIRM
+            </button>
+        </div>
+    </div>
+</div>
+    <div id="modalAlert" class="modal-base">
+    <div class="modal-contenido-retro alert-style">
+        <h2 id="alertTitle" class="modal-titulo-retro">SYSTEM ERROR</h2>
+        <p id="alertMessage" class="modal-text-retro">DESCRIPTION OF THE ERROR GOES HERE.</p>
+        
+        <div class="modal-footer-retro">
+            <button id="btn-close-alert" class="btn-gc-retro a">
+                <span class="btn-icon a">A</span> OK
+            </button>
+        </div>
+    </div>
+</div>
     <script type="module" src="script.js"></script>
 </body>
 </html>

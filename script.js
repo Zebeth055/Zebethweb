@@ -88,7 +88,7 @@ const detectOS = () => {
         document.body.classList.add('mobile-os', 'android-optimizado');
         juegosPorPagina = 8; // <--- En Android solo mostramos 6 (o los que prefieras)
     } else {
-        juegosPorPagina = 20; // <--- En PC se mantienen los 12
+        juegosPorPagina = 15; // <--- En PC se mantienen los 12
     }
 };
 detectOS();
@@ -193,14 +193,32 @@ function cambiarPaginaConEfecto(nuevaPagina) {
         });
     }, 300);
 }
-
+function playNavSound(soundId) {
+    const sound = document.getElementById(soundId);
+    if (sound) {
+        sound.currentTime = 0;
+        // Aplicamos el volumen actual del slider si quieres que sea consistente
+        const currentVol = localStorage.getItem('gamecube-volume') || 0.5;
+        sound.volume = currentVol;
+        
+        sound.play().catch(e => console.warn("Navegación silenciada:", e));
+    }
+}
+// Botón Siguiente
 document.getElementById('next-page').addEventListener('click', () => {
     const totalPaginas = Math.ceil(juegosFiltrados.length / juegosPorPagina);
-    if (paginaActual < totalPaginas) cambiarPaginaConEfecto(paginaActual + 1);
+    if (paginaActual < totalPaginas) {
+        playNavSound('sound-next'); // <--- Sonido Siguiente
+        cambiarPaginaConEfecto(paginaActual + 1);
+    }
 });
 
+// Botón Atrás
 document.getElementById('prev-page').addEventListener('click', () => {
-    if (paginaActual > 1) cambiarPaginaConEfecto(paginaActual - 1);
+    if (paginaActual > 1) {
+        playNavSound('sound-prev'); // <--- Sonido Atrás
+        cambiarPaginaConEfecto(paginaActual - 1);
+    }
 });
 
 // --- 7. BUSCADOR SUAVE (DEBOUNCE) ---
@@ -320,40 +338,108 @@ cargarDesdeFirebase();
 // --- 11. CONTROL DE VOLUMEN MAESTRO ---
 const volumeSlider = document.getElementById('master-volume');
 
-// 1. Función para el efecto visual de "llenado" (Cian/Azul oscuro)
 function updateVolumeStyle(value) {
     if (!volumeSlider) return;
     const percentage = value * 100;
     volumeSlider.style.background = `linear-gradient(90deg, #00ffff ${percentage}%, #050520 ${percentage}%)`;
 }
 
-// 2. Función para aplicar el volumen a todos los elementos <audio>
 function updateGlobalVolume(volume) {
     const allAudios = document.querySelectorAll('audio');
     allAudios.forEach(audio => {
         if (audio.id === 'bg-music') {
-            audio.volume = volume * 0.4; // Música de fondo más tenue
+            audio.volume = volume * 0.4; 
         } else {
-            audio.volume = volume; // Efectos y Jingle
+            audio.volume = volume;
         }
     });
 }
 
-// 3. Inicialización y Eventos
+// INICIALIZACIÓN DEL VOLUMEN (Esto es lo que faltaba)
 if (volumeSlider) {
-    // Recuperar volumen guardado
     const savedVol = localStorage.getItem('gamecube-volume') || 0.5;
     volumeSlider.value = savedVol;
-    
-    // Aplicar estilo visual y volumen inicial
     updateVolumeStyle(savedVol);
     setTimeout(() => updateGlobalVolume(savedVol), 1000);
 
-    // UN SOLO EventListener para todo
     volumeSlider.addEventListener('input', (e) => {
         const val = e.target.value;
-        updateGlobalVolume(val);  // Cambia el sonido
-        updateVolumeStyle(val);   // Cambia el color de la barra
-        localStorage.setItem('gamecube-volume', val); // Guarda
+        updateGlobalVolume(val);
+        updateVolumeStyle(val);
+        localStorage.setItem('gamecube-volume', val);
     });
 }
+
+// --- 12. SISTEMA DE LOGIN Y ALERTAS RETRO ---
+import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+const auth = getAuth(app);
+const modalLogin = document.getElementById('modalLogin');
+const modalAlert = document.getElementById('modalAlert');
+const alertTitle = document.getElementById('alertTitle');
+const alertMessage = document.getElementById('alertMessage');
+
+// --- FUNCIÓN MAESTRA DE ALERTAS ---
+function showRetroAlert(title, message) {
+    alertTitle.innerText = title;
+    alertMessage.innerText = message;
+    modalAlert.style.display = "flex";
+    
+    // Reproducir sonido de error
+    const errorSound = document.getElementById('sound-error');
+    if (errorSound) {
+        errorSound.currentTime = 0; // Reinicia el sonido por si acaso
+        errorSound.play().catch(e => console.log("Audio de error bloqueado:", e));
+    }
+}
+
+// Lógica de botones de Alerta
+document.getElementById('btn-close-alert').onclick = () => {
+    modalAlert.style.display = "none";
+};
+
+// Lógica de botones de Login
+document.getElementById('btn-admin-login').onclick = () => {
+    modalLogin.style.display = "flex";
+    document.getElementById('loginEmail').focus();
+};
+
+document.getElementById('btn-cancel-login').onclick = () => {
+    modalLogin.style.display = "none";
+};
+
+// --- PROCESO DE LOGIN CON MODALES ---
+document.getElementById('btn-confirm-login').onclick = () => {
+    const email = document.getElementById('loginEmail').value;
+    const pass = document.getElementById('loginPass').value;
+
+    // CASO 1: Faltan datos
+    if (!email || !pass) {
+        showRetroAlert("DATA MISSING", "PLEASE INSERT ALL REQUIRED SYSTEM CREDENTIALS.");
+        return;
+    }
+
+    signInWithEmailAndPassword(auth, email, pass)
+        .then(() => {
+            window.location.href = "admin.html";
+        })
+        .catch((error) => {
+            // CASO 2: Datos incorrectos o errores de Firebase
+            let errorMsg = "INVALID ACCESS CODE OR USER ID.";
+            
+            if (error.code === 'auth/invalid-email') {
+                errorMsg = "THE USER_ID FORMAT IS INCORRECT.";
+            } else if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
+                errorMsg = "CREDENTIALS NOT FOUND IN MEMORY CARD.";
+            }
+            
+            showRetroAlert("ACCESS DENIED", errorMsg);
+            console.error(error.code);
+        });
+};
+
+// Cerrar modales al hacer clic fuera
+window.addEventListener('click', (event) => {
+    if (event.target == modalLogin) modalLogin.style.display = "none";
+    if (event.target == modalAlert) modalAlert.style.display = "none";
+});
