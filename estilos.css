@@ -1007,6 +1007,181 @@ footer {
     color: #ffaa00; /* Título en naranja */
 }
 
+
+
+
+:root {
+    --gcn-gray: #d1d1d1;
+    --gcn-dark-gray: #1a1a1a;
+    --gcn-purple: #5910a8;
+}
+
+.gcn-front-panel {
+    background: var(--gcn-gray);
+    padding: 20px;
+    border-radius: 15px;
+    border-bottom: 8px solid #b0b0b0;
+    max-width: 500px;
+    margin: 20px auto;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    box-shadow: inset 0 2px 5px rgba(255,255,255,0.5), 0 10px 20px rgba(0,0,0,0.3);
+}
+
+/* --- PUERTOS DE CONTROLES --- */
+.control-ports {
+    display: flex;
+    justify-content: center; /* Centra los puertos si hay pocos */
+    align-items: center;
+    gap: 20px; /* Espacio constante entre ellos */
+    flex-wrap: wrap; /* Por si en móvil se necesitan dos filas */
+    min-height: 80px; /* Evita que el panel salte al cargar */
+}
+
+.port {
+    width: 60px;
+    height: 60px;
+    background: var(--gcn-dark-gray);
+    border-radius: 50%;
+    border: 4px solid #a0a0a0;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+/* El patrón de pines interno */
+.pin-grid {
+    width: 30px;
+    height: 15px;
+    background: #000;
+    clip-path: polygon(0% 0%, 100% 0%, 85% 100%, 15% 100%);
+    border-bottom: 2px solid #333;
+}
+
+/* Estado Activo (Página Actual) */
+.port.active {
+    border-color: #00ffff;
+    box-shadow: 0 0 15px #00ffff;
+    background: #050520;
+}
+
+/* --- SLOTS DE MEMORY CARD --- */
+.memory-slots {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+}
+
+.mem-card-slot {
+    background: #c0c0c0;
+    border: 2px solid #a0a0a0;
+    border-radius: 4px;
+    width: 120px;
+    height: 35px;
+    position: relative;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    padding-bottom: 4px;
+    transition: all 0.2s;
+}
+
+.mem-card-slot span {
+    font-size: 0.6rem;
+    font-family: 'JetBrains Mono', monospace;
+    color: #666;
+    margin-bottom: 2px;
+}
+
+.slot-line {
+    width: 80%;
+    height: 6px;
+    background: #222;
+    border-radius: 2px;
+    box-shadow: inset 0 2px 2px rgba(0,0,0,0.8);
+}
+
+/* Efecto al presionar (insertar card) */
+.mem-card-slot:active {
+    transform: scale(0.95);
+    background: #b0b0b0;
+}
+
+.mem-card-slot:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Responsive para Android */
+@media (max-width: 480px) {
+    .gcn-front-panel { width: 95%; padding: 15px; }
+    .port { width: 45px; height: 45px; }
+    .mem-card-slot { width: 100px; }
+}
+
+/* Ocultar el texto de página por completo */
+#page-info-retro {
+    display: none !important;
+}
+
+/* --- Ajuste de Puertos y Puntos --- */
+
+.port {
+    position: relative; /* Base para posicionar los puntos */
+    width: 65px;
+    height: 65px;
+    background: var(--gcn-dark-gray);
+    border-radius: 50%;
+    border: 4px solid #a0a0a0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* transition y box-shadow para el estado 'active' se mantienen */
+}
+
+/* Contenedor de los puntitos: AHORA FUERA DEL PUERTO */
+.port-index {
+    position: absolute;
+    
+    /* --- ESTO ES LO QUE LO MUEVE ARRIBA --- */
+    top: -16px; /* Ajusta este valor negativo para que queden sobre la carcasa gris */
+    
+    left: 50%; /* Lo centra horizontalmente */
+    transform: translateX(-50%); /* Ajuste perfecto de centrado */
+    
+    display: flex;
+    gap: 3px; /* Espacio entre puntitos */
+    justify-content: center;
+    pointer-events: none; /* Para que no interfieran con los clics */
+}
+
+/* Cada puntito individual */
+.port-index span {
+    width: 4px;
+    height: 4px;
+    background: #999; /* Gris oscuro para simular el relieve en el plástico gris */
+    border-radius: 50%;
+    
+    /* Efecto de relieve sutil (Incrustado en el plástico) */
+    box-shadow: inset 1px 1px 1px rgba(0,0,0,0.6), 1px 1px 1px rgba(255,255,255,0.3);
+}
+
+/* --- Estado Activo (Página Actual) --- */
+.port.active .port-index span {
+    background: #00ffff; /* Brillo cian en los puntos */
+    box-shadow: 0 0 8px #00ffff, inset 0 0 2px #ffffff;
+}
+
+/* Ajuste de los pines internos */
+.pin-grid {
+    margin-top: 0; /* Ya no necesitan espacio arriba porque los puntos se movieron */
+}
+
 /* --- android ---- */
 /* body.mobile-os
 

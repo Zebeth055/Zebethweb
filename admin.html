@@ -3,13 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zebethweb - Admin BIOS</title>
+    <title>Admin Mode</title>
     <link rel="stylesheet" href="estilos_admin.css">
 </head>
 <body>
 <div class="main-container">
+    
     <div class="right-panel"> 
-        <h2 class="panel-title"></h2>
+        <div class="panel-header">
+            <div class="top-controls">
+                <button id="btn-toggle-edit" class="gc-btn-mini-refresh">
+                    EDIT MODE: <span id="edit-status">OFF</span>
+                </button>
+                <button id="btn-seed-data" class="gc-btn-mini-refresh" style="border-color: #00ffff; color: #00ffff;">
+                    GENERATE TEST DATA
+                </button>
+            </div>
+            <h2 class="panel-title"></h2>
+        </div>
         <div id="lista-juegos" class="db-grid"></div>
     </div>
 
@@ -39,22 +50,21 @@
                     <button id="btnGuardar" class="btn-confirm">YES</button>
                     <button id="btnLimpiar" class="btn-cancel">NO</button>
                 </div>
+            </div>
+        </div>
 
-<div class="info-display">
-    <div id="info-text">Select a game</div>
-</div>
-
-<!-- 1. MODAL DE DETALLE (Independiente) -->
-<div class="modal-overlay" id="modalDetalle" style="display: none;">
-    <div class="modal-content">
-<div class="modal-left" style="position: relative; display: flex; align-items: center; justify-content: center; margin-right: 40px; min-width: 300px;">
-    <img id="modalImagen" src="" alt="Portada" style="width: 100%; border-radius: 10px; border: 3px solid #fff;">
-    
-    <!-- El disco ahora se posiciona un poco más hacia adentro de la portada -->
-    <div style="position: absolute; width: 65%; right: -30px; bottom: -10px; z-index: 2;">
-        <img id="modalDisco" src="" alt="Disco" style="border-radius: 50%; width: 100%; filter: drop-shadow(0 0 15px rgba(0,0,0,0.9));">
+        <div class="info-display">
+            <div id="info-text">Select a game</div>
+        </div>
     </div>
-</div>
+</div> <div class="modal-overlay" id="modalDetalle" style="display: none;">
+    <div class="modal-content">
+        <div class="modal-left" style="position: relative; display: flex; align-items: center; justify-content: center; margin-right: 40px; min-width: 300px;">
+            <img id="modalImagen" src="" alt="Portada" style="width: 100%; border-radius: 10px; border: 3px solid #fff;">
+            <div style="position: absolute; width: 65%; right: -30px; bottom: -10px; z-index: 2;">
+                <img id="modalDisco" src="" alt="Disco" style="border-radius: 50%; width: 100%; filter: drop-shadow(0 0 15px rgba(0,0,0,0.9));">
+            </div>
+        </div>
 
         <div class="modal-right">
             <div class="info-header">EDITAR ENTRADA</div>
@@ -69,26 +79,14 @@
                 <input type="text" id="editURL" class="input-gc">
                 <p>Subido el: <span id="modalFecha"></span></p>
             </div>
-<div class="modal-actions">
-    <button class="btn-gc btn-gc-a" id="btnActualizarModal">
-        <span>(A)</span> ACTUALIZAR
-    </button>
-    
-    <button class="btn-gc btn-gc-b" id="btnBorrarDesdeModal">
-        <span>(B)</span> BORRAR
-    </button>
-
-    <button class="btn-gc btn-gc-x" id="btnCerrarModal" style="background: #0080ff;">
-        <span>(X)</span> CERRAR
-    </button>
-</div>
+            <div class="modal-actions">
+                <button class="btn-gc btn-gc-a" id="btnActualizarModal"><span>(A)</span> ACTUALIZAR</button>
+                <button class="btn-gc btn-gc-b" id="btnBorrarDesdeModal"><span>(B)</span> BORRAR</button>
+                <button class="btn-gc btn-gc-x" id="btnCerrarModal" style="background: #0080ff;"><span>(X)</span> CERRAR</button>
+            </div>
         </div>
     </div>
 </div>
-
-    
-    
-<!-- 2. MODALES DE SISTEMA (FUERA DE TODO, AL FINAL) -->
 
 <div id="confirmModal" class="confirm-overlay" style="display: none; z-index: 9999;">
     <div class="confirm-box">
@@ -100,7 +98,7 @@
             </div>
         </div>
     </div>
-</div>  
+</div>
 
 <div id="successModal" class="confirm-overlay" style="display: none; z-index: 9999;">
     <div class="confirm-box" style="background: linear-gradient(135deg, #00008b 0%, #1e90ff 100%);">

@@ -70,12 +70,22 @@
             <div id="grid-container" class="grid-container"></div>
 
             <!-- Sistema de Paginación -->
-            <div class="pagination-container">
-                <button class="btn-page" id="prev-page">ANTERIOR</button>
-                <span id="page-info">PÁGINA 1</span>
-                <button class="btn-page" id="next-page">SIGUIENTE</button>
-            </div>
-        </main>
+<div class="gcn-front-panel">
+    <div class="control-ports" id="container-puertos"></div>
+
+    <div class="memory-slots">
+        <button id="prev-page" class="mem-card-slot">
+            <span>Atras</span>
+            <div class="slot-line"></div>
+        </button>
+        <button id="next-page" class="mem-card-slot">
+            <span>Siguiente</span>
+            <div class="slot-line"></div>
+        </button>
+    </div>
+</div>
+    
+    <div id="page-info-retro" style="display: none;"></div>
 
         <div class="modal-overlay" id="modalDetalle">
             <div class="modal-content">

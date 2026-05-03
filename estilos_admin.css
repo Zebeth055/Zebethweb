@@ -575,3 +575,114 @@ input:not(.input-gc) {
     margin-top: 5px !important; /* Separación mínima con el monitor */
     padding: 5px;
 }
+
+
+/* Estado seleccionado para borrado múltiple */
+.db-item.selected-batch {
+    border-color: var(--gc-cyan-neon) !important;
+    box-shadow: 0 0 20px var(--gc-cyan-neon), inset 0 0 10px var(--gc-cyan-neon) !important;
+    transform: scale(0.95);
+    filter: brightness(1.2);
+}
+
+/* Badge contador de selección */
+.batch-counter {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: var(--btn-b);
+    color: white;
+    padding: 10px 20px;
+    border: 2px solid white;
+    border-radius: 5px;
+    font-family: 'JetBrains Mono', monospace;
+    z-index: 1000;
+    display: none; /* Se activa por JS */
+    box-shadow: 0 0 15px rgba(255, 51, 102, 0.5);
+}
+
+
+/* Estado cuando el modo edición está activo */
+.edit-mode-active .db-item {
+    border-color: #555;
+    filter: grayscale(0.5);
+    opacity: 0.8;
+}
+
+/* Item seleccionado para borrar (Rojo/Verde Obscuro + Tartamudeo) */
+.edit-mode-active .db-item.selected-batch {
+    background: linear-gradient(135deg, #440000 0%, #002200 100%) !important;
+    border-color: #ff3366 !important;
+    filter: grayscale(0) brightness(1.2);
+    opacity: 1;
+    animation: stutter 0.2s infinite; /* El tartamudeo */
+}
+
+/* Animación de Tartamudeo (Glitch) */
+@keyframes stutter {
+    0% { transform: translate(1px, 1px) rotate(0deg); }
+    25% { transform: translate(-1px, -1px) skew(1deg); }
+    50% { transform: translate(1px, -1px) rotate(-1deg); }
+    75% { transform: translate(-1px, 1px) skew(-1deg); }
+    100% { transform: translate(0, 0); }
+}
+
+.status-on { color: var(--btn-a); text-shadow: 0 0 10px var(--btn-a); }
+.status-off { color: #ff3366; }
+
+/* Botón sólido y responsivo, sin tartamudeo al hacer clic */
+#btn-seed-data:active {
+    background: #00ffff;
+    color: #000;
+    transform: translateY(2px); /* Efecto de presión clásica */
+}
+
+/* Efecto de "Cargando" más limpio para el botón */
+.generating-active {
+    pointer-events: none;
+    background: repeating-linear-gradient(
+        45deg,
+        #000,
+        #000 10px,
+        #002222 10px,
+        #002222 20px
+    );
+    border-color: #00ffff !important;
+    color: #00ffff !important;
+    opacity: 0.8;
+}
+
+.generating-active {
+    animation: simple-blink 0.5s infinite;
+}
+
+@keyframes simple-blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+}
+
+.top-controls {
+    display: flex;         /* Activa el modo horizontal */
+    gap: 15px;            /* Espacio exacto entre botones */
+    align-items: center;   /* Los centra verticalmente entre sí */
+    margin-bottom: 20px;   /* Separa los botones de la lista de juegos */
+    flex-wrap: wrap;       /* Por si la pantalla es muy chica, que no se rompa */
+}
+
+/* Opcional: Si quieres que los botones tengan el mismo tamaño */
+.top-controls .gc-btn-mini-refresh {
+    flex: 1;               /* Hace que ambos crezcan igual */
+    max-width: 250px;      /* Pero que no se vuelvan gigantes */
+    white-space: nowrap;   /* Evita que el texto se salte de línea */
+}
+.top-controls {
+    display: flex;          /* Alineación horizontal */
+    gap: 20px;             /* Espacio entre botones */
+    margin-bottom: 20px;    /* Separación con la rejilla de juegos */
+    align-items: center;    /* Centrado vertical */
+}
+
+.top-controls .gc-btn-mini-refresh {
+    margin: 0;             /* Quitamos márgenes extra para que Flexbox mande */
+    min-width: 200px;      /* Tamaño mínimo para que no se encojan */
+}

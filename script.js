@@ -177,10 +177,50 @@ function renderizarPagina() {
 
 function actualizarControlesPaginacion() {
     const totalPaginas = Math.ceil(juegosFiltrados.length / juegosPorPagina) || 1;
-    document.getElementById("page-info").innerText = `PÁGINA ${paginaActual} DE ${totalPaginas}`;
+    const containerPuertos = document.getElementById('container-puertos');
+    
+    if (!containerPuertos) return;
 
-    document.getElementById("prev-page").disabled = paginaActual === 1;
-    document.getElementById("next-page").disabled = paginaActual >= totalPaginas;
+    // 1. Limpiamos puertos anteriores
+    containerPuertos.innerHTML = "";
+
+    // 2. Generamos los puertos dinámicamente
+    for (let i = 1; i <= totalPaginas; i++) {
+        const port = document.createElement('div');
+        // Si es la página actual, le ponemos la clase 'active' para el brillo cian
+        port.className = `port ${i === paginaActual ? 'active' : ''}`;
+        port.id = `port-${i}`;
+        port.style.cursor = "pointer"; // Para que sepa que es clickable
+
+        // Generamos los puntitos de relieve según el número de puerto
+        let puntosHTML = '';
+        for (let j = 0; j < i; j++) {
+            puntosHTML += '<span></span>';
+        }
+
+        port.innerHTML = `
+            <div class="port-index">${puntosHTML}</div>
+            <div class="pin-grid"></div>
+        `;
+        
+        // --- LA MAGIA DEL CLIC DIRECTO ---
+        port.onclick = () => {
+            if (i !== paginaActual) {
+                // Usamos tu función de efecto suave para navegar
+                playNavSound("sound-select-1"); // Sonido de clic retro
+                cambiarPaginaConEfecto(i);
+            }
+        };
+        
+        containerPuertos.appendChild(port);
+    }
+
+    // 3. Estado de los Slots (Memory Cards) - Botones Atrás/Sig
+    const btnPrev = document.getElementById('prev-page');
+    const btnNext = document.getElementById('next-page');
+    
+    if (btnPrev) btnPrev.disabled = (paginaActual === 1);
+    if (btnNext) btnNext.disabled = (paginaActual >= totalPaginas);
 }
 
 // --- 6. NAVEGACIÓN SUAVE ---
