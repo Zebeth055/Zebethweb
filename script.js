@@ -93,7 +93,7 @@ const detectOS = () => {
         document.body.classList.add("mobile-os", "android-optimizado");
         juegosPorPagina = 8; // <--- En Android solo mostramos 6 (o los que prefieras)
     } else {
-        juegosPorPagina = 15; // <--- En PC se mantienen los 12
+        juegosPorPagina = 12; // <--- En PC se mantienen los 12
     }
 };
 detectOS();
