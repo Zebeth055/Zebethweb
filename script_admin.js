@@ -216,7 +216,7 @@ function iniciarEscuchaDB() {
 
             item.innerHTML = `
                 <button class="delete-btn" data-id="${idDoc}">X</button>
-                <img src="./portadas discos/${datos.id}.png" class="disco-icon" onerror="this.src='./portadas discos/undefinedcd.png';">
+                <img src="Assets/CoversCD//${datos.id}.png" class="disco-icon" onerror="this.src='Assets/CoversCD//undefinedcd.png';">
             `;
 
             // UN SOLO ONCLICK QUE GESTIONE TODO
@@ -274,8 +274,8 @@ async function abrirModalDetalle(datos, idDoc) {
     const modal = document.getElementById("modalDetalle");
     const disco = document.getElementById("modalDisco");
     
-    document.getElementById("modalImagen").src = `./portadas/${datos.id}.png`;
-    disco.src = `./portadas discos/${datos.id}.png`;
+    document.getElementById("modalImagen").src = `Assets/Covers/${datos.id}.png`;
+    disco.src = `Assets/CoversCD//${datos.id}.png`;
     disco.classList.add("girando");
 
     document.getElementById("editNombre").value = datos.nombre || "";

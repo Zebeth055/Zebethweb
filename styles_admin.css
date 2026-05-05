@@ -668,3 +668,31 @@ input:not(.input-gc) {
     75% { transform: translate(-1px, 1px) skew(-1deg); }
     100% { transform: translate(0, 0); }
 }
+
+/* Estilo específico para el botón START de GameCube */
+.btn-start-icon {
+    width: 32px;
+    height: 14px;
+    background: #a0a0a0; /* Gris clásico del botón Start */
+    border: 2px solid #ffffff;
+    border-radius: 10px; /* Forma ovalada */
+    box-shadow: inset -2px -2px 0px rgba(0,0,0,0.3), 2px 2px 0px #000;
+    transition: transform 0.1s;
+}
+
+/* Efecto de hover en el item completo */
+.footer-item:hover .btn-start-icon {
+    background: #ffffff;
+    transform: scale(1.1);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.footer-item:active .btn-start-icon {
+    transform: scale(0.9);
+}
+
+/* Asegurar que el texto también resalte al pasar el mouse */
+.footer-item:hover span {
+    color: var(--gc-cyan-neon);
+    text-shadow: 0 0 8px var(--gc-cyan-neon);
+}

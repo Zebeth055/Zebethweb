@@ -971,6 +971,8 @@ header::before {
     display: flex;
     align-items: center;
     gap: 8px;
+    margin-top: 10px;
+
 }
 
 .btn-icon-admin {
@@ -988,6 +990,7 @@ header::before {
 }
 
 .gc-btn-mini:active { transform: scale(0.95); }
+
 
 /* =========================================
    8. FOOTER Y GUÍA DE CONTROLES

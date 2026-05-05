@@ -52,8 +52,8 @@ let juegosPorPagina = 12;
 let debounceTimer;
 let stopTimeoutHandle = null;
 
-const rutaLocalPortadas = "./portadas/";
-const rutaLocalDiscos = "./portadas discos/";
+const rutaLocalPortadas = "Assets/Covers/";
+const rutaLocalDiscos = "Assets/CoversCD/";
 
 // --- 5. DETECTAR OS (Paginación) ---
 const detectOS = () => {
@@ -61,7 +61,7 @@ const detectOS = () => {
         document.body.classList.add("mobile-os", "android-optimizado");
         juegosPorPagina = 8;
     } else {
-        juegosPorPagina = 12;
+        juegosPorPagina = 15;
     }
 };
 detectOS();
@@ -70,7 +70,7 @@ detectOS();
 let mouseX = 50, followX = 50;
 const suavizado = 0.05, offsetJewel = -50;
 
-fetch('jewel.svg')
+fetch('Assets/jewel.svg')
     .then(response => response.text())
     .then(data => {
         if (jewelDiv) {
