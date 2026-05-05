@@ -16,10 +16,11 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
-// En la sección 3: VARIABLES DE ESTADO
+
+// Variables de historial (por si las usas más adelante)
 let undoStack = [];
 let redoStack = [];
-const MAX_HISTORY = 20; // Límite para no saturar la memoria
+const MAX_HISTORY = 20; 
 
 // --- 3. ELEMENTOS DEL DOM GLOBALES ---
 const startBtn = document.getElementById("start-btn");
@@ -197,7 +198,7 @@ function renderizarPagina() {
             const randomNum = Math.floor(Math.random() * 3) + 1;
             const sound = document.getElementById(`sound-select-${randomNum}`);
             if (sound) { sound.currentTime = 0; sound.play().catch(()=>{}); }
-            window.abrirModal(p.id); // Llamada segura
+            window.abrirModal(p.id);
         };
 
         wrapper.appendChild(card);
@@ -311,7 +312,7 @@ function ordenarProductos() {
 }
 if(selectOrden) selectOrden.addEventListener("change", ordenarProductos);
 
-// --- 12. LÓGICA DEL MODAL (DISCO GIRATORIO) ---
+// --- 12. LÓGICA DEL MODAL (DISCO GIRATORIO Y REDIRECCIÓN) ---
 function obtenerAnguloActual(el) {
     const st = window.getComputedStyle(el, null);
     const tr = st.getPropertyValue("transform");
@@ -353,6 +354,14 @@ window.abrirModal = function(idJuego) {
         imgDisco.onerror = function () { this.style.display = "none"; };
     }
     
+    // --- LÓGICA DE REDIRECCIÓN (RESTAURADA) ---
+    const btnA = modalDetalle.querySelector(".btn-gc-a");
+    if (btnA) {
+        btnA.onclick = () => {
+            if (item.url) window.location.href = item.url;
+        };
+    }
+
     modalDetalle.style.display = "flex";
 }
 
@@ -458,8 +467,6 @@ window.addEventListener("click", (event) => {
     if (event.target == modalAlert) modalAlert.style.display = "none";
     if (event.target == modalDetalle) window.cerrarModal();
 });
-
-
 
 // --- 15. INICIALIZACIÓN FINAL ---
 cargarDesdeFirebase();
