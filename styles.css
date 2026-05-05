@@ -1,657 +1,136 @@
+/* =========================================
+   1. VARIABLES Y ANIMACIONES BASE
+   ========================================= */
 :root {
     --gc-dark: rgb(0, 0, 0);
     --gc-grid: rgba(255, 255, 255, 0.21);
     --btn-b: #ff3366;
     --font-main: "Arial Rounded MT Bold", "Helvetica", sans-serif;
-    --gc-blue-deep: #0e11c5; /* Azul cobalto intenso de la base */
-    --gc-blue-dark: #07096e; /* Azul oscuro para degradados y fondos */
-    --gc-blue-slots: #030832; /* Azul casi negro para el fondo del grid */
-    --gc-cyan-neón: #00ffff; /* Cian neón para bordes activos y texto */
-    --gc-blue-bright: #3f60ff; /* Azul claro para brillos secundarios */
-    --btn-a: #00ff5d; /* Reutilizamos tu variable A */
+    --gc-blue-deep: #0e11c5;
+    --gc-blue-dark: #07096e;
+    --gc-blue-slots: #030832;
+    --gc-cyan-neón: #00ffff;
+    --gc-blue-bright: #3f60ff;
+    --btn-a: #00ff5d;
     --bordes: #000dda;
+    
     /* Efecto Cristal Azul Profundo */
-    --glass-bg: rgba(10, 15, 40, 0.75); /* Tono azul noche más intenso */
-    --glass-border: rgba(100, 200, 255, 0.25); /* Borde con tinte cian */
-    --gc-blue-glow: rgba(0, 15se0, 255, 0.5); /* Brillo interno azul neón */
-    --gc-cyan-glow: rgba(0, 255, 255, 0.2); /* Brillo secundario para aristas */
-
+    --glass-bg: rgba(10, 15, 40, 0.75);
+    --glass-border: rgba(100, 200, 255, 0.25);
+    --gc-blue-glow: rgba(0, 150, 255, 0.5); /* Corregido de 15se0 */
+    --gc-cyan-glow: rgba(0, 255, 255, 0.2);
     --glow-blue: 0 0 10px rgba(65, 105, 225, 0.8);
+
+    /* Variables Panel Frontal */
+    --gcn-gray: rgba(212, 212, 212, 0.27);
+    --gcn-dark-gray: #1a1a1a;
+    --gcn-purple: #5910a8;
 }
 
 @keyframes girarDiscoWii {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
 }
 
-#modalDisco {
-    border-radius: 100%;
-    background: transparent;
-    filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.5));
-    width: 100%;
+@keyframes modalSlide {
+    from { transform: scale(0.8); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
 }
 
-#modalDisco.girando {
-    animation: girarDiscoWii 0.6s linear infinite;
+@keyframes baileInterno {
+    0%, 100% { transform: rotateY(-3deg) rotateZ(0deg); }
+    50% { transform: rotateY(3deg) rotateZ(1deg); }
 }
 
-/* --- ESTILO BASE --- */
+@keyframes fadeInCard {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* =========================================
+   2. ESTILOS GLOBALES
+   ========================================= */
 body {
     margin: 0;
     font-family: var(--font-main);
     background-color: var(--gc-dark);
-    background-image: radial-gradient(circle, transparent 0%, rgba(0, 0, 0, 1) 90%),
+    background-image: 
+        radial-gradient(circle, transparent 0%, rgba(0, 0, 0, 1) 90%),
         linear-gradient(var(--gc-grid) 2px, transparent 2px),
         linear-gradient(90deg, var(--gc-grid) 2px, transparent 2px);
-    background-size:
-        100% 100%,
-        30px 30px,
-        30px 30px;
+    background-size: 100% 100%, 30px 30px, 30px 30px;
     background-attachment: fixed;
     color: #ffffff;
     min-height: 100vh;
     overflow-x: hidden;
 }
 
-.header-title {
-    font-family: var(--font-main);
-    font-size: 1.8rem;
-    color: #fff;
-    text-transform: none; /* Nintendo no usa puras mayúsculas en ese logo */
-    letter-spacing: -1px;
-    filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
-}
-
-header {
-    background: var(--glass-bg);
-    margin: 20px auto;
-    width: 90%;
-    max-width: 1200px;
-    padding: 20px 40px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    /* Desenfoque de Vidrio */
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
-
-    /* Borde Cristalino con tinte azul */
-    border: 3px solid var(--glass-border);
-    border-radius: 18px;
-
-    /* Múltiples Sombras Internas para Profundidad de Vidrio */
-    box-shadow:
-        inset 0 0 20px var(--gc-blue-glow),
-        /* Brillo azul principal */ inset 5px 5px 10px var(--gc-cyan-glow),
-        /* Reflejo cian en arista */ inset -2px -2px 5px rgba(255, 255, 255, 0.05),
-        /* Ligero reflejo blanco opuesto */ 0 15px 35px rgba(0, 0, 0, 0.8); /* Sombra real */
-
-    position: sticky;
-    top: 20px;
-    z-index: 100;
-    overflow: hidden;
-}
-/* El destello de luz cruzado (opcional para más realismo) */
-/* Efecto de destello de luz cruzado más nítido */
-header::before {
-    content: "";
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: linear-gradient(
-        45deg,
-        transparent 40%,
-        rgba(255, 255, 255, 0.1) 45%,
-        rgba(100, 200, 255, 0.1) 50%,
-        transparent 60%
-    );
-    pointer-events: none;
-    transform: rotate(-15deg);
-}
-
-.header-title {
-    font-size: 1.9rem;
-    color: #fff;
-    text-transform: none;
-    letter-spacing: -1px;
-    font-weight: bold;
-    /* Brillo de texto azulado */
-    text-shadow: 0 0 10px rgba(0, 150, 255, 0.7);
-    filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.5));
-}
-
-.search-container {
-    background: rgba(0, 5, 20, 0.7); /* Fondo de slot azul oscuro */
-    border: 2px solid rgba(100, 200, 255, 0.2);
-    border-radius: 50px;
-    padding: 8px 25px;
-    /* Efecto de slot incrustado */
-    box-shadow:
-        inset 0 3px 6px rgba(0, 0, 0, 0.9),
-        0 1px 0 rgba(255, 255, 255, 0.05);
-    display: flex;
-    align-items: center;
-    transition: all 0.3s ease;
-}
-
-.search-container:focus-within {
-    border-color: var(--btn-a);
-    box-shadow:
-        0 0 15px rgba(0, 255, 204, 0.4),
-        inset 0 3px 6px rgba(0, 0, 0, 0.9);
-}
-
-.search-container input {
-    background: transparent;
-    border: none;
-    color: #fff;
-    outline: none;
-    font-family: var(--font-main);
-    font-size: 1rem;
-    /* Tinte cian en el texto de búsqueda */
-    text-shadow: 0 0 5px rgba(0, 255, 204, 0.5);
-}
-.grid-container {
-    display: grid;
-    /* auto-fit hará que las columnas se expandan para llenar el espacio */
-    grid-template-columns: repeat(auto-fit, minmax(180px, 210px));
-    gap: 25px;
-
-    width: 95%;
-    max-width: 1400px;
-    margin: 40px auto; /* El auto horizontal es vital */
-
-    /* CENTRADO TOTAL */
-    justify-content: center; /* Centra el bloque de celdas */
-    justify-items: center; /* Centra cada tarjeta en su celda */
-
-    padding: 20px;
-    box-sizing: border-box; /* Evita que el padding sume al ancho total */
-}
-
-/* 1. El "Envoltorio" (Maneja el subir/bajar y la sombra) */
-.tarjeta-wrapper {
-    perspective: 1000px;
-    transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
-    width: 210px; /* Ancho base en PC */
-    margin: 15px;
-}
-
-.tarjeta-wrapper:hover {
-    /* El envoltorio sube suavemente */
-    transform: translateY(-15px);
-}
-
-/* 2. La Tarjeta Real (Maneja el diseño y el baile) */
-.tarjeta {
-    width: 100%;
-    height: 295px; /* Calculado para que no se corte (210 * 1.4) */
-    background-color: #0055a3;
-    border: 4px solid #000;
-    border-radius: 10px;
-    overflow: hidden;
-    position: relative;
-    cursor: pointer;
-    box-shadow:
-        inset 0 2px 10px rgba(0, 0, 0, 0.8),
-        /* Profundidad interna */ 0 4px 15px rgba(0, 0, 0, 0.5); /* Sombra externa */
-
-    /* Brillo CyanNeón sutil en estado normal (como las ranuras que brillan) */
-    filter: drop-shadow(0 0 1px rgba(0, 255, 255, 0.2));
-
-    /* Transición suave para que los bordes regresen a su ángulo original al quitar el mouse */
-    transition:
-        transform 0.6s ease-out,
-        border-color 0.3s;
-    transform-style: preserve-3d;
-    transform: rotateX(0deg) rotateY(0deg);
-}
-
-.tarjeta-wrapper {
-    opacity: 0;
-    transform: translateY(30px); /* Un poco más de recorrido para que se note */
-    transition:
-        opacity 0.8s ease,
-        transform 0.8s ease;
-}
-
-/* 2. Estado final: se activan mediante la función animarGrid */
-.tarjeta-wrapper.show {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-.tarjeta:hover {
-    border-color: rgba(12, 15, 161, 0.5);
-    /* Solo sube y se inclina un poco */
-    transform: perspective(1000px) translateY(-15px) rotateX(5deg);
-    box-shadow: 15px 25px 20px rgba(0, 0, 0, 0.4);
-}
-
-.tarjeta img {
-    object-fit: fill;
-    /* Evita que se vea estático */
-    transition: transform 0.5s ease;
-    border-radius: 1px; /* Pequeño ajuste para que encaje bien en el slot */
-    margin: 4px; /* Espacio para el brillo de fondo de la tarjeta */
-    width: calc(100% - 8px); /* Ajuste de ancho por el margin */
-    height: calc(100% - 8px); /* Ajuste de alto por el margin */
-    box-shadow: inset 0 0 5px rgba(0, 255, 255, 0.1);
-}
-
-.tarjeta-info {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    /* Bajamos un poco la opacidad del color para que el blur se note más */
-    background: linear-gradient(to top, rgba(0, 0, 40, 0.7), rgba(65, 105, 225, 0.5));
-    border-top: 2px solid var(--bordes);
-    padding: 12px 0;
-    text-align: center;
-    font-size: 0.9rem;
-    text-transform: uppercase;
-    color: white;
-
-    /* --- EFECTO BLUR (CRISTAL) --- */
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px); /* Para compatibilidad con Safari */
-
-    /* ESTADO INICIAL: Escondido */
-    opacity: 0;
-    transform: translateY(10px);
-    transition: all 0.3s ease-in-out;
-    z-index: 10;
+body.intro-active {
+    margin: 0;
+    padding: 0;
     overflow: hidden;
 }
 
-.tarjeta-info::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: -150%; /* Empezamos fuera de la vista a la izquierda */
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-    transition: all 0.6s;
-    pointer-events: none;
-}
-/* MOSTRAR AL PASAR EL CURSOR */
-.tarjeta-wrapper:hover .tarjeta-info {
-    opacity: 1;
-    transform: translateY(0); /* Sube a su posición original */
+body.intro-off {
+    overflow-y: auto;
 }
 
-.tarjeta-wrapper:hover .tarjeta-info::before {
-    left: 150%; /* El brillo cruza toda la etiqueta hasta el otro lado */
-    transition: all 0.6s ease-in-out;
-}
-.modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.85);
-    display: none;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    backdrop-filter: blur(8px);
-}
+.hidden { display: none; }
+.fade-out { opacity: 0; pointer-events: none; }
 
-.modal-content {
-    background: rgba(10, 10, 30, 0.9);
-    width: 80%;
-    max-width: 900px;
-    border: 3px solid rgba(255, 255, 255, 0.3);
-    border-radius: 20px;
-    padding: 40px;
-    display: flex;
-    gap: 40px;
-    box-shadow:
-        0 0 50px rgba(0, 0, 0, 1),
-        inset 0 0 20px rgba(65, 105, 225, 0.3);
-    position: relative;
-    animation: modalSlide 0.3s ease-out;
-}
-
-@keyframes modalSlide {
-    from {
-        transform: scale(0.8);
-        opacity: 0;
-    }
-    to {
-        transform: scale(1);
-        opacity: 1;
-    }
-}
-
-.modal-left {
-    flex: 1;
-    text-align: center;
-}
-.modal-left img {
-    width: 100%;
-    border-radius: 10px;
-    border: 4px solid #fff;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-}
-
-.modal-right {
-    flex: 1.5;
-    background: rgba(255, 255, 255, 0.05);
-    border: 2px solid rgba(255, 255, 255, 0.1);
-    border-radius: 15px;
-    padding: 25px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-
-.info-header {
-    font-size: 1.8rem;
-    color: var(--btn-a);
-    margin-bottom: 15px;
-    border-bottom: 2px solid var(--btn-a);
-    padding-bottom: 10px;
-}
-
-.info-body {
-    font-family: monospace;
-    font-size: 1.1rem;
-    line-height: 1.6;
-}
-.info-status {
-    color: #aaa;
-    margin-top: 20px;
-    font-style: italic;
-}
-
-.modal-actions {
-    margin-top: 30px;
-    display: flex;
-    gap: 20px;
-}
-
-.btn-gc {
-    padding: 12px 25px;
-    border-radius: 50px;
-    border: 3px solid #000;
-    font-weight: bold;
-    cursor: pointer;
-    text-transform: uppercase;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-.btn-gc-a {
-    background: var(--btn-a);
-    color: #000;
-}
-.btn-gc-b {
-    background: var(--btn-b);
-    color: #fff;
-}
-
-/* --- ANIMACIÓN FLOTANTE ESTILO GAMECUBE --- */
-/* Aplicamos el baile a todo lo que esté dentro de la tarjeta al hacer hover */
-.tarjeta:hover img,
-.tarjeta:hover .tarjeta-info {
-    animation: baileInterno 4s ease-in-out infinite;
-}
-
-@keyframes baileInterno {
-    0%,
-    100% {
-        transform: rotateY(-3deg) rotateZ(0deg);
-    }
-    50% {
-        transform: rotateY(3deg) rotateZ(1deg);
-    }
-}
-
-.info-body span {
-    font-family: monospace; /* Se ve más técnico */
-    background: rgba(255, 255, 255, 0.05);
-    padding: 2px 5px;
-    border-radius: 4px;
-} /* Contenedor para alinear buscador y select */
-.buscador-container {
-    display: flex;
-    gap: 15px;
-    padding: 20px;
-    justify-content: center;
-    align-items: center;
-}
-
-/* Estilo del Select */
-.estilo-retro {
-    background-color: #1a1a1a; /* Fondo oscuro */
-    color: #00ffcc; /* Color neón o el que uses en tus títulos */
-    border: 2px solid #333;
-    padding: 8px 15px;
-    border-radius: 5px;
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-    cursor: pointer;
-    outline: none;
-    transition: all 0.3s ease;
-    appearance: none; /* Quita la flecha por defecto */
-}
-
-.estilo-retro:hover {
-    border-color: #00ffcc;
-    box-shadow: 0 0 10px rgba(0, 255, 204, 0.2);
-}
-
-/* Contenedor para la flecha personalizada */
-.select-wrapper .estilo-retro {
-    /* Fondo: Degradado azul/púrpura + rejilla técnica de GameCube */
-    background: linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
-        linear-gradient(180deg, #1100aa 0%, #330066 100%);
-    background-size:
-        15px 15px,
-        15px 15px,
-        100% 100%;
-
-    /* El Marco: Borde blanco nítido con sombras negras de profundidad */
-    border: 2px solid #ffffff;
-    box-shadow:
-        0 0 0 2px #000,
-        /* Borde exterior negro */ inset 0 0 0 1px #000; /* Línea interna negra */
-
-    /* Tipografía de consola */
-    color: #ffffff;
-    font-weight: bold;
-    text-transform: uppercase;
-    text-shadow: 2px 2px 0px #000; /* Sombra sólida retro */
-
-    padding: 8px 35px 8px 15px;
-    border-radius: 4px;
-    appearance: none; /* Quitamos flecha por defecto */
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.select-wrapper::after {
-    content: "▼";
-    font-size: 10px;
-    top: 50%;
-    right: 10px;
-    transform: translateY(-50%);
-    position: absolute;
-    color: #555;
-    pointer-events: none;
-}
-
-.select-wrapper::after {
-    content: "▼";
-    position: absolute;
-    right: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #00ffff; /* Cian neón */
-    font-size: 10px;
-    pointer-events: none;
-    text-shadow: 0 0 5px rgba(0, 255, 255, 0.8);
-}
-
-/* Efecto al pasar el cursor (Hover) */
-.select-wrapper .estilo-retro:hover {
-    border-color: #00ffff;
-    box-shadow:
-        0 0 10px rgba(0, 255, 255, 0.5),
-        0 0 0 2px #000;
-}
-/* Estilo para las opciones dentro del desplegable */
-.estilo-retro option {
-    background-color: #1a1a1a;
-    color: white;
-}
-
-footer {
-    /* 1. Dimensiones y Posición */
-    width: 95%;
-    max-width: 1100px;
-    margin: 40px auto;
-    padding: 15px 25px;
-    position: relative;
-
-    /* 2. Fondo: Degradado de Azul Cobalto a Púrpura Profundo + Cuadrícula */
-    background: 
-        /* El patrón de rejilla (ajusta el color rgba para que sea sutil) */
-        linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
-        /* El degradado de color base de la imagen */ linear-gradient(180deg, #1100aa 0%, #330066 100%);
-    background-size:
-        20px 20px,
-        20px 20px,
-        100% 100%;
-
-    /* 3. El Borde Doble (Característico de GameCube) */
-    border: 3px solid #ffffff; /* Borde exterior blanco */
-    outline: 2px solid #555; /* Borde exterior gris oscuro/negro para dar profundidad */
-    box-shadow: inset 0 0 0 2px #000; /* Línea negra interna para separar el borde del fondo */
-
-    /* 4. Tipografía y Alineación */
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    color: #ffffff;
-    font-family: var(--font-main);
-    text-shadow: 2px 2px 0px #000; /* Sombra de texto sólida como en la consola */
-}
-
-.footer-guide {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    z-index: 100;
-
-    background: linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
-        linear-gradient(180deg, #1100aa 0%, #330066 100%);
-
-    /* 2. El Marco: Borde blanco nítido y sombra negra */
-    border-top: px solid #ffffff;
-    /* 3. Espaciado y alineación */
-    padding: 12px 0;
-    display: flex;
-    justify-content: center;
-    gap: 60px;
-
-    /* 4. Texto: Sombra sólida estilo retro */
-    color: #ffffff;
-    font-weight: bold;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-/* Opcional: Si tienes iconos de botones (A, B, etc.) dentro */
-.footer-guide span {
-    border: 2px solid #fff;
-    padding: 2px 8px;
-    background: rgba(0, 0, 0, 0.4);
-    margin-right: 8px;
-}
-
-/* Estilo para los elementos internos del footer (Select, Finish, Confirm) */
-.footer-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 1.1rem;
-    font-weight: bold;
-    text-transform: uppercase;
-}
-
-/* Pequeño detalle: las cajas de los botones A/B/Start en el footer */
-.footer-btn-icon {
-    border: 2px solid #fff;
-    padding: 2px 8px;
-    background: rgba(0, 0, 0, 0.3);
-    box-shadow: inset 2px 2px 0 rgba(0, 0, 0, 0.5);
-}
-
-
+/* =========================================
+   3. PANTALLA DE INTRODUCCIÓN (POWER / LID)
+   ========================================= */
 #intro-screen {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: #000;
+    width: 100vw;
+    height: 100vh;
+    background: #000;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    z-index: 9999; /* Por encima de todo */
+    z-index: 999999;
     transition: opacity 0.8s ease;
 }
+
 #gamecube-intro {
     width: 100%;
-    max-width: 900px; /* Para que no se pixelee en PC */
+    max-width: 900px;
 }
 
-/* La Tapa (Jewel) que cubre el video */
 #gc-lid {
     position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
+    top: 0; 
+    left: 0;
+    width: 100%; 
+    height: 100%;
     background: #000;
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 10;
+    transition: opacity 1.2s ease-in-out, transform 1.5s ease-in-out;
 }
 
-
+.lid-open {
+    opacity: 0;
+    transform: scale(1.1);
+    pointer-events: none;
+}
 
 #jewel-container {
     position: relative;
-    width: 250px; /* Ajusta al tamaño de tu jewel */
+    width: 250px;
     height: 250px;
     display: flex;
     justify-content: center;
     align-items: center;
     border-radius: 0%;
     overflow: hidden;
-    /* Esto asegura que el brillo no se salga del círculo */
     clip-path: circle(50% at 50% 50%);
-}
-
-#jewel-logo {
-    width: 100%;
-    height: auto;
-    z-index: 1;
 }
 
 #jewel-container::after {
@@ -663,22 +142,24 @@ footer {
     height: 100%;
     z-index: 1;
     pointer-events: none;
-
-    /* Gradiente corregido: blanco suave que desvanece a transparente */
     background: radial-gradient(
         circle at var(--reflejo-x, 50%) -17%, 
-        rgba(255, 255, 255, 0.4) 0%,   /* Centro del reflejo */
-        rgba(255, 255, 255, 0.1) 20%,  /* Halo tenue */
-        transparent 50%               /* Fondo totalmente invisible */
+        rgba(255, 255, 255, 0.4) 0%,   
+        rgba(255, 255, 255, 0.1) 20%,  
+        transparent 50%               
     );
-
-    /* 'screen' hace que solo las partes claras iluminen el logo negro */
     mix-blend-mode: screen; 
 }
 
+#jewel-logo, #gc-lid img {
+    width: 260px;
+    height: auto;
+    z-index: 1;
+    border-radius: 50%;
+    box-shadow: 0 0 2px 1px rgba(255,255,255,0.05);
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.05));
+}
 
-
-/* Contenedor de controles de energía */
 .power-interface {
     position: absolute;
     bottom: 12%; 
@@ -687,22 +168,20 @@ footer {
     align-items: center;
     z-index: 10000;
 }
+
 .curved-text-wrapper {
-    width: 130px; /* Un poco más grande para que no se corte */
+    width: 130px;
     height: 50px;
     margin-bottom: -50px;
-    display: block; /* Asegura que no esté oculto */
+    display: block;
 }
 
-.curved-text-wrapper svg {
-    overflow: visible; /* Importante por si el texto se sale un poco */
-}
+.curved-text-wrapper svg { overflow: visible; }
 
 .curved-text-wrapper text {
-    /* Color gris claro metalizado para que resalte sobre el fondo negro */
     fill: #888 !important; 
     font-family: "Arial Rounded MT Bold", Arial, sans-serif;
-    font-size: 10px; /* Ajusta este tamaño si es muy grande */
+    font-size: 10px;
     font-weight: bold;
     letter-spacing: 1px;
     text-transform: uppercase;
@@ -711,10 +190,10 @@ footer {
 
 #start-btn {
     position: relative;
-    width: 65px;  /* Lo hacemos perfectamente circular */
+    width: 65px;
     height: 65px;
     padding: 0;
-    background: #222; /* Gris casi negro */
+    background: #222;
     border: 2px solid #111;
     border-radius: 50%;
     cursor: pointer;
@@ -727,34 +206,27 @@ footer {
     align-items: center;
     transition: all 0.1s ease;
     outline: none;
-    font-size: 0; /* Ocultamos el texto "Power" interno del HTML */
+    font-size: 0;
 }
 
-
-#start-btn::before {
-    content: none !important;
-}
-
+#start-btn::before { content: none !important; }
 #start-btn:active {
     transform: scale(0.96) translateY(2px);
     box-shadow: inset 0 4px 8px #000;
 }
 
-/* --- EL FOQUITO LED (Mejorado) --- */
 #power-led {
     width: 100px;
     height: 25px;
-    background: #110500; /* Apagado total */
+    background: #110500;
     margin-top: 18px;
     border-radius: 5px 5px 40px 40px; 
     position: relative;
     transition: all 0.4s ease;
-    /* Quitamos overflow: hidden para que el brillo respire */
     overflow: visible; 
     border: 1px solid rgba(255,255,255,0.02);
 }
 
-/* Reflejo de cristal sobre el plástico */
 #power-led::after {
     content: "";
     position: absolute;
@@ -764,211 +236,116 @@ footer {
     pointer-events: none;
 }
 
-/* --- ESTADO ENCENDIDO (Efectos Pro) --- */
 #power-led.led-on {
-    /* Gradiente radial: crea el punto blanco central de la bombilla */
-    background: radial-gradient(
-        circle at 50% 20%, 
-        #ffffff 0%, 
-        #fff700 20%, 
-        #ffaa00 60%, 
-        #ff7700 100%
-    );
-
-    /* Usamos drop-shadow para que el resplandor sea orgánico y no se corte */
-    filter: 
-        saturate(1.5) 
-        brightness(1.2) 
-        drop-shadow(0 0 10px #ff8800) 
-        drop-shadow(0 0 25px rgba(255, 136, 0, 0.6));
-    
-    /* Mantenemos un brillo interno sutil */
+    background: radial-gradient(circle at 50% 20%, #ffffff 0%, #fff700 20%, #ffaa00 60%, #ff7700 100%);
+    filter: saturate(1.5) brightness(1.2) drop-shadow(0 0 10px #ff8800) drop-shadow(0 0 25px rgba(255, 136, 0, 0.6));
     box-shadow: inset 0 0 8px rgba(255, 255, 255, 0.4);
 }
 
-/* Halo atmosférico por detrás (Opcional para más profundidad) */
 #power-led.led-on::before {
     content: "";
     position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 150%;
-    height: 200%;
+    top: 50%; left: 50%;
+    width: 150%; height: 200%;
     transform: translate(-50%, -50%);
     background: radial-gradient(circle, rgba(255, 136, 0, 0.2) 0%, transparent 70%);
     z-index: -1;
     pointer-events: none;
 }
-#gc-lid {
+
+/* =========================================
+   4. HEADER Y NAVEGACIÓN SUPERIOR
+   ========================================= */
+header {
+    background: var(--glass-bg);
+    margin: 20px auto;
+    width: 90%;
+    max-width: 1200px;
+    padding: 20px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border: 3px solid var(--glass-border);
+    border-radius: 18px;
+    box-shadow:
+        inset 0 0 20px var(--gc-blue-glow),
+        inset 5px 5px 10px var(--gc-cyan-glow),
+        inset -2px -2px 5px rgba(255, 255, 255, 0.05),
+        0 15px 35px rgba(0, 0, 0, 0.8);
+    position: sticky;
+    top: 20px;
+    z-index: 100;
+    overflow: hidden;
+}
+
+header::before {
+    content: "";
     position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: #000;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 10;
-    transition: opacity 1.2s ease-in-out, transform 1.5s ease-in-out;
-}
-
-#gc-lid img, #jewel-logo {
-    width: 260px;
-    /* Brillo sutil en el borde para que parezca un disco físico */
-    border-radius: 50%;
-    box-shadow: 0 0 2px 1px rgba(255,255,255,0.05);
-    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.05));
-}
-
-/* Clases de estado */
-.lid-open {
-    opacity: 0;
-    transform: scale(1.1);
+    top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background: linear-gradient(
+        45deg,
+        transparent 40%,
+        rgba(255, 255, 255, 0.1) 45%,
+        rgba(100, 200, 255, 0.1) 50%,
+        transparent 60%
+    );
     pointer-events: none;
+    transform: rotate(-15deg);
 }
 
-.fade-out {
-    opacity: 0;
-    pointer-events: none;
-}
-
-.hidden {
-    display: none;
-}
-
-
-/* Forzamos que mientras la intro exista, nada se salga de la pantalla */
-body.intro-active {
-    margin: 0;
-    padding: 0;
-    overflow: hidden; /* Esto quita el scroll global inicialmente */
-}
-
-#intro-screen {
-    position: fixed; /* Cambiado de relative a fixed */
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: #000;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    z-index: 999999; /* El máximo posible */
-}
-
-/* Solo permitimos scroll cuando la intro se haya ido */
-body.intro-off {
-    overflow-y: auto;
-}
-
-/* --- SISTEMA DE PAGINACIÓN (PC) --- */
-.pagination-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 30px;
-    padding: 20px 0;
-    margin-top: 5px;
-}
-
-.btn-page {
-    background: #0a0f28;
-    border: 2px solid #1a1f4d;
+.header-title {
+    font-family: var(--font-main);
+    font-size: 1.9rem;
     color: #fff;
-    padding: 10px 25px;
-    font-family: "JetBrains Mono", monospace;
+    text-transform: none;
+    letter-spacing: -1px;
     font-weight: bold;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    border-radius: 4px;
+    text-shadow: 0 0 10px rgba(0, 150, 255, 0.7);
+    filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.5));
 }
 
-.btn-page:hover:not(:disabled) {
-    background: #1a1f4d;
-    border-color: #4ed9ff;
-    color: #4ed9ff;
-    box-shadow: 0 0 15px rgba(78, 217, 255, 0.3);
+.search-container {
+    background: rgba(0, 5, 20, 0.7);
+    border: 2px solid rgba(100, 200, 255, 0.2);
+    border-radius: 50px;
+    padding: 8px 25px;
+    box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.9), 0 1px 0 rgba(255, 255, 255, 0.05);
+    display: flex;
+    align-items: center;
+    transition: all 0.3s ease;
 }
 
-.btn-page:disabled {
-    opacity: 0.3;
-    cursor: not-allowed;
-    filter: grayscale(1);
+.search-container:focus-within {
+    border-color: var(--btn-a);
+    box-shadow: 0 0 15px rgba(0, 255, 204, 0.4), inset 0 3px 6px rgba(0, 0, 0, 0.9);
 }
 
-#page-info {
-    color: #4ed9ff;
-    font-family: "JetBrains Mono", monospace;
-    font-weight: bold;
-    font-size: 1.1rem;
+.search-container input {
+    background: transparent;
+    border: none;
+    color: #fff;
+    outline: none;
+    font-family: var(--font-main);
+    font-size: 1rem;
+    text-shadow: 0 0 5px rgba(0, 255, 204, 0.5);
 }
 
-/* --- FOOTER GUIDE (PC) --- */
-
-.guide-item {
-    font-family: "JetBrains Mono", monospace;
-    font-size: 0.9rem;
-    font-weight: bold;
-}
-
-/* Animación de entrada para las tarjetas */
-@keyframes fadeInCard {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.grid-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 20px;
-    padding: 20px;
-    /* Evita que el contenedor colapse y haga saltar el footer */
-    min-height: 70vh;
-    transition: opacity 0.3s ease-in-out;
-}
-
-/* Estado inicial: invisible */
-.tarjeta-wrapper {
-    opacity: 0;
-    transform: translateY(30px);
-    transition:
-        opacity 0.5s ease,
-        transform 0.5s ease;
-}
-
-/* Estado activo: visible */
-.tarjeta-wrapper.show {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-/* Clase para el efecto de desvanecimiento al cambiar de página */
-.grid-fade-out {
-    opacity: 0;
-}
-/* Contenedor del control */
+/* Control de Volumen */
 .gc-volume-wrapper {
     display: flex;
     align-items: center;
     gap: 12px;
     background: rgba(0, 0, 0, 0.6);
     padding: 8px 18px;
-    border: 2px solid #ffffff; /* Marco blanco nítido */
-    box-shadow:
-        inset 0 0 0 2px #000,
-        0 0 15px rgba(0, 150, 255, 0.3);
+    border: 2px solid #ffffff;
+    box-shadow: inset 0 0 0 2px #000, 0 0 15px rgba(0, 150, 255, 0.3);
     border-radius: 4px;
     position: relative;
 }
 
-/* Etiqueta "VOL." */
 .gc-volume-label {
     font-family: "Arial Rounded MT Bold", sans-serif;
     font-size: 0.8rem;
@@ -976,23 +353,22 @@ body.intro-off {
     text-shadow: 2px 2px 0px #000;
 }
 
-/* El Slider personalizado */
 #master-volume {
     -webkit-appearance: none;
+    appearance: none;
     width: 100px;
     height: 12px;
-    background: #050520; /* Azul muy oscuro */
+    background: #050520;
     border: 2px solid #000;
     outline: none;
     cursor: pointer;
 }
 
-/* La barrita que se mueve (Thumb) - Estilo Botón A */
 #master-volume::-webkit-slider-thumb {
     -webkit-appearance: none;
     width: 16px;
     height: 16px;
-    background: #00ff5d; /* Verde Nintendo A */
+    background: #00ff5d;
     border: 2px solid #ffffff;
     box-shadow: 0 0 8px rgba(0, 255, 93, 0.6);
     cursor: pointer;
@@ -1007,217 +383,184 @@ body.intro-off {
     cursor: pointer;
 }
 
-/* El progreso de la barra (solo webkit) */
 #master-volume::-webkit-slider-runnable-track {
     background: linear-gradient(90deg, #00ffff var(--value), #050520 var(--value));
 }
-#master-volume {
-    -webkit-appearance: none; /* Quita el diseño por defecto de Chrome/Android */
-    appearance: none;
-    background: #050520; /* Fondo base azul oscuro */
-}
 
-.admin-access-container {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    z-index: 100;
-}
-
-.gc-btn-mini {
-    background: rgba(0, 0, 0, 0.7);
-    color: #fff;
-    border: 2px solid #ffffff;
-    padding: 8px 15px;
-    font-family: "Arial Rounded MT Bold", sans-serif;
-    font-size: 0.7rem;
-    font-weight: bold;
-    letter-spacing: 1px;
-    cursor: pointer;
-    box-shadow:
-        inset 0 0 0 2px #000,
-        0 0 10px rgba(0, 150, 255, 0.3);
-    transition: all 0.2s ease;
+/* Filtros y Selectores */
+.buscador-container {
     display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-/* Icono pequeño que simula un puerto de mando */
-.btn-icon-admin {
-    width: 10px;
-    height: 10px;
-    background: var(--btn-a); /* Tu verde neón */
-    border-radius: 50%;
-    box-shadow: 0 0 5px var(--btn-a);
-}
-
-.gc-btn-mini:hover {
-    border-color: var(--gc-cian-neón);
-    box-shadow:
-        inset 0 0 0 2px #000,
-        0 0 15px var(--gc-cian-neón);
-    transform: scale(1.05);
-}
-
-.gc-btn-mini:active {
-    transform: scale(0.95);
-}
-
-/* Estructura Base del Modal */
-.modal-base {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.85);
-    z-index: 1000;
+    gap: 15px;
+    padding: 20px;
     justify-content: center;
     align-items: center;
 }
 
-/* El cuadro de diálogo estilo GameCube */
-.modal-contenido-retro {
-    background: #030832; /* Azul slots */
-    border: 3px solid #ffffff;
-    box-shadow:
-        inset 0 0 0 2px #000,
-        0 0 25px rgba(0, 150, 255, 0.5);
-    padding: 25px;
-    width: 350px;
-    border-radius: 4px;
-    text-align: center;
-}
+.select-wrapper { position: relative; }
 
-.modal-titulo-retro {
-    color: var(--gc-cian-neón);
-    font-size: 1.2rem;
-    margin-bottom: 20px;
-    text-shadow: 2px 2px 0px #000;
-}
-
-/* Inputs con estilo técnico */
-.input-group-retro {
-    text-align: left;
-    margin-bottom: 15px;
-}
-
-.input-group-retro label {
-    display: block;
-    font-size: 0.7rem;
-    color: #aaa;
-    margin-bottom: 5px;
-}
-
-.input-group-retro input {
-    width: 100%;
-    background: #000;
-    border: 1px solid #ffffff;
-    padding: 10px;
-    color: #00ffff;
-    font-family: "JetBrains Mono", monospace;
-    box-sizing: border-box;
-}
-
-/* Botones A y B */
-.modal-footer-retro {
-    display: flex;
-    justify-content: space-around;
-    margin-top: 25px;
-}
-
-.btn-gc-retro {
-    background: none;
-    border: none;
-    color: white;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-weight: bold;
-    font-size: 0.8rem;
-}
-
-.btn-gc-retro:hover {
-    transform: scale(1.1);
-}
-
-/* Estilo base del botón para que el triángulo se posicione bien */
-.btn-gc-retro {
-    position: relative;
-    padding-left: 25px; /* Espacio para el triángulo */
-    transition: all 0.2s ease;
-    filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.5));
-}
-
-/* El triángulo oculto por defecto */
-.btn-gc-retro::before {
-    content: "";
+.select-wrapper::after {
+    content: "▼";
     position: absolute;
-    left: 0;
+    right: 12px;
     top: 50%;
     transform: translateY(-50%);
-    width: 0;
-    height: 0;
-    border-top: 8px solid transparent;
-    border-bottom: 8px solid transparent;
-    border-left: 12px solid #ffaa00; /* Naranja GameCube */
-    opacity: 0;
-    filter: drop-shadow(0 0 5px #ffaa00);
-    transition:
-        opacity 0.2s ease,
-        left 0.2s ease;
+    color: #00ffff;
+    font-size: 10px;
+    pointer-events: none;
+    text-shadow: 0 0 5px rgba(0, 255, 255, 0.8);
 }
 
-/* Efecto al pasar el mouse (Hover) o al estar enfocado */
-.btn-gc-retro:hover::beforea,
-.btn-gc-retro:focus::before {
-    opacity: 1;
-    left: -5px; /* Pequeño desplazamiento al aparecer */
-}
-
-.btn-gc-retro:hover {
-    color: #ffcc00; /* El texto también brilla un poco en naranja */
-    text-shadow: 0 0 8px rgba(255, 170, 0, 0.6);
-}
-
-/* Ajuste específico para los iconos A/B dentro de los botones */
-.btn-gc-retro .btn-icon {
-    margin-left: 5px;
-}
-
-/* Clase especial para alertas */
-.alert-style {
-    border-color: #ffaa00 !important; /* Naranja de advertencia */
-    box-shadow:
-        inset 0 0 0 2px #000,
-        0 0 30px rgba(255, 170, 0, 0.4) !important;
-}
-
-.modal-text-retro {
-    font-family: "JetBrains Mono", monospace;
-    font-size: 0.9rem;
-    color: #fff;
-    margin: 20px 0;
-    line-height: 1.4;
+.estilo-retro {
+    background: linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(180deg, #1100aa 0%, #330066 100%);
+    background-size: 15px 15px, 15px 15px, 100% 100%;
+    border: 2px solid #ffffff;
+    box-shadow: 0 0 0 2px #000, inset 0 0 0 1px #000;
+    color: #ffffff;
+    font-weight: bold;
     text-transform: uppercase;
+    text-shadow: 2px 2px 0px #000;
+    padding: 8px 35px 8px 15px;
+    border-radius: 4px;
+    appearance: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    outline: none;
 }
 
-#alertTitle {
-    color: #ffaa00; /* Título en naranja */
+.estilo-retro:hover {
+    border-color: #00ffff;
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.5), 0 0 0 2px #000;
 }
 
-
-
-
-:root {
-    --gcn-gray: rgba(212, 212, 212, 0.27);
-    --gcn-dark-gray: #1a1a1a;
-    --gcn-purple: #5910a8;
+.estilo-retro option {
+    background-color: #1a1a1a;
+    color: white;
 }
 
+/* =========================================
+   5. GRID Y TARJETAS (JUEGOS)
+   ========================================= */
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 210px));
+    gap: 25px;
+    width: 95%;
+    max-width: 1400px;
+    margin: 40px auto;
+    justify-content: center;
+    justify-items: center;
+    padding: 20px;
+    box-sizing: border-box;
+    min-height: 70vh;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.grid-fade-out { opacity: 0; }
+
+.tarjeta-wrapper {
+    perspective: 1000px;
+    width: 210px;
+    margin: 15px;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 0.8s ease, transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.tarjeta-wrapper.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.tarjeta-wrapper:hover {
+    transform: translateY(-15px);
+}
+
+.tarjeta {
+    width: 100%;
+    height: 295px;
+    background-color: #0055a3;
+    border: 4px solid #000;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+    box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.8), 0 4px 15px rgba(0, 0, 0, 0.5);
+    filter: drop-shadow(0 0 1px rgba(0, 255, 255, 0.2));
+    transition: transform 0.6s ease-out, border-color 0.3s;
+    transform-style: preserve-3d;
+    transform: rotateX(0deg) rotateY(0deg);
+}
+
+.tarjeta:hover {
+    border-color: rgba(12, 15, 161, 0.5);
+    transform: perspective(1000px) translateY(-15px) rotateX(5deg);
+    box-shadow: 15px 25px 20px rgba(0, 0, 0, 0.4);
+}
+
+.tarjeta:hover img,
+.tarjeta:hover .tarjeta-info {
+    animation: baileInterno 4s ease-in-out infinite;
+}
+
+.tarjeta img {
+    object-fit: fill;
+    transition: transform 0.5s ease;
+    border-radius: 1px;
+    margin: 4px;
+    width: calc(100% - 8px);
+    height: calc(100% - 8px);
+    box-shadow: inset 0 0 5px rgba(0, 255, 255, 0.1);
+}
+
+.tarjeta-info {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: linear-gradient(to top, rgba(0, 0, 40, 0.7), rgba(65, 105, 225, 0.5));
+    border-top: 2px solid var(--bordes);
+    padding: 12px 0;
+    text-align: center;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    color: white;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.3s ease-in-out;
+    z-index: 10;
+    overflow: hidden;
+}
+
+.tarjeta-info::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -150%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: all 0.6s;
+    pointer-events: none;
+}
+
+.tarjeta-wrapper:hover .tarjeta-info {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.tarjeta-wrapper:hover .tarjeta-info::before {
+    left: 150%;
+    transition: all 0.6s ease-in-out;
+}
+
+/* =========================================
+   6. PUERTOS Y CONSOLA FRONTAL (PAGINACIÓN)
+   ========================================= */
 .gcn-front-panel {
     background: var(--gcn-gray);
     padding: 20px;
@@ -1230,56 +573,72 @@ body.intro-off {
     box-shadow: inset 0 2px 5px rgba(255,255,255,0.5), 0 10px 20px rgba(0,0,0,0.3);
 }
 
-/* --- PUERTOS DE CONTROLES --- */
 .control-ports {
-    display: flex;
-    justify-content: center; /* Centra los puertos si hay pocos */
-    align-items: center;
-    gap: 20px; /* Espacio constante entre ellos */
-    flex-wrap: wrap; /* Por si en móvil se necesitan dos filas */
-    min-height: 10px; /* Evita que el panel salte al cargar */
-}
-
-
-.port {
-    cursor: pointer;
-    transition: filter 0.2s ease;
-}
-
-.port:hover {
-    filter: brightness(1.5) drop-shadow(0 0 5px var(--btn-a)); /* Brillo cian al acercar el mouse */
-}
-
-.port {
-    width: 60px;
-    height: 60px;
-    background: var(--gcn-dark-gray);
-    border-radius: 50%;
-    border: 4px solid #a0a0a0;
-    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
-    transition: all 0.3s ease;
+    gap: 20px;
+    flex-wrap: wrap;
+    min-height: 10px;
 }
 
-/* El patrón de pines interno */
-.pin-grid {
-    width: 30px;
-    height: 15px;
-    background: #000;
-    clip-path: polygon(0% 0%, 100% 0%, 85% 100%, 15% 100%);
-    border-bottom: 2px solid #333;
+.port {
+    position: relative;
+    width: 65px;
+    height: 65px;
+    background: var(--gcn-dark-gray);
+    border-radius: 50%;
+    border: 4px solid #a0a0a0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.3s ease, filter 0.2s ease;
 }
 
-/* Estado Activo (Página Actual) */
+.port:hover {
+    filter: brightness(1.5) drop-shadow(0 0 5px var(--btn-a));
+}
+
 .port.active {
     border-color: #00ffff;
     box-shadow: 0 0 15px #00ffff;
     background: #050520;
 }
 
-/* --- SLOTS DE MEMORY CARD --- */
+.port-index {
+    position: absolute;
+    top: -16px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 3px;
+    justify-content: center;
+    pointer-events: none;
+}
+
+.port-index span {
+    width: 4px;
+    height: 4px;
+    background: #999;
+    border-radius: 50%;
+    box-shadow: inset 1px 1px 1px rgba(0,0,0,0.6), 1px 1px 1px rgba(255,255,255,0.3);
+}
+
+.port.active .port-index span {
+    background: #00ffff;
+    box-shadow: 0 0 8px #00ffff, inset 0 0 2px #ffffff;
+}
+
+.pin-grid {
+    width: 30px;
+    height: 15px;
+    background: #000;
+    clip-path: polygon(0% 0%, 100% 0%, 85% 100%, 15% 100%);
+    border-bottom: 2px solid #333;
+    margin-top: 0;
+}
+
 .memory-slots {
     padding: 10px;
     display: flex;
@@ -1318,7 +677,6 @@ body.intro-off {
     box-shadow: inset 0 2px 2px rgba(184, 184, 184, 0.58);
 }
 
-/* Efecto al presionar (insertar card) */
 .mem-card-slot:active {
     transform: scale(0.95);
     background: #b0b0b0;
@@ -1329,326 +687,599 @@ body.intro-off {
     cursor: not-allowed;
 }
 
-/* Responsive para Android */
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    padding: 20px 0;
+    margin-top: 5px;
+}
+
+.btn-page {
+    background: #0a0f28;
+    border: 2px solid #1a1f4d;
+    color: #fff;
+    padding: 10px 25px;
+    font-family: "JetBrains Mono", monospace;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-radius: 4px;
+}
+
+.btn-page:hover:not(:disabled) {
+    background: #1a1f4d;
+    border-color: #4ed9ff;
+    color: #4ed9ff;
+    box-shadow: 0 0 15px rgba(78, 217, 255, 0.3);
+}
+
+.btn-page:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    filter: grayscale(1);
+}
+
+#page-info, #page-info-retro {
+    color: #4ed9ff;
+    font-family: "JetBrains Mono", monospace;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+#page-info-retro { display: none !important; }
+
+/* =========================================
+   7. MODALES (DETALLE DE JUEGO, LOGIN, ALERTAS)
+   ========================================= */
+.modal-overlay, .modal-base {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    backdrop-filter: blur(8px);
+}
+
+.modal-content {
+    background: rgba(10, 10, 30, 0.9);
+    width: 80%;
+    max-width: 900px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 20px;
+    padding: 40px;
+    display: flex;
+    gap: 40px;
+    box-shadow: 0 0 50px rgba(0, 0, 0, 1), inset 0 0 20px rgba(65, 105, 225, 0.3);
+    position: relative;
+    animation: modalSlide 0.3s ease-out;
+}
+
+.modal-left {
+    flex: 1;
+    text-align: center;
+}
+
+.modal-left img {
+    width: 100%;
+    border-radius: 10px;
+    border: 4px solid #fff;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+#modalDisco {
+    border-radius: 100%;
+    background: transparent;
+    filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.5));
+    width: 100%;
+}
+
+#modalDisco.girando { animation: girarDiscoWii 0.6s linear infinite; }
+
+.modal-right {
+    flex: 1.5;
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.info-header {
+    font-size: 1.8rem;
+    color: var(--btn-a);
+    margin-bottom: 15px;
+    border-bottom: 2px solid var(--btn-a);
+    padding-bottom: 10px;
+}
+
+.info-body {
+    font-family: monospace;
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
+
+.info-body span {
+    font-family: monospace;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 2px 5px;
+    border-radius: 4px;
+}
+
+.info-status {
+    color: #aaa;
+    margin-top: 20px;
+    font-style: italic;
+}
+
+.modal-actions {
+    margin-top: 30px;
+    display: flex;
+    gap: 20px;
+}
+
+.btn-gc {
+    padding: 12px 25px;
+    border-radius: 50px;
+    border: 3px solid #000;
+    font-weight: bold;
+    cursor: pointer;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.btn-gc-a { background: var(--btn-a); color: #000; }
+.btn-gc-b { background: var(--btn-b); color: #fff; }
+
+/* Modal Admin / Alertas Retro */
+.modal-contenido-retro {
+    background: #030832;
+    border: 3px solid #ffffff;
+    box-shadow: inset 0 0 0 2px #000, 0 0 25px rgba(0, 150, 255, 0.5);
+    padding: 25px;
+    width: 350px;
+    border-radius: 4px;
+    text-align: center;
+}
+
+.modal-titulo-retro {
+    color: var(--gc-cian-neón);
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 0px #000;
+}
+
+.input-group-retro {
+    text-align: left;
+    margin-bottom: 15px;
+}
+
+.input-group-retro label {
+    display: block;
+    font-size: 0.7rem;
+    color: #aaa;
+    margin-bottom: 5px;
+}
+
+.input-group-retro input {
+    width: 100%;
+    background: #000;
+    border: 1px solid #ffffff;
+    padding: 10px;
+    color: #00ffff;
+    font-family: "JetBrains Mono", monospace;
+    box-sizing: border-box;
+}
+
+.modal-footer-retro {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 25px;
+}
+
+.btn-gc-retro {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: bold;
+    font-size: 0.8rem;
+    position: relative;
+    padding-left: 25px;
+    transition: all 0.2s ease;
+    filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.5));
+}
+
+.btn-gc-retro::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid transparent;
+    border-left: 12px solid #ffaa00;
+    opacity: 0;
+    filter: drop-shadow(0 0 5px #ffaa00);
+    transition: opacity 0.2s ease, left 0.2s ease;
+}
+
+.btn-gc-retro:hover::before,
+.btn-gc-retro:focus::before {
+    opacity: 1;
+    left: -5px;
+}
+
+.btn-gc-retro:hover {
+    color: #ffcc00;
+    text-shadow: 0 0 8px rgba(255, 170, 0, 0.6);
+    transform: scale(1.1);
+}
+
+.btn-gc-retro .btn-icon { margin-left: 5px; }
+
+.alert-style {
+    border-color: #ffaa00 !important;
+    box-shadow: inset 0 0 0 2px #000, 0 0 30px rgba(255, 170, 0, 0.4) !important;
+}
+
+.modal-text-retro {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 0.9rem;
+    color: #fff;
+    margin: 20px 0;
+    line-height: 1.4;
+    text-transform: uppercase;
+}
+
+#alertTitle { color: #ffaa00; }
+
+.admin-access-container {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 100;
+}
+
+.gc-btn-mini {
+    background: rgba(0, 0, 0, 0.7);
+    color: #fff;
+    border: 2px solid #ffffff;
+    padding: 8px 15px;
+    font-family: "Arial Rounded MT Bold", sans-serif;
+    font-size: 0.7rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+    cursor: pointer;
+    box-shadow: inset 0 0 0 2px #000, 0 0 10px rgba(0, 150, 255, 0.3);
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-icon-admin {
+    width: 10px;
+    height: 10px;
+    background: var(--btn-a);
+    border-radius: 50%;
+    box-shadow: 0 0 5px var(--btn-a);
+}
+
+.gc-btn-mini:hover {
+    border-color: var(--gc-cian-neón);
+    box-shadow: inset 0 0 0 2px #000, 0 0 15px var(--gc-cian-neón);
+    transform: scale(1.05);
+}
+
+.gc-btn-mini:active { transform: scale(0.95); }
+
+/* =========================================
+   8. FOOTER Y GUÍA DE CONTROLES
+   ========================================= */
+footer {
+    width: 95%;
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 15px 25px;
+    position: relative;
+    background: 
+        linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(180deg, #1100aa 0%, #330066 100%);
+    background-size: 20px 20px, 20px 20px, 100% 100%;
+    border: 3px solid #ffffff;
+    outline: 2px solid #555;
+    box-shadow: inset 0 0 0 2px #000;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    color: #ffffff;
+    font-family: var(--font-main);
+    text-shadow: 2px 2px 0px #000;
+}
+
+.footer-guide {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 100;
+    background: linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(180deg, #1100aa 0%, #330066 100%);
+    border-top: 2px solid #ffffff; /* Corregido de px a 2px */
+    padding: 12px 0;
+    display: flex;
+    justify-content: center;
+    gap: 60px;
+    color: #ffffff;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.footer-guide span {
+    border: 2px solid #fff;
+    padding: 2px 8px;
+    background: rgba(0, 0, 0, 0.4);
+    margin-right: 8px;
+}
+
+.footer-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.footer-btn-icon {
+    border: 2px solid #fff;
+    padding: 2px 8px;
+    background: rgba(0, 0, 0, 0.3);
+    box-shadow: inset 2px 2px 0 rgba(0, 0, 0, 0.5);
+}
+
+.guide-item {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+/* =========================================
+   9. OPTIMIZACIÓN ANDROID / MOBILE OS
+   ========================================= */
 @media (max-width: 480px) {
     .gcn-front-panel { width: 95%; padding: 15px; }
     .port { width: 45px; height: 45px; }
     .mem-card-slot { width: 100px; }
 }
 
-/* Ocultar el texto de página por completo */
-#page-info-retro {
-    display: none !important;
-}
-
-/* --- Ajuste de Puertos y Puntos --- */
-
-.port {
-    position: relative; /* Base para posicionar los puntos */
-    width: 65px;
-    height: 65px;
-    background: var(--gcn-dark-gray);
-    border-radius: 50%;
-    border: 4px solid #a0a0a0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    /* transition y box-shadow para el estado 'active' se mantienen */
-}
-
-/* Contenedor de los puntitos: AHORA FUERA DEL PUERTO */
-.port-index {
-    position: absolute;
-    
-    /* --- ESTO ES LO QUE LO MUEVE ARRIBA --- */
-    top: -16px; /* Ajusta este valor negativo para que queden sobre la carcasa gris */
-    
-    left: 50%; /* Lo centra horizontalmente */
-    transform: translateX(-50%); /* Ajuste perfecto de centrado */
-    
-    display: flex;
-    gap: 3px; /* Espacio entre puntitos */
-    justify-content: center;
-    pointer-events: none; /* Para que no interfieran con los clics */
-}
-
-/* Cada puntito individual */
-.port-index span {
-    width: 4px;
-    height: 4px;
-    background: #999; /* Gris oscuro para simular el relieve en el plástico gris */
-    border-radius: 50%;
-    
-    /* Efecto de relieve sutil (Incrustado en el plástico) */
-    box-shadow: inset 1px 1px 1px rgba(0,0,0,0.6), 1px 1px 1px rgba(255,255,255,0.3);
-}
-
-/* --- Estado Activo (Página Actual) --- */
-.port.active .port-index span {
-    background: #00ffff; /* Brillo cian en los puntos */
-    box-shadow: 0 0 8px #00ffff, inset 0 0 2px #ffffff;
-}
-
-/* Ajuste de los pines internos */
-.pin-grid {
-    margin-top: 0; /* Ya no necesitan espacio arriba porque los puntos se movieron */
-}
-
-/* --- android ---- */
-/* body.mobile-os
-
-
-/* 1. Grid Estático: Máximo rendimiento en móvil */
-/* --- Ajustes Android ---- */
 body.mobile-os .grid-container {
-    display: grid !important;
-    /* 2 columnas iguales */
-    grid-template-columns: repeat(2, 1fr) !important;
-
-    /* Cambiamos el ancho a 100% y usamos padding para el aire lateral */
-    width: 100% !important;
-    max-width: 100vw !important;
-    margin: 0 auto !important;
-
-    /* Esto asegura que el grid se centre si sobra espacio */
-    justify-content: center !important;
-    justify-items: center !important;
-    align-items: start !important;
-
-    /* Espaciado */
-    gap: 15px !important;
-    padding: 20px 10px !important; /* 10px a los lados de margen interno */
-    box-sizing: border-box !important;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    width: 100%;
+    max-width: 100vw;
+    margin: 0 auto;
+    justify-content: center;
+    justify-items: center;
+    align-items: start;
+    gap: 15px;
+    padding: 20px 10px;
+    box-sizing: border-box;
 }
 
-/* Forzar que las tarjetas no se desborden */
 body.mobile-os .tarjeta-wrapper {
-    margin: 0 !important;
-    width: 100% !important;
-    /* Un poco menos de ancho máximo para que no se peguen al borde del celular */
-    max-width: 165px !important;
-    display: flex !important;
-    justify-content: center !important;
+    margin: 0;
+    width: 100%;
+    max-width: 165px;
+    display: flex;
+    justify-content: center;
 }
 
 body.mobile-os .tarjeta {
-    width: 100% !important;
-    aspect-ratio: 3 / 4.2 !important;
-    height: auto !important;
-
-    /* Forzamos a que la tarjeta sea un dibujo plano (Bitmap) */
-    /* Esto evita que el scroll se sienta pesado */
+    width: 100%;
+    aspect-ratio: 3 / 4.2;
+    height: auto;
     contain: strict;
-    border: 1px solid #222 !important;
-    box-shadow: none !important;
-    background: #050505 !important;
+    border: 1px solid #222;
+    box-shadow: none;
+    background: #050505;
 }
 
 body.mobile-os .tarjeta img {
-    width: 100% !important;
-    height: 100% !important;
-    object-fit: cover !important;
-    /* Evita el suavizado costoso durante el scroll */
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
     image-rendering: auto;
 }
 
-/* Ocultamos la info flotante para que el scroll sea pura seda */
-body.mobile-os z.tarjeta-info {
-    display: none !important;
+body.mobile-os .tarjeta-info {
+    display: none;
 }
 
-/* 3. Header: Un poco más de aire */
 body.mobile-os header {
-    background: #0a0f28 !important;
-    border: 2px solid #1a1f4d !important;
-    border-radius: 12px !important;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5) !important;
-    max-width: 1200px;
-    position: sticky;
-    top: 0;
-    box-sizing: border-box !important; /* Crucial */
-    width: 94% !important; /* Deja un pequeño margen para que respire */
-    margin: 10px auto !important;
-    left: 0;
-    right: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    padding: 20px 15px;
+    background: linear-gradient(180deg, #0a0f28 0%, #050515 100%);
+    border-bottom: 3px solid #1a1f4d;
+    border-radius: 0 0 20px 20px;
+    width: 94%;
+    margin: 10px auto 20px auto;
+    position: relative;
+    box-sizing: border-box;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+body.mobile-os header h1 {
+    font-size: 1.8rem;
+    color: #fff;
+    text-align: center;
+    line-height: 1.1;
+    margin: 0;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5), 0 0 20px rgba(65, 105, 225, 0.4);
+    font-weight: 800;
+}
+
+body.mobile-os .controles-orden {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+body.mobile-os #selectOrden {
+    background: linear-gradient(45deg, #2a0a5e, #4b0082);
+    border: 2px solid #fff;
+    border-radius: 8px;
+    padding: 8px 12px;
+    color: #fff;
+    font-weight: bold;
+    font-size: 0.9rem;
+    min-width: 60px;
+    box-shadow: 0 0 10px rgba(75, 0, 130, 0.5);
+}
+
+body.mobile-os .search-container {
+    flex: 1;
+    max-width: 200px;
+    position: relative;
+}
+
+body.mobile-os #inputBuscador {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    border: 2px solid #1a1f4d;
+    border-radius: 50px;
+    padding: 8px 15px;
+    color: #4ed9ff;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 0.8rem;
+    outline: none;
+    box-sizing: border-box;
+}
+
+body.mobile-os #inputBuscador::placeholder {
+    color: rgba(78, 217, 255, 0.4);
 }
 
 body.mobile-os .modal-content {
-    background: rgba(15, 20, 50, 0.95) !important;
-    width: 90% !important;
-    max-width: 380px !important;
-    /* Los bordes deben ser muy redondeados como en la foto */
-    border: 2px solid rgba(255, 255, 255, 0.2) !important;
-    border-radius: 28px !important;
-    padding: 25px !important;
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 0 !important; /* Manejaremos el espacio con márgenes */
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9) !important;
+    background: rgba(15, 20, 50, 0.95);
+    width: 90%;
+    max-width: 380px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 28px;
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9);
     backdrop-filter: blur(15px);
 }
 
-/* Contenedor Superior (Portada + Disco) */
 body.mobile-os .modal-left {
-    width: 100% !important;
-    display: flex !important;
-    justify-content: center !important;
-    position: relative !important;
-    margin-bottom: 30px !important; /* Espacio para que no choque con el texto */
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    position: relative;
+    margin-bottom: 30px;
 }
 
-/* La Portada con el marco blanco grueso */
 body.mobile-os .modal-left img {
-    width: 180px !important;
-    height: auto !important;
-    border-radius: 15px !important;
-    border: 4px solid #ffffff !important;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6) !important;
+    width: 180px;
+    height: auto;
+    border-radius: 15px;
+    border: 4px solid #ffffff;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
     z-index: 2;
 }
 
-/* Ajuste del Mini-DVD asomando (Disco) */
 body.mobile-os .modal-left div[style*="position: absolute"] {
-    width: 150px !important; /* Reducimos de 150 a 120 para que no sea gigante */
-    height: 150px !important;
-    right: 10% !important; /* Ajustado para "pegarse" más a la portada como en la foto */
-    bottom: -10px !important;
-    z-index: 3 !important;
-    background: transparent !important; /* Aseguramos que no tenga fondo propio */
-    filter: drop-shadow(0 8px 15px rgba(0, 0, 0, 0.6)) !important;
+    width: 120px; 
+    height: 120px;
+    right: 10%;
+    bottom: -10px;
+    z-index: 3;
+    background: transparent;
+    filter: drop-shadow(0 8px 15px rgba(0, 0, 0, 0.6));
 }
 
-/* Sección de Información (Abajo) */
 body.mobile-os .modal-right {
-    background: rgba(255, 255, 255, 0.03) !important;
-    border-radius: 22px !important;
-    padding: 5px !important;
-    border: 1px solid rgba(255, 255, 255, 0.08) !important;
-    width: auto !important;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 22px;
+    padding: 5px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    width: auto;
 }
 
-/* Título Verde Neón */
 body.mobile-os .modal-right h2 {
-    color: #00ff7f !important;
-    font-size: 1.6rem !important;
-    margin-bottom: 20px !important;
-    border-bottom: 4px solid rgba(0, 255, 127, 0.3) !important;
-    padding-bottom: 10px !important;
+    color: #00ff7f;
+    font-size: 1.6rem;
+    margin-bottom: 20px;
+    border-bottom: 4px solid rgba(0, 255, 127, 0.3);
+    padding-bottom: 10px;
 }
 
-/* Etiquetas e ID */
 body.mobile-os .modal-right p {
-    font-family: "JetBrains Mono", monospace; /* Si la usas, se ve muy técnico */
-    font-size: 0.85rem !important;
-    margin: 10px 0 !important;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 0.85rem;
+    margin: 10px 0;
 }
 
 body.mobile-os .modal-right span {
-    background: rgba(255, 255, 255, 0.1) !important;
-    padding: 3px 10px !important;
-    border-radius: 6px !important;
-    color: #ffffff !important;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 3px 10px;
+    border-radius: 6px;
+    color: #ffffff;
 }
 
 body.mobile-os .modal-actions {
-    display: flex !important;
-    justify-content: space-between !important;
-    gap: 15px !important;
-    margin-top: 20px !important;
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    margin-top: 20px;
 }
 
 body.mobile-os .btn-gc {
-    flex: 1 !important; /* Hace que ambos botones midan lo mismo */
-    border-radius: 50px !important;
-    padding: 12px 5px !important;
-    font-size: 0.8rem !important;
-    font-weight: bold !important;
-    border: none !important;
-    text-align: center !important;
-    display: flex !important;
-    justify-content: center !important;
-    align-items: center !important;
+    flex: 1;
+    border-radius: 50px;
+    padding: 12px 5px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    border: none;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 body.mobile-os #modalDisco {
-    background: none !important;
-    width: 100% !important;
-    height: 100% !important;
-    border-radius: 50% !important;
-    object-fit: contain !important;
-    display: block !important;
-    border: none !important; /* Eliminamos cualquier borde previo */
-    background: none !important;
-}
-
-body.mobile-os header {
-    display: flex !important;
-    flex-direction: column !important; /* Apilamos para dar espacio al título */
-    align-items: center !important;
-    gap: 15px !important;
-    padding: 20px 15px !important;
-    background: linear-gradient(180deg, #0a0f28 0%, #050515 100%) !important;
-    border-bottom: 3px solid #1a1f4d !important;
-    border-radius: 0 0 20px 20px !important; /* Redondeado solo abajo */
-    width: 100% !important;
-    margin: 0 0 20px 0 !important;
-    position: relative !important;
-}
-
-/* Título con efecto de brillo (Glow) */
-body.mobile-os header h1 {
-    font-size: 1.8rem !important;
-    color: #fff !important;
-    text-align: center !important;
-    line-height: 1.1 !important;
-    margin: 0 !important;
-    text-shadow:
-        0 0 10px rgba(255, 255, 255, 0.5),
-        0 0 20px rgba(65, 105, 225, 0.4) !important;
-    font-weight: 800 !important;
-}
-
-/* Contenedor de controles (A-Z y Buscador) */
-body.mobile-os.header-controls {
-    display: flex !important;
-    width: 100% !important;
-    justify-content: center !important;
-    align-items: center !important;
-    gap: 10px !important;
-}
-
-/* Botón A-Z Estilo Consola */
-body.mobile-os #sort-btn {
-    background: linear-gradient(45deg, #2a0a5e, #4b0082) !important;
-    border: 2px solid #fff !important;
-    border-radius: 8px !important;
-    padding: 8px 12px !important;
-    color: #fff !important;
-    font-weight: bold !important;
-    font-size: 0.9rem !important;
-    min-width: 60px !important;
-    box-shadow: 0 0 10px rgba(75, 0, 130, 0.5) !important;
-}
-
-/* Barra de Búsqueda Estilo Tecnológico */
-body.mobile-os .search-container {
-    flex: 1 !important;
-    max-width: 200px !important;
-    position: relative !important;
-}
-
-body.mobile-os #search-input {
-    width: 100% !important;
-    background: rgba(0, 0, 0, 0.4) !important;
-    border: 2px solid #1a1f4d !important;
-    border-radius: 50px !important; /* Forma de cápsula como en la imagen */
-    padding: 8px 15px !important;
-    color: #4ed9ff !important; /* Azul tecnológico */
-    font-family: "JetBrains Mono", monospace !important;
-    font-size: 0.8rem !important;
-    outline: none !important;
-}
-
-body.mobile-os #search-input::placeholder {
-    color: rgba(78, 217, 255, 0.4) !important;
+    background: none;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: contain;
+    display: block;
+    border: none;
 }
