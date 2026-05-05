@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Mode</title>
-    <link rel="stylesheet" href="estilos_admin.css">
+    <link rel="stylesheet" href="styles_admin.css">
 </head>
 <body>
 <div class="main-container">
@@ -18,6 +18,17 @@
                 <button id="btn-seed-data" class="gc-btn-mini-refresh" style="border-color: #00ffff; color: #00ffff;">
                     GENERATE TEST DATA
                 </button>
+                <div class="panel-header">
+    <div class="db-actions">
+        <button id="btn-export-json" class="gc-btn-mini-refresh" style="border-color: #f1c40f; color: #f1c40f;">
+            EXPORT JSON
+        </button>
+        <label for="input-import-json" class="gc-btn-mini-refresh" style="border-color: #2ecc71; color: #2ecc71; cursor: pointer;">
+            IMPORT JSON
+        </label>
+        <input type="file" id="input-import-json" accept=".json" style="display: none;">
+    </div>
+</div>
             </div>
             <h2 class="panel-title"></h2>
         </div>
