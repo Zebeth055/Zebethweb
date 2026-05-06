@@ -59,9 +59,9 @@ const rutaLocalDiscos = "Assets/CoversCD/";
 const detectOS = () => {
     if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
         document.body.classList.add("mobile-os", "android-optimizado");
-        juegosPorPagina = 8;
+        juegosPorPagina = 20;
     } else {
-        juegosPorPagina = 15;
+        juegosPorPagina = 25;
     }
 };
 detectOS();

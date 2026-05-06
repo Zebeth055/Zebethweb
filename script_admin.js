@@ -1,9 +1,10 @@
-// 1. LOS IMPORTS
+// 1. LOS IMPORTS (Consolidados arriba para mayor orden)
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import {
-    getFirestore, collection, addDoc, deleteDoc, doc, getDocs, 
-    query, orderBy, onSnapshot, updateDoc
+import { 
+    initializeFirestore, collection, addDoc, deleteDoc, doc, getDocs, 
+    query, orderBy, onSnapshot, updateDoc 
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
 // 2. CONFIGURACIÓN
 const firebaseConfig = {
@@ -15,8 +16,23 @@ const firebaseConfig = {
     appId: "1:497969896150:web:9fc8cecef549fa2d284777"
 };
 
+// --- PRIMERO INICIALIZAR APP ---
 const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+
+// --- LUEGO INICIALIZAR SERVICIOS USANDO 'app' ---
+const auth = getAuth(app);
+const db = initializeFirestore(app, {
+    experimentalForceLongPolling: true // Esto resuelve el error ERR_BLOCKED_BY_CLIENT
+});
+
+// 3. AUTENTICACIÓN (Recuerda cambiar estos datos por los tuyos)
+signInWithEmailAndPassword(auth, "tu-email@ejemplo.com", "tu-password")
+  .then((userCredential) => {
+    console.log("Logueado como:", userCredential.user.uid);
+  })
+  .catch((error) => {
+    console.error("Error de login:", error.message);
+  });
 
 // 3. VARIABLES DE ESTADO
 const listaContainer = document.getElementById("lista-juegos");
