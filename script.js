@@ -55,6 +55,17 @@ let stopTimeoutHandle = null;
 const rutaLocalPortadas = "Assets/Covers/";
 const rutaLocalDiscos = "Assets/CoversCD/";
 
+// Lista de rutas de tus sonidos
+const sonidosCuriosidad = [
+    'sounds/Nintendo GameCube Boot Up Sound 1.mp3',
+    'sounds/Nintendo GameCube Boot Up Sound 2 (1 Z Button).mp3',
+    'sounds/Nintendo GameCube Boot Up Sound 3 (4 Z Buttons).mp3'
+];
+
+let audioActual = null;
+
+
+
 // --- 5. DETECTAR OS (Paginación) ---
 const detectOS = () => {
     if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
@@ -118,44 +129,88 @@ if (jingle) {
     };
 }
 
+// Lista de avatares para usuarios no logueados (ajusta las rutas a tus archivos reales)
+const TOTAL_GUEST_IMAGES = 170; 
+
+const getRandomAvatar = () => {
+    // Genera un número aleatorio entre 1 y el total
+    const randomNum = Math.floor(Math.random() * TOTAL_GUEST_IMAGES) + 1;
+    return `Assets/pfp/guest/guest_${randomNum}.png`;
+};
 // --- 8. GESTIÓN DE SESIÓN (BOTONES ADMIN DINÁMICOS) ---
 onAuthStateChanged(auth, (user) => {
     const btnAdminOriginal = document.getElementById("btn-admin-login");
+    const adminZone = document.querySelector(".admin-header-zone");
     
+    // Limpiamos siempre para reconstruir según el estado
+    document.getElementById("admin-menu-wrapper")?.remove();
+
+    // Creamos el contenedor principal (el mismo para ambos estados)
+    const wrapper = document.createElement("div");
+    wrapper.id = "admin-menu-wrapper";
+    wrapper.className = "admin-dropdown-wrapper";
+
     if (user) {
+        // --- ESTADO: LOGUEADO (Tu código actual) ---
         if (btnAdminOriginal) btnAdminOriginal.style.display = "none";
-        document.getElementById("btn-modificar")?.remove();
-        document.getElementById("btn-logout")?.remove();
 
-        const modBtn = document.createElement("button");
-        modBtn.id = "btn-modificar";
-        modBtn.className = "gc-btn-mini";
-        modBtn.style.marginRight = "10px";
-        modBtn.innerHTML = `<span class="btn-icon-admin" style="filter: hue-rotate(90deg);"></span> MODIFICAR`;
-        modBtn.onclick = () => window.location.href = "admin.html";
+        const avatarUrl = "Assets/pfp/Admin.webp"; // Tu pfp de admin
 
-        const logoutBtn = document.createElement("button");
-        logoutBtn.id = "btn-logout";
-        logoutBtn.className = "gc-btn-mini";
-        logoutBtn.style.borderColor = "var(--btn-b)";
-        logoutBtn.innerHTML = `<span class="btn-icon b" style="padding: 2px 5px; font-size: 10px; margin-right: 5px;">B</span> SALIR`;
-        logoutBtn.onclick = () => signOut(auth).then(() => window.location.reload());
+        wrapper.innerHTML = `
+            <img src="${avatarUrl}" class="admin-avatar" alt="Admin">
+            <button class="dropdown-trigger-retro" id="trigger-retro">ADMIN</button>
+            <div class="dropdown-content-retro">
+                <button id="btn-mod-retro" class="dropdown-item-retro">MODIFICAR</button>
+                <button id="btn-out-retro" class="dropdown-item-retro">SALIR</button>
+            </div>
+        `;
 
         if(adminZone) {
-            adminZone.appendChild(modBtn);
-            adminZone.appendChild(logoutBtn);
+            adminZone.appendChild(wrapper);
+            const trigger = wrapper.querySelector("#trigger-retro");
+            trigger.onclick = (e) => {
+                e.stopPropagation();
+                wrapper.classList.toggle("active");
+            };
+            document.getElementById("btn-mod-retro").onclick = () => window.location.href = "admin.html";
+            document.getElementById("btn-out-retro").onclick = () => signOut(auth).then(() => window.location.reload());
         }
+
     } else {
-        if (btnAdminOriginal) {
-            btnAdminOriginal.style.display = "flex";
-            btnAdminOriginal.onclick = () => {
-                modalLogin.style.display = "flex";
-                document.getElementById("loginEmail").focus();
+        // --- ESTADO: NO LOGUEADO (Nuevo estilo con imagen al azar) ---
+        if (btnAdminOriginal) btnAdminOriginal.style.display = "none";
+
+        // Obtenemos imagen al azar de la carpeta
+        const randomAvatarUrl = getRandomAvatar();
+
+        wrapper.innerHTML = `
+            <img src="${randomAvatarUrl}" class="admin-avatar" style="filter: grayscale(0.5);" alt="Guest">
+            <button class="dropdown-trigger-retro" id="trigger-login-retro" style="padding-right: 15px;">
+                LOGIN
+            </button>
+        `;
+
+        if(adminZone) {
+            adminZone.appendChild(wrapper);
+
+            // Quitamos la flechita si no hay menú desplegable (opcional)
+            const btnLogin = document.getElementById("trigger-login-retro");
+            btnLogin.style.setProperty('--after-content', 'none'); 
+
+            // Al hacer clic, abre el modal de siempre
+            btnLogin.onclick = () => {
+                if(modalLogin) {
+                    modalLogin.style.display = "flex";
+                    document.getElementById("loginEmail")?.focus();
+                }
             };
         }
-        document.getElementById("btn-modificar")?.remove();
-        document.getElementById("btn-logout")?.remove();
     }
+});
+
+// Cerrar el menú al hacer clic en cualquier otra parte de la pantalla
+document.addEventListener("click", () => {
+    document.getElementById("admin-menu-wrapper")?.classList.remove("active");
 });
 
 // --- 9. CARGA DE BASE DE DATOS Y RENDERIZADO ---
@@ -313,6 +368,33 @@ function ordenarProductos() {
 if(selectOrden) selectOrden.addEventListener("change", ordenarProductos);
 
 // --- 12. LÓGICA DEL MODAL (DISCO GIRATORIO Y REDIRECCIÓN) ---
+
+window.abrirModalDolphin = function() {
+    const modalDolphin = document.getElementById("modalDolphin");
+    if(modalDolphin) {
+        modalDolphin.style.display = "flex";
+        // Sonido de selección (Botón A)
+        const sonido = document.getElementById('sound-select-1');
+        if (sonido) {
+            sonido.currentTime = 0;
+            sonido.play().catch(()=>{});
+        }
+    }
+};
+
+window.cerrarModalDolphin = function() {
+    const modalDolphin = document.getElementById("modalDolphin");
+    if(modalDolphin) {
+        modalDolphin.style.display = "none";
+        // Sonido de volver (Botón B)
+        const sonido = document.getElementById('sound-next');
+        if (sonido) {
+            sonido.currentTime = 0;
+            sonido.play().catch(()=>{});
+        }
+    }
+};
+
 function obtenerAnguloActual(el) {
     const st = window.getComputedStyle(el, null);
     const tr = st.getPropertyValue("transform");
@@ -364,6 +446,52 @@ window.abrirModal = function(idJuego) {
 
     modalDetalle.style.display = "flex";
 }
+
+function abrirModalRetro(idModal) {
+    const modal = document.getElementById(idModal);
+    if (modal) {
+        modal.style.display = 'flex';
+        // Reproducir sonido de selección si existe
+        const sonido = document.getElementById('sound-select-1');
+        if (sonido) sonido.play();
+    }
+}
+
+function cerrarModalRetro(idModal) {
+    const modal = document.getElementById(idModal);
+    if (modal) {
+        modal.style.display = 'none';
+        // Reproducir sonido de atrás/B
+        const sonido = document.getElementById('sound-next');
+        if (sonido) sonido.play();
+    }
+}
+
+// Dentro de script.js, añade estas líneas al final del archivo:
+
+window.abrirModalRetro = function(idModal) {
+    const modal = document.getElementById(idModal);
+    if (modal) {
+        modal.style.display = 'flex';
+        const sonido = document.getElementById('sound-select-1');
+        if (sonido) {
+            sonido.currentTime = 0;
+            sonido.play().catch(()=>{});
+        }
+    }
+};
+
+window.cerrarModalRetro = function(idModal) {
+    const modal = document.getElementById(idModal);
+    if (modal) {
+        modal.style.display = 'none';
+        const sonido = document.getElementById('sound-next');
+        if (sonido) {
+            sonido.currentTime = 0;
+            sonido.play().catch(()=>{});
+        }
+    }
+};
 
 window.cerrarModal = function () {
     if (stopTimeoutHandle) clearTimeout(stopTimeoutHandle);
@@ -467,6 +595,32 @@ window.addEventListener("click", (event) => {
     if (event.target == modalAlert) modalAlert.style.display = "none";
     if (event.target == modalDetalle) window.cerrarModal();
 });
+
+function reproducirSonidoAleatorio() {
+    // Detener el sonido anterior si existe
+    if (audioActual) {
+        audioActual.pause();
+        audioActual.currentTime = 0;
+    }
+
+    const indice = Math.floor(Math.random() * sonidosCuriosidad.length);
+    const rutaSeleccionada = sonidosCuriosidad[indice];
+    
+    // Usamos encodeURI por los espacios en los nombres de tus archivos
+    audioActual = new Audio(encodeURI(rutaSeleccionada));
+    audioActual.volume = 0.5;
+
+    audioActual.play()
+        .then(() => {
+            console.log("Reproduciendo: " + rutaSeleccionada);
+        })
+        .catch(error => {
+            console.error("Error al reproducir. Asegúrate de haber interactuado con la página primero. Detalle:", error);
+        });
+}
+
+window.reproducirSonidoAleatorio = reproducirSonidoAleatorio;
+
 
 // --- 15. INICIALIZACIÓN FINAL ---
 cargarDesdeFirebase();

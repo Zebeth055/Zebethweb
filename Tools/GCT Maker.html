@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>GCT Maker - System Tool</title>
+    
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="../styles_admin.css">
+    
+    <style>
+        /* ESTILOS ESPECÍFICOS PARA EL GCT MAKER */
+        body { overflow-y: auto !important; }
+
+        .gct-main-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .gct-panel {
+            background: rgba(10, 15, 40, 0.85);
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.8), inset 0 0 20px rgba(0, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            flex: 1;
+            min-width: 300px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .gct-title {
+            color: #00ffff;
+            font-family: var(--font-main);
+            text-transform: uppercase;
+            text-shadow: 2px 2px 0px #000;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #00ffff;
+            padding-bottom: 10px;
+            text-align: center;
+        }
+
+        /* Inputs Estilo Terminal */
+        .input-gct, .textarea-gct {
+            background: #000;
+            border: 2px solid #330066;
+            color: #00ffff;
+            font-family: "JetBrains Mono", monospace;
+            padding: 12px;
+            width: 100%;
+            box-sizing: border-box;
+            outline: none;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .input-gct:focus, .textarea-gct:focus {
+            border-color: #00ffff;
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.4);
+        }
+
+        .textarea-gct {
+            resize: none;
+            height: 300px;
+        }
+
+        /* Tabla de Códigos */
+        .table-container {
+            height: 250px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid #330066;
+            border-radius: 4px;
+        }
+
+        .table-retro {
+            width: 100%;
+            border-collapse: collapse;
+            color: white;
+            font-family: "JetBrains Mono", monospace;
+            font-size: 0.85rem;
+        }
+
+        .table-retro tr {
+            border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .table-retro tr:hover { background: rgba(0, 255, 255, 0.15); }
+        .table-retro td { padding: 10px; }
+
+        .btn-del {
+            background: #ff3366;
+            color: white;
+            border: 2px solid #fff;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            padding: 2px 8px;
+            transition: 0.2s;
+        }
+        
+        .btn-del:hover {
+            box-shadow: 0 0 10px #ff3366;
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-title" onclick="window.location.href='../index.html'" style="cursor: pointer;">
+            <img src="../Assets/icons/gamecube icono.svg" class="header-icon" alt="icon">
+        </div>
+        <div class="container-acciones">
+            <button class="Tools-retro" onclick="window.open('https://dolphin-emu.org/')">
+                <img src="../Assets/icons/Dolphin icon.svg" class="btn-custom-icon" alt="icon"> 
+            </button>
+    </header>
+
+    <main class="gct-main-container">
+        
+        <div class="gct-panel">
+            <h2 class="gct-title">TARGET MEMORY</h2>
+            <input class="input-gct" id="game_id" type="text" placeholder="Game ID (Ej: GMSE01)">
+            
+            <div class="table-container">
+                <table class="table-retro" id="codes_table">
+                    <tbody id="codes_body"></tbody>
+                </table>
+            </div>
+            
+            <button class="estilo-retro" id="gct_b" style="width: 100%; padding: 15px; font-size: 1rem; color: #00ffff; border-color: #00ffff;">
+                DOWNLOAD .GCT
+            </button>
+        </div>
+
+        <div class="gct-panel">
+            <h2 class="gct-title">CODE INJECTOR</h2>
+            <input class="input-gct" id="code_title" type="text" placeholder="Code Name (Ej: Infinite Lives)">
+            
+            <textarea class="textarea-gct" id="code" placeholder="00000000 00000000"></textarea>
+            
+            <button class="estilo-retro" id="add_code_b" style="width: 100%; padding: 15px; font-size: 1rem; color: #00ff5d; border-color: #00ff5d;">
+                ADD CODE TO LIST
+            </button>
+        </div>
+
+    </main>
+
+
+    <div id="modalAlert" class="confirm-overlay" style="display: none; z-index: 9999;">
+        <div class="confirm-box" style="background: linear-gradient(135deg, #cc7a00 0%, #663d00 100%);">
+            <div class="confirm-content">
+                <p id="alertMessage" style="font-family: 'JetBrains Mono', monospace;">⚠️ WARNING:<br>Message</p>
+                <div class="confirm-options">
+                    <div id="btn-close-alert" class="option-item selected"><span class="selection-arrow">▶</span> OK</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modalSuccess" class="confirm-overlay" style="display: none; z-index: 9999;">
+        <div class="confirm-box" style="background: linear-gradient(135deg, #00008b 0%, #1e90ff 100%);">
+            <div class="confirm-content">
+                <p style="font-family: 'JetBrains Mono', monospace;">SUCCESS:<br>.GCT FILE COMPILED.</p>
+                <div class="confirm-options">
+                    <div id="btn-close-success" class="option-item selected"><span class="selection-arrow">▶</span> OK</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modalDolphin" class="modal-base">
+        <div class="modal-contenido-retro dolphin-style">
+            <h2 class="modal-titulo-retro">TOOLS</h2>
+            <div class="modal-cuerpo-retro">
+                <div class="grid-herramientas-dolphin">
+                    <button class="btn-tool-dolphin" onclick="window.location.href='GCT Maker.html'">
+                        <img src="../Assets/icons/config.png" class="tool-icon-img"> GCT Maker
+                    </button>
+                </div>
+            </div>
+            <div class="modal-footer-retro">
+                <button class="btn-gc-retro b" onclick="document.getElementById('modalDolphin').style.display='none'">
+                    <span class="btn-icon b">B</span> CANCEL
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modalLogin" class="modal-base">
+        <div class="modal-contenido-retro">
+            <h2 class="modal-titulo-retro">ADMIN ACCESS</h2>
+            <div class="modal-cuerpo-retro">
+                <div class="input-group-retro">
+                    <label>USER_ID:</label>
+                    <input type="email" id="loginEmail" placeholder="example@mail.com" />
+                </div>
+                <div class="input-group-retro">
+                    <label>ACCESS_CODE:</label>
+                    <input type="password" id="loginPass" placeholder="••••••••" />
+                </div>
+            </div>
+            <div class="modal-footer-retro">
+                <button id="btn-cancel-login" class="btn-gc-retro b"><span class="btn-icon b">B</span> CANCEL</button>
+                <button id="btn-confirm-login" class="btn-gc-retro a"><span class="btn-icon a">A</span> CONFIRM</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="../script.js"></script>
+
+    <script type="module">
+        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+        // Vinculaciones del Header
+        document.getElementById('trigger-login-retro').onclick = () => document.getElementById('modalLogin').style.display = 'flex';
+        document.getElementById('btn-cancel-login').onclick = () => document.getElementById('modalLogin').style.display = 'none';
+        document.getElementById('btn-open-tools').onclick = () => document.getElementById('modalDolphin').style.display = 'flex';
+        
+        // Cerrar Modales de Alerta
+        document.getElementById('btn-close-alert').onclick = () => document.getElementById('modalAlert').style.display = 'none';
+        document.getElementById('btn-close-success').onclick = () => document.getElementById('modalSuccess').style.display = 'none';
+
+        // Lógica de Login local
+        document.getElementById('btn-confirm-login').onclick = async () => {
+            const email = document.getElementById('loginEmail').value;
+            const pass = document.getElementById('loginPass').value;
+            const auth = getAuth();
+            if (!email || !pass) return;
+            try {
+                await signInWithEmailAndPassword(auth, email, pass);
+                document.getElementById('modalLogin').style.display = 'none';
+            } catch (error) {
+                console.error(error);
+            }
+        };
+    </script>
+
+    <script>
+        // GLOBALS
+        var CODES = [];
+        var SELECTED_ROW = -1;
+        var ROW_DELETE = false;
+        var UNNAMED_CODES_NR = 1;
+
+        // Función para lanzar el Modal Retro de Alerta
+        function make_notification(text) {
+            document.getElementById('alertMessage').innerHTML = `⚠️ WARNING:<br><br>${text}`;
+            document.getElementById('modalAlert').style.display = 'flex';
+        }
+
+        function click_row(table, row) {
+            var add_code_b = document.getElementById('add_code_b');
+            var code_title = document.getElementById('code_title');
+            var code = document.getElementById('code');
+            
+            var currentIndex = row.sectionRowIndex;
+
+            if (currentIndex == SELECTED_ROW) {
+                row.style.backgroundColor = '';
+                SELECTED_ROW = -1;
+                add_code_b.innerHTML = 'ADD CODE TO LIST';
+                code_title.value = '';
+                code.value = '';
+            } else if (!ROW_DELETE) {
+                if (SELECTED_ROW != -1 && CODES.length != 0) {
+                    table.rows[SELECTED_ROW].style.backgroundColor = '';
+                }
+                row.style.backgroundColor = 'rgba(0, 255, 255, 0.2)';
+                SELECTED_ROW = currentIndex;
+                add_code_b.innerHTML = 'UPDATE CODE';
+                code_title.value = row.childNodes[0].innerHTML;
+                code.value = CODES[SELECTED_ROW]['text'];
+            }
+            ROW_DELETE = false;
+        }
+
+        function delete_code(table, row) {
+            var currentIndex = row.sectionRowIndex;
+            if (currentIndex == SELECTED_ROW) {
+                SELECTED_ROW = -1;
+                document.getElementById('add_code_b').innerHTML = 'ADD CODE TO LIST';
+                document.getElementById('code_title').value = '';
+                document.getElementById('code').value = '';
+            } else if (currentIndex < SELECTED_ROW) {
+                SELECTED_ROW -= 1;
+            }
+            CODES.splice(currentIndex, 1);
+            table.removeChild(row);
+            ROW_DELETE = true;
+        }
+
+        function get_code_title() {
+            var code_title_obj = document.getElementById('code_title');
+            var code_title = code_title_obj.value;
+            if (code_title == '') {
+                code_title = `Unnamed Code ${UNNAMED_CODES_NR}`;
+                UNNAMED_CODES_NR += 1;
+            }
+            code_title_obj.value = '';
+            return code_title;
+        }
+
+        function code_to_hex(code) {
+            var byte_array = [];
+            for (var i = 0; i < code.length; i += 2) {
+                var byte = parseInt(code.substring(i, i + 2), 16);
+                byte_array.push(byte);
+            }
+            return byte_array;
+        }
+
+        function get_code() {
+            var code_obj = document.getElementById('code');
+            var code = code_obj.value;
+
+            var curated_code = code.replace(/\s+/g, '');
+            if (curated_code.length == 0) return false;
+            
+            if (!/^[0-9A-Fa-f]*$/.test(curated_code)) {
+                make_notification('INVALID HEX CHARACTERS DETECTED');
+                return false;
+            }
+            else if (curated_code.length % 16 != 0) {
+                make_notification('CODE LENGTH IS INCORRECT.<br>Must be multiple of 16.');
+                return false;
+            }
+            var byte_array = code_to_hex(curated_code);
+            
+            code_obj.value = '';
+            return {'text': code, 'hex': byte_array};
+        }
+
+        function add_code() {
+            var table_ref = document.getElementById('codes_table').getElementsByTagName('tbody')[0];
+            var row_ref;
+            var code = get_code();
+            if (!code) return;
+            var code_title = get_code_title();
+
+            if (SELECTED_ROW == -1) { 
+                row_ref = table_ref.insertRow();
+                row_ref.onclick = function() {click_row(table_ref, row_ref);};
+                
+                var cell1 = row_ref.insertCell(0);
+                cell1.style.width = '100%';
+                cell1.innerHTML = code_title;
+                
+                var cell2 = row_ref.insertCell(1);
+                var delete_button = document.createElement('BUTTON');
+                delete_button.className = 'btn-del';
+                delete_button.innerHTML = 'X';
+                delete_button.onclick = function() {delete_code(table_ref, row_ref);};
+                cell2.appendChild(delete_button);
+
+                CODES.push(code);
+            } else { 
+                row_ref = table_ref.childNodes[SELECTED_ROW];
+                row_ref.childNodes[0].innerHTML = code_title;
+                CODES[SELECTED_ROW] = code;
+                row_ref.click();
+            }
+        }
+
+        function create_gct() {
+            if (CODES.length == 0) {
+                make_notification('MEMORY IS EMPTY.<br>ADD CODES TO LIST FIRST.');
+                return;
+            }
+            var game_id = document.getElementById('game_id').value;
+            if (game_id == '') {
+                make_notification('TARGET GAME ID IS MISSING.<br>Ej: GALE01');
+                return;
+            }
+            
+            var gct_array = [0x00, 0xD0, 0xC0, 0xDE, 0x00, 0xD0, 0xC0, 0xDE];
+            for (let code of CODES) {
+                gct_array = gct_array.concat(code['hex']);
+            }
+            gct_array = gct_array.concat([0xF0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]);
+
+            var byteArray = new Uint8Array(gct_array);
+            var a = window.document.createElement('a');
+            a.href = window.URL.createObjectURL(new Blob([byteArray], { type: 'application/octet-stream' }));
+            a.download = `${game_id.toUpperCase()}.gct`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+
+            // Lanzar el modal de éxito al terminar
+            document.getElementById('modalSuccess').style.display = 'flex';
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            var btnAdd = document.getElementById('add_code_b');
+            if (btnAdd) btnAdd.onclick = add_code;
+            
+            var btnGct = document.getElementById('gct_b');
+            if (btnGct) btnGct.onclick = create_gct;
+        });
+    </script>
+</body>
+</html>

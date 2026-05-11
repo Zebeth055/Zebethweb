@@ -258,13 +258,6 @@ body.intro-off {
    ========================================= */
 header {
     background: var(--glass-bg);
-    margin: 20px auto;
-    width: 90%;
-    max-width: 1200px;
-    padding: 20px 40px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     backdrop-filter: blur(18px);
     -webkit-backdrop-filter: blur(18px);
     border: 3px solid var(--glass-border);
@@ -277,24 +270,19 @@ header {
     position: sticky;
     top: 20px;
     z-index: 100;
-    overflow: hidden;
-}
+    overflow: visible !important; 
+    display: flex;
+    justify-content: space-between; /* Manda el título a la izq, botón a la der y buscador al centro */
+    align-items: center;           /* Alinea todos verticalmente al centro */
+    padding: 10px 30px;
+    box-sizing: border-box;
+    gap: 20px;
+    max-width: 1200px; /* El ancho máximo que quieres que alcance */
+    margin: 0 auto;    /* Centra todo el header en la pantalla */
+    width: 100%;
 
-header::before {
-    content: "";
-    position: absolute;
-    top: -50%; left: -50%;
-    width: 200%; height: 200%;
-    background: linear-gradient(
-        45deg,
-        transparent 40%,
-        rgba(255, 255, 255, 0.1) 45%,
-        rgba(100, 200, 255, 0.1) 50%,
-        transparent 60%
-    );
-    pointer-events: none;
-    transform: rotate(-15deg);
-}
+    }
+
 
 .header-title {
     font-family: var(--font-main);
@@ -305,6 +293,12 @@ header::before {
     font-weight: bold;
     text-shadow: 0 0 10px rgba(0, 150, 255, 0.7);
     filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.5));
+    position: relative; /* Muy importante */
+    width: 60px;        /* Define un ancho fijo para este espacio */
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .search-container {
@@ -313,9 +307,12 @@ header::before {
     border-radius: 50px;
     padding: 8px 25px;
     box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.9), 0 1px 0 rgba(255, 255, 255, 0.05);
-    display: flex;
     align-items: center;
     transition: all 0.3s ease;
+    flex-grow: 1;                  /* Hace que el buscador tome el espacio disponible */
+    display: flex;
+    justify-content: center;       /* Centra el input dentro de su contenedor */
+    max-width: 500px;
 }
 
 .search-container:focus-within {
@@ -331,18 +328,18 @@ header::before {
     font-family: var(--font-main);
     font-size: 1rem;
     text-shadow: 0 0 5px rgba(0, 255, 204, 0.5);
+    width: 100%;
 }
+
+
+
 
 /* Control de Volumen */
 .gc-volume-wrapper {
     display: flex;
     align-items: center;
-    gap: 12px;
-    background: rgba(0, 0, 0, 0.6);
-    padding: 8px 18px;
-    border: 2px solid #ffffff;
-    box-shadow: inset 0 0 0 2px #000, 0 0 15px rgba(0, 150, 255, 0.3);
-    border-radius: 4px;
+    gap: 5px;
+    padding: 2px 5px;
     position: relative;
 }
 
@@ -356,8 +353,8 @@ header::before {
 #master-volume {
     -webkit-appearance: none;
     appearance: none;
-    width: 100px;
-    height: 12px;
+    width: 50px;
+    height: 10px;
     background: #050520;
     border: 2px solid #000;
     outline: none;
@@ -445,7 +442,7 @@ header::before {
    ========================================= */
 .grid-container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 210px));
+    grid-template-columns: repeat(auto-fit, minmax(180px, 250px));
     gap: 25px;
     width: 95%;
     max-width: 1400px;
@@ -549,7 +546,8 @@ header::before {
 }
 
 .tarjeta-wrapper:hover .tarjeta-info {
-    opacity: 1;
+    opacity: none;
+    
     transform: translateY(0);
 }
 
@@ -1069,20 +1067,395 @@ footer {
 }
 
 
+/* --- NUEVO: ESTILOS PARA EL MENÚ DESPLEGABLE ADMIN --- */
+.admin-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+/* El menú oculto por defecto */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 110%; /* Aparece justo debajo del botón */
+    background: var(--glass-bg); /* Usamos tu fondo de cristal */
+    backdrop-filter: blur(12px);
+    border: 2px solid var(--bordes);
+    border-radius: 8px;
+    min-width: 160px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+    z-index: 1000;
+    overflow: hidden;
+    padding: 5px 0;
+    animation: menuFadeIn 0.2s ease-out;
+}
+
+@keyframes menuFadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Mostrar cuando el contenedor está activo */
+.admin-dropdown.active .dropdown-content {
+    display: block;
+}
+
+/* --- ESTILO AVANZADO DROPDOWN ADMIN --- */
+.admin-dropdown-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: relative;
+    overflow: visible !important;
+}
+
+/* Imagen circular del Admin */
+.admin-avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: 2px solid #ffffff;
+    box-shadow: 0 0 0 2px #000;
+    object-fit: cover;
+    background: #330066;
+    flex-shrink: 0;
+}
+
+/* El botón con tu estilo de rejilla */
+.dropdown-trigger-retro {
+    background: linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(180deg, #1100aa 0%, #330066 100%);
+    background-size: 15px 15px, 15px 15px, 100% 100%;
+    border: 2px solid #ffffff;
+    box-shadow: 0 0 0 2px #000, inset 0 0 0 1px #000;
+    color: #ffffff;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-shadow: 2px 2px 0px #000;
+    padding: 8px 35px 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    outline: none;
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.dropdown-trigger-retro:hover {
+    filter: brightness(1.2);
+    transform: translateY(-1px);
+}
+
+/* La flechita indicadora */
+.dropdown-trigger-retro::after {
+    content: '▼';
+    position: absolute;
+    right: 12px;
+    font-size: 10px;
+    text-shadow: none;
+}
+
+/* Contenedor del menú con el mismo estilo de rejilla */
+.dropdown-content-retro {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 110%;
+    min-width: 180px;
+    background: linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(180deg, #1100aa 0%, #330066 100%);
+    background-size: 15px 15px, 15px 15px, 100% 100%;
+    border: 2px solid #ffffff;
+    box-shadow: 0 0 0 2px #000;
+    z-index: 9999;
+    border-radius: 4px;
+    padding: 5px 0;
+}
+
+.admin-dropdown-wrapper.active .dropdown-content-retro {
+    display: block;
+}
+
+.dropdown-item-retro {
+    width: 100%;
+    padding: 12px 15px;
+    background: transparent;
+    border: none;
+    color: white;
+    text-align: left;
+    font-family: "Segoe UI", sans-serif;
+    font-weight: bold;
+    text-transform: uppercase;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-shadow: 1px 1px 0px #000;
+}
+
+.dropdown-item-retro:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* --- FIX PARA QUE EL HEADER NO CORTE EL MENÚ --- */
+.main-header, 
+.admin-header-zone {
+    overflow: visible !important;
+    z-index: 1000;
+}
+
+/* --- ESTILO RETRO CYBER DROPDOWN --- */
+.admin-dropdown-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: relative;
+}
+
+.admin-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid #ffffff;
+    box-shadow: 0 0 0 2px #000;
+    object-fit: cover;
+    background: #330066;
+}
+
+.dropdown-content-retro {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 120%;
+    min-width: 180px;
+    background: linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(180deg, #1100aa 0%, #330066 100%);
+    background-size: 15px 15px, 15px 15px, 100% 100%;
+    border: 2px solid #ffffff;
+    box-shadow: 0 0 0 2px #000;
+    border-radius: 4px;
+    padding: 5px 0;
+    z-index: 9999;
+}
+
+.admin-dropdown-wrapper.active .dropdown-content-retro {
+    display: block;
+}
+
+.dropdown-item-retro {
+    width: 100%;
+    padding: 10px 15px;
+    background: transparent;
+    border: none;
+    color: white;
+    text-align: left;
+    font-family: "Segoe UI", sans-serif;
+    font-weight: bold;
+    text-transform: uppercase;
+    cursor: pointer;
+    text-shadow: 1px 1px 0px #000;
+}
+
+.dropdown-item-retro:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+/* Si el botón tiene el ID de login, ocultamos el pseudo-elemento de la flecha */
+#trigger-login-retro::after {
+    display: none;
+}
+
+
+.container-acciones {
+    display: flex;
+    gap: 15px; /* Aquí controlas la cercanía exacta entre los 3 botones */
+}
+
+.Tools-retro {
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;    
+    /* Ajuste de tamaño para igualar al select */
+    min-width: auto;   /* Deja que el contenido mande */
+        
+    /* Estética */
+    gap: 8px;          /* Espacio entre icono y texto */
+    white-space: nowrap;
+    background: linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(180deg, #1100aa 0%, #330066 100%);
+    background-size: 15px 15px, 15px 15px, 100% 100%;
+    border: 2px solid #ffffff;
+    box-shadow: 0 0 0 2px #000, inset 0 0 0 1px #000;
+    color: #ffffff;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-shadow: 2px 2px 0px #000;
+    padding: 5px;
+    border-radius: 4px;
+    appearance: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    outline: none;
+
+}
+
+/* Ajuste del icono para que no empuje el botón */
+.btn-custom-icon {
+    height: 24px;      /* Un poco más pequeño para dejar aire arriba y abajo */
+    width: auto;
+    object-fit: contain;
+    margin-right: 0;   /* Quitamos el margen porque ya usamos 'gap' en el padre */
+    filter: drop-shadow(0 0 2px rgba(0, 255, 255, 0.5));
+}
+
+/* Corrección del hover (tenías un error en el nombre de la clase) */
+.Tools-retro:hover {
+    border-color: #00ffff;
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.5), 0 0 0 2px #000;
+}
+
+
+.header-icon{
+    height: 60px;      /* Un poco más pequeño para dejar aire arriba y abajo */
+    width: auto;
+    position: absolute; /* Lo sacamos del flujo normal */
+    object-fit: contain;
+    
+    /* Centrado perfecto */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+@media (max-width: 900px) {
+    
+    /* 1. HEADER (Logo y botones) */
+    header {
+        flex-wrap: wrap;       /* Permite que los elementos bajen solo si es necesario */
+        justify-content: center; 
+        gap: 20px;             /* Reducimos un poco el gap para ganar espacio */
+        padding: 15px;
+    }
+
+    /* 2. HEADER PRINCIPAL (Título, Buscador, Logout) */
+    .header-principal {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 15px;
+    }
+
+    .contenedor-busqueda {
+        flex: 1 1 300px;       
+        max-width: 100%;
+    }
+
+    .barra-controles {
+        flex-wrap: wrap;      
+        justify-content: center;
+        gap: 25px;             
+    }
+}
+
+/* Estilo específico para el modal de Dolphin */
+.dolphin-style {
+    border-color: #00ffff !important; /* Brillo Cyan */
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.3) !important;
+}
+
+/* Cuadrícula de herramientas */
+.grid-herramientas-dolphin {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Dos columnas */
+    gap: 15px;
+    margin-top: 20px;
+}
+
+/* Botones estilo "Portada de Juego" */
+.btn-tool-dolphin {
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid rgba(0, 255, 255, 0.2);
+    border-radius: 12px;
+    padding: 20px 10px;
+    color: white;
+    font-family: var(--font-main);
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    backdrop-filter: blur(5px);
+}
+
+.btn-tool-dolphin:hover {
+    background: rgba(0, 255, 255, 0.15);
+    border-color: #00ffff;
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.4);
+}
+
+.tool-icon {
+    font-size: 1.5rem;
+    filter: drop-shadow(0 0 5px rgba(255,255,255,0.5));
+}
+
+/* Ajuste para móvil (una sola columna si es necesario) */
+@media (max-width: 480px) {
+    .grid-herramientas-dolphin {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Estilo para las imágenes dentro de los botones del modal */
+.tool-icon-img {
+    width: 50px;           /* Tamaño ajustable */
+    height: 50px;
+    object-fit: contain;   /* Evita que la imagen se deforme */
+    margin-bottom: 8px;    /* Espacio entre imagen y texto */
+    filter: drop-shadow(0 0 5px rgba(0, 255, 255, 0.5)); /* Brillo cyan suave */
+    transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+/* Efecto cuando pasas el mouse por el botón */
+.btn-tool-dolphin:hover .tool-icon-img {
+    transform: scale(1.1); /* La imagen crece un poco */
+    filter: drop-shadow(0 0 12px rgba(0, 255, 255, 0.9)); /* El brillo se intensifica */
+}
+
+/* Ajuste del botón para que la imagen y el texto se alineen bien */
+.btn-tool-dolphin {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 110px;     /* Asegura que todos los botones midan lo mismo */
+    padding: 15px 10px;
+}
+
 /* =========================================
    9. OPTIMIZACIÓN ANDROID / MOBILE OS
    ========================================= */
-
+/*body.mobile-os */
 body.mobile-os .gcn-front-panel {
-    padding: 20px; 
+    padding: 20px;
 }
 
 body.mobile-os .port {
-        width: 40px; height: 40px; 
+    width: 40px;
+    height: 40px;
 }
 
 body.mobile-os .mem-card-slot {
-        width: 150px; 
+    width: 150px;
 }
 
 body.mobile-os .grid-container {
@@ -1127,105 +1500,6 @@ body.mobile-os .tarjeta img {
 body.mobile-os .tarjeta-info {
     display: none;
 }
-body.mobile-os header {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 5px;
-    padding: 20px 5px;
-    background: linear-gradient(180deg, #0a0f28 0%, #050515 100%);
-    border-bottom: 3px solid #1a1f4d;
-    border-radius: 0 0 20px 20px;
-        width: 100%;
-    margin-top: 0 !important; 
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: 25px;
-
-    top: 0;
-    position: relative; 
-    box-sizing: border-box;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-}
-body.mobile-os .header-title {
-    display: none;
-}
-
-
-body.mobile-os .gc-volume-wrapper {
-    position: absolute;
-    left: 10px;
-    top: 65%;
-    transform: translateY(-50%);
-    
-    flex-direction: column-reverse;
-    padding: 8px 4px;
-    gap: 10px;
-    width: 30px;
-    height: auto;
-}
-
-body.mobile-os #master-volume {
-    appearance: none;
-    -webkit-appearance: none;
-    width: 60px;
-    height: 10px;
-    transform: rotate(-90deg);
-    margin: 25px 0;
-    background: #050520;
-}
-
-body.mobile-os .gc-volume-label {
-    font-size: 0.6rem;
-    writing-mode: horizontal-tb;
-    text-align: center;
-}
-
-body.mobile-os .controles-orden {
-    display: flex;
-    width: 100%;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    padding: 7px;
-    order: 1;
-}
-
-
-body.mobile-os .search-container {
-    flex: none;
-    width: 85%;
-    max-width: 300px;
-    margin-bottom: 5px;
-}
-
-body.mobile-os #inputBuscador::placeholder {
-    color: rgba(78, 217, 255, 0.4);
-}
-
-body.mobile-os .select-wrapper::after {
-    content: "▼";
-    position: absolute;
-    right: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #00ffff;
-    font-size: 10px;
-    pointer-events: none;
-    text-shadow: 0 0 5px rgba(0, 255, 255, 0.8);
-    order: 2;
-}
-
-body.mobile-os .estilo-retro {
-    padding: 8px 35px 8px 15px;
-    border-radius: 4px;
-    appearance: none;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-    outline: none;
-    }
-
 
 body.mobile-os .modal-content {
     background: rgba(15, 20, 50, 0.95);
@@ -1252,14 +1526,15 @@ body.mobile-os .modal-left {
 body.mobile-os .modal-left img {
     width: 180px;
     height: auto;
-    border-radius: 15px;
-    border: 4px solid #ffffff;
+    border-radius: 0;
+    border: 1px solid #fff;
     z-index: 2;
+    box-shadow: none !important;
     filter: none !important;
 }
 
 body.mobile-os .modal-left div[style*="position: absolute"] {
-    width: 120px; 
+    width: 120px;
     height: 120px;
     right: 10%;
     bottom: -10px;
@@ -1317,12 +1592,6 @@ body.mobile-os .btn-gc {
     align-items: center;
 }
 
-body.mobile-os .modal-left img {
-    border-radius: none;
-    border: 1px solid #fff;
-    box-shadow: none !important; 
-}
-
 body.mobile-os #modalDisco {
     background: none;
     width: 100%;
@@ -1332,4 +1601,91 @@ body.mobile-os #modalDisco {
     border: none;
     will-change: filter;
     filter: none !important;
+}
+
+/* ## Header ## */
+body.mobile-os header,
+body.mobile-os .header-principal {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    flex-direction: row !important;
+    justify-content: center !important;
+    align-items: center !important;
+    padding: 15px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    background: linear-gradient(180deg, #0a0f28 0%, #050515 100%);
+    border-bottom: 3px solid #1a1f4d;
+    border-radius: 0 0 20px 20px;
+    margin-bottom: 25px;
+}
+
+body.mobile-os .header-icon {
+    order: 0 !important;
+    flex: 0 0 auto !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center;
+    height: 60px !important;
+    margin: 0 5px !important;
+}
+
+body.mobile-os .search-container {
+    order: 1 !important;
+    flex: 0 0 100% !important;
+    display: flex;
+    justify-content: center;
+    width: 85%;
+    max-width: 300px;
+    margin: 10px 0 5px;
+}
+
+body.mobile-os #inputBuscador {
+    width: 85%;
+    max-width: 420px;
+    height: 36px;
+    font-size: 16px;
+}
+
+body.mobile-os .select-wrapper {
+    display: flex !important;
+    justify-content: center !important;
+}
+
+body.mobile-os .estilo-retro {
+    border-radius: 100px !important;
+    height: 35px !important;
+}
+
+body.mobile-os #inputBuscador::placeholder {
+    color: rgba(78, 217, 255, 0.4);
+}
+
+body.mobile-os .controles-orden {
+    order: 3 !important;
+    flex: 0 0 100% !important;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 0 15px;
+    position: relative;
+}
+
+body.mobile-os .admin-dropdown-wrapper {
+    order: 3 !important;
+    position: absolute !important;
+    left: 15px;
+    bottom: 10px;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px;
+}
+
+body.mobile-os .dropdown-trigger-retro {
+    order: 4 !important;
+    margin-left: auto !important;
+    border-radius: 100px;
+    flex: 1 !important;
+    display: flex !important;
+    justify-content: flex-end !important;
 }

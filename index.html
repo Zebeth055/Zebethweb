@@ -5,8 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>GameCube Backup</title>
     <link rel="stylesheet" href="styles.css" />
-</head>
+    </head>
 
+    
 <body> 
     <div id="intro-screen">
         <div id="gc-lid">
@@ -44,26 +45,46 @@
     <audio id="bg-music" loop preload="auto"><source src="sounds/Nintendo GameCube Menu.mp3" type="audio/mpeg" /></audio>
 
     <header>
-        <div class="header-title">Gamecube Backups</div>
-        <div class="controles-orden">
-            <div class="select-wrapper">
-                <select id="selectOrden" class="estilo-retro">
-                    <option value="az">A - Z</option>
-                    <option value="za">Z - A</option>
-                    <option value="peso">Peso</option>
-                </select>
-            </div>
+        <div class="header-title" onclick="reproducirSonidoAleatorio()" style="cursor: pointer;">
+    <img src="Assets/icons/gamecube icono.svg" class="header-icon" alt="icon">
+</div>
+<div class="container-acciones">
+        <button class="Tools-retro" onclick="window.open('dolphin-emu.org/')">
+            <img src="Assets/icons/Dolphin icon.svg" class="btn-custom-icon" alt="icon"> 
+        </button>
+        <button class="Tools-retro" onclick="abrirModalRetro('modalDolphin')">
+            <img src="Assets/icons/gear.svg" class="btn-custom-icon" alt="icon"> 
+        </button>
+    </div>
+        
+        
+<div class="controles-orden">
+    <div class="select-wrapper" style="display: flex; align-items: center; gap: 15px;">
+        <select id="selectOrden" class="estilo-retro">
+            <option value="az">A - Z</option>
+            <option value="za">Z - A</option>
+            <option value="peso">Peso</option>
+        </select>
+
+    </div>
+</div>
+        <div class="search-container">
+            <input type="text" id="inputBuscador" placeholder="[ BUSCAR_DATOS ]">
         </div>
         <div class="gc-volume-wrapper">
             <span class="gc-volume-label">VOL.</span>
-            <input type="range" id="master-volume" min="0" max="1" step="0.05" value="0.5" />
-        </div>
-        <div class="search-container">
-            <input type="text" id="inputBuscador" placeholder="[ BUSCAR_DATOS ]" />
+            <input type="range" id="master-volume" min="0" max="1" step="0.05" value="0.5">
         </div>
         <div class="admin-header-zone">
     <button id="btn-admin-login" class="gc-btn-mini"><span class="btn-icon-admin"></span> ADMIN</button>
-    </div>
+    <div id="admin-menu-wrapper" class="admin-dropdown-wrapper">
+            <img src="Assets/pfp/guest/guest_168.png" class="admin-avatar" style="filter: grayscale(0.5);" alt="Guest">
+            <button class="dropdown-trigger-retro" id="trigger-login-retro" style="padding-right: 15px; --after-content: none;">
+                LOGIN
+            </button>
+        </div></div>
+        
+        
     </header>
 
     <main>
@@ -127,6 +148,34 @@
         </div>
     </div>
 
+<div id="modalDolphin" class="modal-base">
+    <div class="modal-contenido-retro dolphin-style">
+        <h2 class="modal-titulo-retro">TOOLS</h2>
+        
+        <div class="modal-cuerpo-retro">
+            <p class="modal-text-retro"></p>
+            
+            <div class="grid-herramientas-dolphin">
+<button class="btn-tool-dolphin" onclick="window.location.href = 'Tools/GCT Maker.html'">
+    <img src="Assets/icons/config.png" class="tool-icon-img" alt="Config">
+    GCT Maker
+</button>
+                <button class="btn-tool-dolphin" onclick="window.open('URL_HERRAMIENTA_4', '_blank')">
+                    <img src="Assets/icons/textures.png" class="tool-icon-img" alt="Texturas">
+                    TEXTURAS
+                </button>
+            </div>
+        </div>
+
+        <div class="modal-footer-retro">
+            <button class="btn-gc-retro b" onclick="window.cerrarModalDolphin()">
+                <span class="btn-icon b">B</span> CANCEL
+            </button>
+        </div>
+    </div>
+</div>
+
+    
     <div id="modalAlert" class="modal-base">
         <div class="modal-contenido-retro alert-style">
             <h2 id="alertTitle" class="modal-titulo-retro">SYSTEM ERROR</h2>
