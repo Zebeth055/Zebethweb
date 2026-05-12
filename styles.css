@@ -1617,13 +1617,13 @@ body.mobile-os header,.header-principal {
     border-bottom: 3px solid #1a1f4d;
     border-radius: 0 0 20px 20px;
     margin-bottom: 25px;
-    position: fixed; /* Lo fija a la pantalla */
+    position: sticky; /* Lo fija a la pantalla */
     top: 0;          /* Lo pega al borde superior */
     left: 0;         /* Asegura que empiece desde la izquierda */
     z-index: 1000;   /* Mantiene el header por encima de todo el contenido */
 }
 
-body.mobile-os .header-icon {
+ body.mobile-os .header-icon {
     order: 0 !important;
     flex: 0 0 auto !important;
     display: flex !important;
@@ -1657,7 +1657,7 @@ body.mobile-os .select-wrapper {
 
 body.mobile-os .estilo-retro {
     border-radius: 100px !important;
-    height: 35px !important;
+    height: 34px !important;
 }
 
 body.mobile-os #inputBuscador::placeholder {
