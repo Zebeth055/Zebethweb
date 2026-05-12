@@ -1,0 +1,1694 @@
+/* =========================================
+   1. VARIABLES Y ANIMACIONES BASE
+   ========================================= */
+:root {
+    --gc-dark: rgb(0, 0, 0);
+    --gc-grid: rgba(255, 255, 255, 0.21);
+    --btn-b: #ff3366;
+    --font-main: "Arial Rounded MT Bold", "Helvetica", sans-serif;
+    --gc-blue-deep: #0e11c5;
+    --gc-blue-dark: #07096e;
+    --gc-blue-slots: #030832;
+    --gc-cyan-neón: #00ffff;
+    --gc-blue-bright: #3f60ff;
+    --btn-a: #00ff5d;
+    --bordes: #000dda;
+    
+    /* Efecto Cristal Azul Profundo */
+    --glass-bg: rgba(10, 15, 40, 0.75);
+    --glass-border: rgba(100, 200, 255, 0.25);
+    --gc-blue-glow: rgba(0, 150, 255, 0.5); /* Corregido de 15se0 */
+    --gc-cyan-glow: rgba(0, 255, 255, 0.2);
+    --glow-blue: 0 0 10px rgba(65, 105, 225, 0.8);
+
+    /* Variables Panel Frontal */
+    --gcn-gray: rgba(212, 212, 212, 0.27);
+    --gcn-dark-gray: #1a1a1a;
+    --gcn-purple: #5910a8;
+}
+
+@keyframes girarDiscoWii {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@keyframes modalSlide {
+    from { transform: scale(0.8); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+@keyframes baileInterno {
+    0%, 100% { transform: rotateY(-3deg) rotateZ(0deg); }
+    50% { transform: rotateY(3deg) rotateZ(1deg); }
+}
+
+@keyframes fadeInCard {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* =========================================
+   2. ESTILOS GLOBALES
+   ========================================= */
+body {
+    margin: 0;
+    font-family: var(--font-main);
+    background-color: var(--gc-dark);
+    background-image: 
+        radial-gradient(circle, transparent 0%, rgba(0, 0, 0, 1) 90%),
+        linear-gradient(var(--gc-grid) 2px, transparent 2px),
+        linear-gradient(90deg, var(--gc-grid) 2px, transparent 2px);
+    background-size: 100% 100%, 30px 30px, 30px 30px;
+    background-attachment: fixed;
+    color: #ffffff;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+body.intro-active {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+body.intro-off {
+    overflow-y: auto;
+}
+
+.hidden { display: none; }
+.fade-out { opacity: 0; pointer-events: none; }
+
+/* =========================================
+   3. PANTALLA DE INTRODUCCIÓN (POWER / LID)
+   ========================================= */
+#intro-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #000;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 999999;
+    transition: opacity 0.8s ease;
+}
+
+#gamecube-intro {
+    width: 100%;
+    max-width: 900px;
+}
+
+#gc-lid {
+    position: absolute;
+    top: 0; 
+    left: 0;
+    width: 100%; 
+    height: 100%;
+    background: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+    transition: opacity 1.2s ease-in-out, transform 1.5s ease-in-out;
+}
+
+.lid-open {
+    opacity: 0;
+    transform: scale(1.1);
+    pointer-events: none;
+}
+
+#jewel-container {
+    position: relative;
+    width: 250px;
+    height: 250px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 0%;
+    overflow: hidden;
+    clip-path: circle(50% at 50% 50%);
+}
+
+#jewel-container::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+    background: radial-gradient(
+        circle at var(--reflejo-x, 50%) -17%, 
+        rgba(255, 255, 255, 0.4) 0%,   
+        rgba(255, 255, 255, 0.1) 20%,  
+        transparent 50%               
+    );
+    mix-blend-mode: screen; 
+}
+
+#jewel-logo, #gc-lid img {
+    width: 260px;
+    height: auto;
+    z-index: 1;
+    border-radius: 50%;
+    box-shadow: 0 0 2px 1px rgba(255,255,255,0.05);
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.05));
+}
+
+.power-interface {
+    position: absolute;
+    bottom: 12%; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 10000;
+}
+
+.curved-text-wrapper {
+    width: 130px;
+    height: 50px;
+    margin-bottom: -50px;
+    display: block;
+}
+
+.curved-text-wrapper svg { overflow: visible; }
+
+.curved-text-wrapper text {
+    fill: #888 !important; 
+    font-family: "Arial Rounded MT Bold", Arial, sans-serif;
+    font-size: 10px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    pointer-events: none;
+}
+
+#start-btn {
+    position: relative;
+    width: 65px;
+    height: 65px;
+    padding: 0;
+    background: #222;
+    border: 2px solid #111;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 
+        inset 0 4px 6px rgba(255,255,255,0.05),
+        inset 0 -4px 6px rgba(0,0,0,0.6),
+        0 5px 15px rgba(0,0,0,0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.1s ease;
+    outline: none;
+    font-size: 0;
+}
+
+#start-btn::before { content: none !important; }
+#start-btn:active {
+    transform: scale(0.96) translateY(2px);
+    box-shadow: inset 0 4px 8px #000;
+}
+
+#power-led {
+    width: 100px;
+    height: 25px;
+    background: #110500;
+    margin-top: 18px;
+    border-radius: 5px 5px 40px 40px; 
+    position: relative;
+    transition: all 0.4s ease;
+    overflow: visible; 
+    border: 1px solid rgba(255,255,255,0.02);
+}
+
+#power-led::after {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%);
+    border-radius: inherit;
+    pointer-events: none;
+}
+
+#power-led.led-on {
+    background: radial-gradient(circle at 50% 20%, #ffffff 0%, #fff700 20%, #ffaa00 60%, #ff7700 100%);
+    filter: saturate(1.5) brightness(1.2) drop-shadow(0 0 10px #ff8800) drop-shadow(0 0 25px rgba(255, 136, 0, 0.6));
+    box-shadow: inset 0 0 8px rgba(255, 255, 255, 0.4);
+}
+
+#power-led.led-on::before {
+    content: "";
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 150%; height: 200%;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(circle, rgba(255, 136, 0, 0.2) 0%, transparent 70%);
+    z-index: -1;
+    pointer-events: none;
+}
+
+/* =========================================
+   4. HEADER Y NAVEGACIÓN SUPERIOR
+   ========================================= */
+header {
+    background: var(--glass-bg);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border: 3px solid var(--glass-border);
+    border-radius: 18px;
+    box-shadow:
+        inset 0 0 20px var(--gc-blue-glow),
+        inset 5px 5px 10px var(--gc-cyan-glow),
+        inset -2px -2px 5px rgba(255, 255, 255, 0.05),
+        0 15px 35px rgba(0, 0, 0, 0.8);
+    position: sticky;
+    top: 20px;
+    z-index: 100;
+    overflow: visible !important; 
+    display: flex;
+    justify-content: space-between; /* Manda el título a la izq, botón a la der y buscador al centro */
+    align-items: center;           /* Alinea todos verticalmente al centro */
+    padding: 10px 30px;
+    box-sizing: border-box;
+    gap: 20px;
+    max-width: 1200px; /* El ancho máximo que quieres que alcance */
+    margin: 0 auto;    /* Centra todo el header en la pantalla */
+    width: 100%;
+
+    }
+
+
+.header-title {
+    font-family: var(--font-main);
+    font-size: 1.9rem;
+    color: #fff;
+    text-transform: none;
+    letter-spacing: -1px;
+    font-weight: bold;
+    text-shadow: 0 0 10px rgba(0, 150, 255, 0.7);
+    filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.5));
+    position: relative; /* Muy importante */
+    width: 60px;        /* Define un ancho fijo para este espacio */
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.search-container {
+    background: rgba(0, 5, 20, 0.7);
+    border: 2px solid rgba(100, 200, 255, 0.2);
+    border-radius: 50px;
+    padding: 8px 25px;
+    box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.9), 0 1px 0 rgba(255, 255, 255, 0.05);
+    align-items: center;
+    transition: all 0.3s ease;
+    flex-grow: 1;                  /* Hace que el buscador tome el espacio disponible */
+    display: flex;
+    justify-content: center;       /* Centra el input dentro de su contenedor */
+    max-width: 500px;
+}
+
+.search-container:focus-within {
+    border-color: var(--btn-a);
+    box-shadow: 0 0 15px rgba(0, 255, 204, 0.4), inset 0 3px 6px rgba(0, 0, 0, 0.9);
+}
+
+.search-container input {
+    background: transparent;
+    border: none;
+    color: #fff;
+    outline: none;
+    font-family: var(--font-main);
+    font-size: 1rem;
+    text-shadow: 0 0 5px rgba(0, 255, 204, 0.5);
+    width: 100%;
+}
+
+
+
+
+/* Control de Volumen */
+.gc-volume-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 2px 5px;
+    position: relative;
+}
+
+.gc-volume-label {
+    font-family: "Arial Rounded MT Bold", sans-serif;
+    font-size: 0.8rem;
+    color: #fff;
+    text-shadow: 2px 2px 0px #000;
+}
+
+#master-volume {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 50px;
+    height: 10px;
+    background: #050520;
+    border: 2px solid #000;
+    outline: none;
+    cursor: pointer;
+}
+
+#master-volume::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 16px;
+    height: 16px;
+    background: #00ff5d;
+    border: 2px solid #ffffff;
+    box-shadow: 0 0 8px rgba(0, 255, 93, 0.6);
+    cursor: pointer;
+}
+
+#master-volume::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    background: #00ff5d;
+    border: 2px solid #ffffff;
+    box-shadow: 0 0 8px rgba(0, 255, 93, 0.6);
+    cursor: pointer;
+}
+
+#master-volume::-webkit-slider-runnable-track {
+    background: linear-gradient(90deg, #00ffff var(--value), #050520 var(--value));
+}
+
+/* Filtros y Selectores */
+.buscador-container {
+    display: flex;
+    gap: 15px;
+    padding: 20px;
+    justify-content: center;
+    align-items: center;
+}
+
+.select-wrapper { position: relative; }
+
+.select-wrapper::after {
+    content: "▼";
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #00ffff;
+    font-size: 10px;
+    pointer-events: none;
+    text-shadow: 0 0 5px rgba(0, 255, 255, 0.8);
+}
+
+.estilo-retro {
+    background: linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(180deg, #1100aa 0%, #330066 100%);
+    background-size: 15px 15px, 15px 15px, 100% 100%;
+    border: 2px solid #ffffff;
+    box-shadow: 0 0 0 2px #000, inset 0 0 0 1px #000;
+    color: #ffffff;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-shadow: 2px 2px 0px #000;
+    padding: 8px 35px 8px 15px;
+    border-radius: 4px;
+    appearance: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    outline: none;
+}
+
+.estilo-retro:hover {
+    border-color: #00ffff;
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.5), 0 0 0 2px #000;
+}
+
+.estilo-retro option {
+    background-color: #1a1a1a;
+    color: white;
+}
+
+/* =========================================
+   5. GRID Y TARJETAS (JUEGOS)
+   ========================================= */
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 250px));
+    gap: 25px;
+    width: 95%;
+    max-width: 1400px;
+    margin: 40px auto;
+    justify-content: center;
+    justify-items: center;
+    padding: 20px;
+    box-sizing: border-box;
+    min-height: 70vh;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.grid-fade-out { opacity: 0; }
+
+.tarjeta-wrapper {
+    perspective: 1000px;
+    width: 210px;
+    margin: 15px;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 0.8s ease, transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.tarjeta-wrapper.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.tarjeta-wrapper:hover {
+    transform: translateY(-15px);
+}
+
+.tarjeta {
+    width: 100%;
+    height: 295px;
+    background-color: #0055a3;
+    border: 4px solid #000;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+    box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.8), 0 4px 15px rgba(0, 0, 0, 0.5);
+    filter: drop-shadow(0 0 1px rgba(0, 255, 255, 0.2));
+    transition: transform 0.6s ease-out, border-color 0.3s;
+    transform-style: preserve-3d;
+    transform: rotateX(0deg) rotateY(0deg);
+}
+
+.tarjeta:hover {
+    border-color: rgba(12, 15, 161, 0.5);
+    transform: perspective(1000px) translateY(-15px) rotateX(5deg);
+    box-shadow: 15px 25px 20px rgba(0, 0, 0, 0.4);
+}
+
+.tarjeta:hover img,
+.tarjeta:hover .tarjeta-info {
+    animation: baileInterno 4s ease-in-out infinite;
+}
+
+.tarjeta img {
+    object-fit: fill;
+    transition: transform 0.5s ease;
+    border-radius: 1px;
+    margin: 4px;
+    width: calc(100% - 8px);
+    height: calc(100% - 8px);
+    box-shadow: inset 0 0 5px rgba(0, 255, 255, 0.1);
+}
+
+.tarjeta-info {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: linear-gradient(to top, rgba(0, 0, 40, 0.7), rgba(65, 105, 225, 0.5));
+    border-top: 2px solid var(--bordes);
+    padding: 12px 0;
+    text-align: center;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    color: white;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.3s ease-in-out;
+    z-index: 10;
+    overflow: hidden;
+}
+
+.tarjeta-info::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -150%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: all 0.6s;
+    pointer-events: none;
+}
+
+.tarjeta-wrapper:hover .tarjeta-info {
+    opacity: none;
+    
+    transform: translateY(0);
+}
+
+.tarjeta-wrapper:hover .tarjeta-info::before {
+    left: 150%;
+    transition: all 0.6s ease-in-out;
+}
+
+/* =========================================
+   6. PUERTOS Y CONSOLA FRONTAL (PAGINACIÓN)
+   ========================================= */
+.gcn-front-panel {
+    background: var(--gcn-gray);
+    padding: 20px;
+    border-radius: 15px;
+    border-bottom: 8px solid rgba(0, 0, 0, 0.18);
+    max-width: 500px;
+    margin: 20px auto;
+    flex-direction: column;
+    gap: 25px;
+    box-shadow: inset 0 2px 5px rgba(255,255,255,0.5), 0 10px 20px rgba(0,0,0,0.3);
+}
+
+.control-ports {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    min-height: 10px;
+}
+
+.port {
+    position: relative;
+    width: 65px;
+    height: 65px;
+    background: var(--gcn-dark-gray);
+    border-radius: 50%;
+    border: 4px solid #a0a0a0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.3s ease, filter 0.2s ease;
+}
+
+.port:hover {
+    filter: brightness(1.5) drop-shadow(0 0 5px var(--btn-a));
+}
+
+.port.active {
+    border-color: #00ffff;
+    box-shadow: 0 0 15px #00ffff;
+    background: #050520;
+}
+
+.port-index {
+    position: absolute;
+    top: -16px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 3px;
+    justify-content: center;
+    pointer-events: none;
+}
+
+.port-index span {
+    width: 4px;
+    height: 4px;
+    background: #999;
+    border-radius: 50%;
+    box-shadow: inset 1px 1px 1px rgba(0,0,0,0.6), 1px 1px 1px rgba(255,255,255,0.3);
+}
+
+.port.active .port-index span {
+    background: #00ffff;
+    box-shadow: 0 0 8px #00ffff, inset 0 0 2px #ffffff;
+}
+
+.pin-grid {
+    width: 30px;
+    height: 15px;
+    background: #000;
+    clip-path: polygon(0% 0%, 100% 0%, 85% 100%, 15% 100%);
+    border-bottom: 2px solid #333;
+    margin-top: 0;
+}
+
+.memory-slots {
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+}
+
+.mem-card-slot {
+    background: #c0c0c0;
+    border: 2px solid #a0a0a0;
+    border-radius: 4px;
+    width: 120px;
+    height: 35px;
+    position: relative;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    padding-bottom: 4px;
+    transition: all 0.2s;
+}
+
+.mem-card-slot span {
+    font-size: 0.6rem;
+    font-family: 'JetBrains Mono', monospace;
+    color: #666;
+    margin-bottom: 3px;
+}
+
+.slot-line {
+    width: 80%;
+    height: 6px;
+    background: #222;
+    border-radius: 2px;
+    box-shadow: inset 0 2px 2px rgba(184, 184, 184, 0.58);
+}
+
+.mem-card-slot:active {
+    transform: scale(0.95);
+    background: #b0b0b0;
+}
+
+.mem-card-slot:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    padding: 20px 0;
+    margin-top: 5px;
+}
+
+.btn-page {
+    background: #0a0f28;
+    border: 2px solid #1a1f4d;
+    color: #fff;
+    padding: 10px 25px;
+    font-family: "JetBrains Mono", monospace;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-radius: 4px;
+}
+
+.btn-page:hover:not(:disabled) {
+    background: #1a1f4d;
+    border-color: #4ed9ff;
+    color: #4ed9ff;
+    box-shadow: 0 0 15px rgba(78, 217, 255, 0.3);
+}
+
+.btn-page:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    filter: grayscale(1);
+}
+
+#page-info, #page-info-retro {
+    color: #4ed9ff;
+    font-family: "JetBrains Mono", monospace;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+#page-info-retro { display: none !important; }
+
+/* =========================================
+   7. MODALES (DETALLE DE JUEGO, LOGIN, ALERTAS)
+   ========================================= */
+.modal-overlay, .modal-base {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    backdrop-filter: blur(8px);
+}
+
+.modal-content {
+    background: rgba(10, 10, 30, 0.9);
+    width: 80%;
+    max-width: 900px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 20px;
+    padding: 40px;
+    display: flex;
+    gap: 40px;
+    box-shadow: 0 0 50px rgba(0, 0, 0, 1), inset 0 0 20px rgba(65, 105, 225, 0.3);
+    position: relative;
+    animation: modalSlide 0.3s ease-out;
+}
+
+.modal-left {
+    flex: 1;
+    text-align: center;
+}
+
+.modal-left img {
+    width: 100%;
+    border-radius: 10px;
+    border: 4px solid #fff;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+
+
+#modalDisco {
+    border-radius: 100%;
+    background: transparent;
+    filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.5));
+    width: 100%;
+}
+
+#modalDisco.girando { animation: girarDiscoWii 0.6s linear infinite; }
+
+.modal-right {
+    flex: 1.5;
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.info-header {
+    font-size: 1.8rem;
+    color: var(--btn-a);
+    margin-bottom: 15px;
+    border-bottom: 2px solid var(--btn-a);
+    padding-bottom: 10px;
+}
+
+.info-body {
+    font-family: monospace;
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
+
+.info-body span {
+    font-family: monospace;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 2px 5px;
+    border-radius: 4px;
+}
+
+.info-status {
+    color: #aaa;
+    margin-top: 20px;
+    font-style: italic;
+}
+
+.modal-actions {
+    margin-top: 30px;
+    display: flex;
+    gap: 20px;
+}
+
+.btn-gc {
+    padding: 12px 25px;
+    border-radius: 50px;
+    border: 3px solid #000;
+    font-weight: bold;
+    cursor: pointer;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.btn-gc-a { background: var(--btn-a); color: #000; }
+.btn-gc-b { background: var(--btn-b); color: #fff; }
+
+/* Modal Admin / Alertas Retro */
+.modal-contenido-retro {
+    background: #030832;
+    border: 3px solid #ffffff;
+    box-shadow: inset 0 0 0 2px #000, 0 0 25px rgba(0, 150, 255, 0.5);
+    padding: 25px;
+    width: 350px;
+    border-radius: 4px;
+    text-align: center;
+}
+
+.modal-titulo-retro {
+    color: var(--gc-cian-neón);
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 0px #000;
+}
+
+.input-group-retro {
+    text-align: left;
+    margin-bottom: 15px;
+}
+
+.input-group-retro label {
+    display: block;
+    font-size: 0.7rem;
+    color: #aaa;
+    margin-bottom: 5px;
+}
+
+.input-group-retro input {
+    width: 100%;
+    background: #000;
+    border: 1px solid #ffffff;
+    padding: 10px;
+    color: #00ffff;
+    font-family: "JetBrains Mono", monospace;
+    box-sizing: border-box;
+}
+
+.modal-footer-retro {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 25px;
+}
+
+.btn-gc-retro {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: bold;
+    font-size: 0.8rem;
+    position: relative;
+    padding-left: 25px;
+    transition: all 0.2s ease;
+    filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.5));
+}
+
+.btn-gc-retro::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid transparent;
+    border-left: 12px solid #ffaa00;
+    opacity: 0;
+    filter: drop-shadow(0 0 5px #ffaa00);
+    transition: opacity 0.2s ease, left 0.2s ease;
+}
+
+.btn-gc-retro:hover::before,
+.btn-gc-retro:focus::before {
+    opacity: 1;
+    left: -5px;
+}
+
+.btn-gc-retro:hover {
+    color: #ffcc00;
+    text-shadow: 0 0 8px rgba(255, 170, 0, 0.6);
+    transform: scale(1.1);
+}
+
+.btn-gc-retro .btn-icon { margin-left: 5px; }
+
+.alert-style {
+    border-color: #ffaa00 !important;
+    box-shadow: inset 0 0 0 2px #000, 0 0 30px rgba(255, 170, 0, 0.4) !important;
+}
+
+.modal-text-retro {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 0.9rem;
+    color: #fff;
+    margin: 20px 0;
+    line-height: 1.4;
+    text-transform: uppercase;
+}
+
+#alertTitle { color: #ffaa00; }
+
+.admin-access-container {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 100;
+}
+
+.gc-btn-mini {
+    background: rgba(0, 0, 0, 0.7);
+    color: #fff;
+    border: 2px solid #ffffff;
+    padding: 8px 15px;
+    font-family: "Arial Rounded MT Bold", sans-serif;
+    font-size: 0.7rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+    cursor: pointer;
+    box-shadow: inset 0 0 0 2px #000, 0 0 10px rgba(0, 150, 255, 0.3);
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 10px;
+
+}
+
+.btn-icon-admin {
+    width: 10px;
+    height: 10px;
+    background: var(--btn-a);
+    border-radius: 50%;
+    box-shadow: 0 0 5px var(--btn-a);
+}
+
+.gc-btn-mini:hover {
+    border-color: var(--gc-cian-neón);
+    box-shadow: inset 0 0 0 2px #000, 0 0 15px var(--gc-cian-neón);
+    transform: scale(1.05);
+}
+
+.gc-btn-mini:active { transform: scale(0.95); }
+
+
+/* =========================================
+   8. FOOTER Y GUÍA DE CONTROLES
+   ========================================= */
+footer {
+    width: 95%;
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 15px 25px;
+    position: relative;
+    background: 
+        linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(180deg, #1100aa 0%, #330066 100%);
+    background-size: 20px 20px, 20px 20px, 100% 100%;
+    border: 3px solid #ffffff;
+    outline: 2px solid #555;
+    box-shadow: inset 0 0 0 2px #000;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    color: #ffffff;
+    font-family: var(--font-main);
+    text-shadow: 2px 2px 0px #000;
+}
+
+.footer-guide {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 100;
+    background: linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(180deg, #1100aa 0%, #330066 100%);
+    border-top: 2px solid #ffffff; /* Corregido de px a 2px */
+    padding: 12px 0;
+    display: flex;
+    justify-content: center;
+    gap: 60px;
+    color: #ffffff;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.footer-guide span {
+    border: 2px solid #fff;
+    padding: 2px 8px;
+    background: rgba(0, 0, 0, 0.4);
+    margin-right: 8px;
+}
+
+.footer-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.footer-btn-icon {
+    border: 2px solid #fff;
+    padding: 2px 8px;
+    background: rgba(0, 0, 0, 0.3);
+    box-shadow: inset 2px 2px 0 rgba(0, 0, 0, 0.5);
+}
+
+.guide-item {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+
+/* --- NUEVO: ESTILOS PARA EL MENÚ DESPLEGABLE ADMIN --- */
+.admin-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+/* El menú oculto por defecto */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 110%; /* Aparece justo debajo del botón */
+    background: var(--glass-bg); /* Usamos tu fondo de cristal */
+    backdrop-filter: blur(12px);
+    border: 2px solid var(--bordes);
+    border-radius: 8px;
+    min-width: 160px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+    z-index: 1000;
+    overflow: hidden;
+    padding: 5px 0;
+    animation: menuFadeIn 0.2s ease-out;
+}
+
+@keyframes menuFadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Mostrar cuando el contenedor está activo */
+.admin-dropdown.active .dropdown-content {
+    display: block;
+}
+
+/* --- ESTILO AVANZADO DROPDOWN ADMIN --- */
+.admin-dropdown-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: relative;
+    overflow: visible !important;
+}
+
+/* Imagen circular del Admin */
+.admin-avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: 2px solid #ffffff;
+    box-shadow: 0 0 0 2px #000;
+    object-fit: cover;
+    background: #330066;
+    flex-shrink: 0;
+}
+
+/* El botón con tu estilo de rejilla */
+.dropdown-trigger-retro {
+    background: linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(180deg, #1100aa 0%, #330066 100%);
+    background-size: 15px 15px, 15px 15px, 100% 100%;
+    border: 2px solid #ffffff;
+    box-shadow: 0 0 0 2px #000, inset 0 0 0 1px #000;
+    color: #ffffff;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-shadow: 2px 2px 0px #000;
+    padding: 8px 35px 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    outline: none;
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.dropdown-trigger-retro:hover {
+    filter: brightness(1.2);
+    transform: translateY(-1px);
+}
+
+/* La flechita indicadora */
+.dropdown-trigger-retro::after {
+    content: '▼';
+    position: absolute;
+    right: 12px;
+    font-size: 10px;
+    text-shadow: none;
+}
+
+/* Contenedor del menú con el mismo estilo de rejilla */
+.dropdown-content-retro {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 110%;
+    min-width: 180px;
+    background: linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(180deg, #1100aa 0%, #330066 100%);
+    background-size: 15px 15px, 15px 15px, 100% 100%;
+    border: 2px solid #ffffff;
+    box-shadow: 0 0 0 2px #000;
+    z-index: 9999;
+    border-radius: 4px;
+    padding: 5px 0;
+}
+
+.admin-dropdown-wrapper.active .dropdown-content-retro {
+    display: block;
+}
+
+.dropdown-item-retro {
+    width: 100%;
+    padding: 12px 15px;
+    background: transparent;
+    border: none;
+    color: white;
+    text-align: left;
+    font-family: "Segoe UI", sans-serif;
+    font-weight: bold;
+    text-transform: uppercase;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-shadow: 1px 1px 0px #000;
+}
+
+.dropdown-item-retro:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* --- FIX PARA QUE EL HEADER NO CORTE EL MENÚ --- */
+.main-header, 
+.admin-header-zone {
+    overflow: visible !important;
+    z-index: 1000;
+}
+
+/* --- ESTILO RETRO CYBER DROPDOWN --- */
+.admin-dropdown-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: relative;
+}
+
+.admin-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid #ffffff;
+    box-shadow: 0 0 0 2px #000;
+    object-fit: cover;
+    background: #330066;
+}
+
+.dropdown-content-retro {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 120%;
+    min-width: 180px;
+    background: linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(180deg, #1100aa 0%, #330066 100%);
+    background-size: 15px 15px, 15px 15px, 100% 100%;
+    border: 2px solid #ffffff;
+    box-shadow: 0 0 0 2px #000;
+    border-radius: 4px;
+    padding: 5px 0;
+    z-index: 9999;
+}
+
+.admin-dropdown-wrapper.active .dropdown-content-retro {
+    display: block;
+}
+
+.dropdown-item-retro {
+    width: 100%;
+    padding: 10px 15px;
+    background: transparent;
+    border: none;
+    color: white;
+    text-align: left;
+    font-family: "Segoe UI", sans-serif;
+    font-weight: bold;
+    text-transform: uppercase;
+    cursor: pointer;
+    text-shadow: 1px 1px 0px #000;
+}
+
+.dropdown-item-retro:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+/* Si el botón tiene el ID de login, ocultamos el pseudo-elemento de la flecha */
+#trigger-login-retro::after {
+    display: none;
+}
+
+
+.container-acciones {
+    display: flex;
+    gap: 15px; /* Aquí controlas la cercanía exacta entre los 3 botones */
+}
+
+.Tools-retro {
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;    
+    /* Ajuste de tamaño para igualar al select */
+    min-width: auto;   /* Deja que el contenido mande */
+        
+    /* Estética */
+    gap: 8px;          /* Espacio entre icono y texto */
+    white-space: nowrap;
+    background: linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(180deg, #1100aa 0%, #330066 100%);
+    background-size: 15px 15px, 15px 15px, 100% 100%;
+    border: 2px solid #ffffff;
+    box-shadow: 0 0 0 2px #000, inset 0 0 0 1px #000;
+    color: #ffffff;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-shadow: 2px 2px 0px #000;
+    padding: 5px;
+    border-radius: 4px;
+    appearance: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    outline: none;
+
+}
+
+/* Ajuste del icono para que no empuje el botón */
+.btn-custom-icon {
+    height: 24px;      /* Un poco más pequeño para dejar aire arriba y abajo */
+    width: auto;
+    object-fit: contain;
+    margin-right: 0;   /* Quitamos el margen porque ya usamos 'gap' en el padre */
+    filter: drop-shadow(0 0 2px rgba(0, 255, 255, 0.5));
+}
+
+/* Corrección del hover (tenías un error en el nombre de la clase) */
+.Tools-retro:hover {
+    border-color: #00ffff;
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.5), 0 0 0 2px #000;
+}
+
+
+.header-icon{
+    height: 60px;      /* Un poco más pequeño para dejar aire arriba y abajo */
+    width: auto;
+    position: absolute; /* Lo sacamos del flujo normal */
+    object-fit: contain;
+    
+    /* Centrado perfecto */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+@media (max-width: 900px) {
+    
+    /* 1. HEADER (Logo y botones) */
+    header {
+        flex-wrap: wrap;       /* Permite que los elementos bajen solo si es necesario */
+        justify-content: center; 
+        gap: 20px;             /* Reducimos un poco el gap para ganar espacio */
+        padding: 15px;
+    }
+
+    /* 2. HEADER PRINCIPAL (Título, Buscador, Logout) */
+    .header-principal {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 15px;
+    }
+
+    .contenedor-busqueda {
+        flex: 1 1 300px;       
+        max-width: 100%;
+    }
+
+    .barra-controles {
+        flex-wrap: wrap;      
+        justify-content: center;
+        gap: 25px;             
+    }
+}
+
+/* Estilo específico para el modal de Dolphin */
+.dolphin-style {
+    border-color: #00ffff !important; /* Brillo Cyan */
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.3) !important;
+}
+
+/* Cuadrícula de herramientas */
+.grid-herramientas-dolphin {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Dos columnas */
+    gap: 15px;
+    margin-top: 20px;
+}
+
+/* Botones estilo "Portada de Juego" */
+.btn-tool-dolphin {
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid rgba(0, 255, 255, 0.2);
+    border-radius: 12px;
+    padding: 20px 10px;
+    color: white;
+    font-family: var(--font-main);
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    backdrop-filter: blur(5px);
+}
+
+.btn-tool-dolphin:hover {
+    background: rgba(0, 255, 255, 0.15);
+    border-color: #00ffff;
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.4);
+}
+
+.tool-icon {
+    font-size: 1.5rem;
+    filter: drop-shadow(0 0 5px rgba(255,255,255,0.5));
+}
+
+/* Ajuste para móvil (una sola columna si es necesario) */
+@media (max-width: 480px) {
+    .grid-herramientas-dolphin {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Estilo para las imágenes dentro de los botones del modal */
+.tool-icon-img {
+    width: 50px;           /* Tamaño ajustable */
+    height: 50px;
+    object-fit: contain;   /* Evita que la imagen se deforme */
+    margin-bottom: 8px;    /* Espacio entre imagen y texto */
+    filter: drop-shadow(0 0 5px rgba(0, 255, 255, 0.5)); /* Brillo cyan suave */
+    transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+/* Efecto cuando pasas el mouse por el botón */
+.btn-tool-dolphin:hover .tool-icon-img {
+    transform: scale(1.1); /* La imagen crece un poco */
+    filter: drop-shadow(0 0 12px rgba(0, 255, 255, 0.9)); /* El brillo se intensifica */
+}
+
+/* Ajuste del botón para que la imagen y el texto se alineen bien */
+.btn-tool-dolphin {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 110px;     /* Asegura que todos los botones midan lo mismo */
+    padding: 15px 10px;
+}
+
+/* =========================================
+   9. OPTIMIZACIÓN ANDROID / MOBILE OS
+   ========================================= */
+/*body.mobile-os */
+body.mobile-os .gcn-front-panel {
+    padding: 20px;
+}
+
+body.mobile-os .port {
+    width: 40px;
+    height: 40px;
+}
+
+body.mobile-os .mem-card-slot {
+    width: 150px;
+}
+
+body.mobile-os .grid-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    width: 100%;
+    max-width: 100vw;
+    margin: 0 auto;
+    justify-content: center;
+    justify-items: center;
+    align-items: start;
+    gap: 15px;
+    padding: 20px 10px;
+    box-sizing: border-box;
+}
+
+body.mobile-os .tarjeta-wrapper {
+    margin: 0;
+    width: 100%;
+    max-width: 165px;
+    display: flex;
+    justify-content: center;
+}
+
+body.mobile-os .tarjeta {
+    width: 100%;
+    aspect-ratio: 3 / 4.2;
+    height: auto;
+    contain: strict;
+    border: 1px solid #222;
+    box-shadow: none;
+    background: #050505;
+}
+
+body.mobile-os .tarjeta img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    image-rendering: auto;
+}
+
+body.mobile-os .tarjeta-info {
+    display: none;
+}
+
+body.mobile-os .modal-content {
+    background: rgba(15, 20, 50, 0.95);
+    width: 90%;
+    max-width: 380px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 28px;
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9);
+    backdrop-filter: blur(15px);
+}
+
+body.mobile-os .modal-left {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    position: relative;
+    margin-bottom: 30px;
+}
+
+body.mobile-os .modal-left img {
+    width: 180px;
+    height: auto;
+    border-radius: 0;
+    border: 1px solid #fff;
+    z-index: 2;
+    box-shadow: none !important;
+    filter: none !important;
+}
+
+body.mobile-os .modal-left div[style*="position: absolute"] {
+    width: 120px;
+    height: 120px;
+    right: 10%;
+    bottom: -10px;
+    z-index: 3;
+    background: transparent;
+    filter: none !important;
+}
+
+body.mobile-os .modal-right {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 22px;
+    padding: 5px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    width: auto;
+}
+
+body.mobile-os .modal-right h2 {
+    color: #00ff7f;
+    font-size: 1.6rem;
+    margin-bottom: 20px;
+    border-bottom: 4px solid rgba(0, 255, 127, 0.3);
+    padding-bottom: 10px;
+}
+
+body.mobile-os .modal-right p {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 0.85rem;
+    margin: 10px 0;
+}
+
+body.mobile-os .modal-right span {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 3px 10px;
+    border-radius: 6px;
+    color: #ffffff;
+}
+
+body.mobile-os .modal-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+body.mobile-os .btn-gc {
+    flex: 1;
+    border-radius: 50px;
+    padding: 12px 5px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    border: none;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+body.mobile-os #modalDisco {
+    background: none;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    border: none;
+    will-change: filter;
+    filter: none !important;
+}
+
+/* ## Header ## */
+body.mobile-os header,.header-principal {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    flex-direction: row !important;
+    justify-content: center !important;
+    align-items: center !important;
+    padding: 15px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    background: linear-gradient(180deg, #0a0f28 0%, #050515 100%);
+    border-bottom: 3px solid #1a1f4d;
+    border-radius: 0 0 20px 20px;
+    margin-bottom: 25px;
+    position: fixed; /* Lo fija a la pantalla */
+    top: 0;          /* Lo pega al borde superior */
+    left: 0;         /* Asegura que empiece desde la izquierda */
+    z-index: 1000;   /* Mantiene el header por encima de todo el contenido */
+}
+
+body.mobile-os .header-icon {
+    order: 0 !important;
+    flex: 0 0 auto !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center;
+    height: 60px !important;
+    margin: 0 5px !important;
+}
+
+body.mobile-os search-container {
+    order: 1 !important;
+    flex: 0 0 100% !important;
+    display: flex;
+    justify-content: center;
+    width: 85%;
+    max-width: 300px;
+    margin: 10px 0 5px;
+}
+
+body.mobile-os #inputBuscador {
+    width: 85%;
+    max-width: 420px;
+    height: 36px;
+    font-size: 16px;
+}
+
+body.mobile-os .select-wrapper {
+    display: flex !important;
+    justify-content: center !important;
+}
+
+body.mobile-os .estilo-retro {
+    border-radius: 100px !important;
+    height: 35px !important;
+}
+
+body.mobile-os #inputBuscador::placeholder {
+    color: rgba(78, 217, 255, 0.4);
+}
+
+body.mobile-os .controles-orden {
+    order: 3 !important;
+    flex: 0 0 100% !important;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 0 15px;
+    position: relative;
+}
+
+body.mobile-os .admin-dropdown-wrapper {
+    order: 3 !important;
+    position: absolute !important;
+    left: 15px;
+    bottom: 10px;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px;
+}
+
+body.mobile-os .dropdown-trigger-retro {
+    order: 4 !important;
+    margin-left: auto !important;
+    border-radius: 100px;
+    flex: 1 !important;
+    display: flex !important;
+    justify-content: flex-end !important;
+}
