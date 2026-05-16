@@ -213,15 +213,74 @@ document.addEventListener("click", () => {
     document.getElementById("admin-menu-wrapper")?.classList.remove("active");
 });
 
-// --- 9. CARGA DE BASE DE DATOS Y RENDERIZADO ---
+// Variable para saber qué estamos viendo
+let consolaActual = "gamecube"; 
+
+// Esta función va conectada a tu botón de la interfaz
+window.cambiarConsola = function() {
+    // 1. Cambiamos el estado de la consola
+    consolaActual = (consolaActual === "gamecube") ? "gba" : "gamecube";
+    
+    // 2. Referencias a los elementos del botón
+    const icono = document.getElementById("icono-consola");
+        const btn = document.getElementById("btn-cambiar-consola");
+
+    // 3. Lógica del Switch (Cambio de imagen y texto)
+    if (consolaActual === "gba") {
+        icono.src = "Assets/icons/gba icon.png"; // Asegúrate de tener este icono
+                btn.classList.add("mode-gba"); // Opcional: para cambiar el color del botón con CSS
+    } else {
+        icono.src = "Assets/icons/gamecube icon.png";
+                btn.classList.remove("mode-gba");
+    }
+
+    // 4. Reiniciamos paginación y recargamos datos
+    paginaActual = 1;
+    cargarDesdeFirebase();
+};
+
 async function cargarDesdeFirebase() {
     try {
-        const querySnapshot = await getDocs(query(collection(db, "juegos")));
-        productos = [];
-        querySnapshot.forEach((doc) => productos.push(doc.data()));
-        ordenarProductos();
+        // Seleccionamos la colección según la consola actual
+        const nombreColeccion = (consolaActual === "gamecube") ? "juegos" : "gba juegos";
+        const q = query(collection(db, nombreColeccion));
+        const querySnapshot = await getDocs(q);
+        
+        const nuevosProductos = [];
+
+        querySnapshot.forEach((doc) => {
+            const data = doc.data();
+            
+            // Si es GBA, usamos tu lógica de nombres separados
+            if (consolaActual === "gba") {
+                nuevosProductos.push({
+                    id: data.nombre_archivo, // Para la imagen .png
+                    nombre: data.nombre_mostrar, // Para el texto debajo
+                    url: data.url || "",
+                    formato: data.formato || "GBA ROM",
+                    compresion: data.compresion || "None"
+                });
+            } else {
+                // Si es GameCube, mantenemos tu estructura original
+                nuevosProductos.push({
+                    id: doc.id,
+                    ...data
+                });
+            }
+        });
+
+        productos = nuevosProductos;
+        juegosFiltrados = [...productos];
+        
+        // Si tienes el buscador activo, filtramos de una vez
+        if (buscador && buscador.value) {
+            buscador.dispatchEvent(new Event("input"));
+        } else {
+            renderizarPagina();
+        }
     } catch (error) {
-        console.error("Error BD:", error);
+        console.error("Error al cargar desde Firebase:", error);
+        showRetroAlert("SYSTEM ERROR", "COULD NOT RETRIEVE DATA FROM MEMORY CARD.");
     }
 }
 
@@ -233,6 +292,7 @@ function renderizarPagina() {
     const juegosVisibles = juegosFiltrados.slice(inicio, inicio + juegosPorPagina);
 
     if (juegosVisibles.length === 0) {
+        // Este es el modal/mensaje de 0 datos que mencionas
         gridContainer.innerHTML = `<div style="color:white; grid-column: 1/-1; text-align:center; padding: 50px; font-family: 'JetBrains Mono', monospace;">[ SIN DATOS EN ESTA SECCIÓN ]</div>`;
         actualizarControlesPaginacion();
         return;
@@ -243,9 +303,20 @@ function renderizarPagina() {
         wrapper.className = "tarjeta-wrapper";
         
         const card = document.createElement("div");
-        card.className = "tarjeta";
+        // Mantenemos la clase dinámica para el CSS
+        card.className = `tarjeta tarjeta-${consolaActual}`;
+        gridContainer.className = `grid-container grid-${consolaActual}`;
+
+        // IMPORTANTE: Aquí usamos las rutas que tú ya tienes definidas
+        // p.id ya contiene 'data.nombre_archivo' gracias a tu función cargarDesdeFirebase
+        const rutaImagen = (consolaActual === "gba") 
+            ? `Assets/CoversGBA/${p.id}.png` // Ruta manual para asegurar que cargue
+            : `Assets/Covers/${p.id}.png`;
+
         card.innerHTML = `
-            <img src="${rutaLocalPortadas}${p.id}.png" alt="${p.nombre}" onerror="this.src='https://via.placeholder.com/210x270'">
+            <div class="portada-contenedor">
+                <img src="${rutaImagen}" alt="${p.nombre}" onerror="this.src='https://via.placeholder.com/210x270'">
+            </div>
             <div class="tarjeta-info">${p.nombre}</div>
         `;
 
@@ -259,7 +330,12 @@ function renderizarPagina() {
         wrapper.appendChild(card);
         gridContainer.appendChild(wrapper);
         
-        if (introTerminada) setTimeout(() => wrapper.classList.add("show"), 50 * index);
+        if (introTerminada) {
+            setTimeout(() => wrapper.classList.add("show"), 50 * index);
+        } else {
+            // Si la intro no ha terminado pero quieres verlos ya:
+            wrapper.classList.add("show");
+        }
     });
 
     actualizarControlesPaginacion();
@@ -407,11 +483,21 @@ window.abrirModal = function(idJuego) {
     const item = productos.find(p => p.id === idJuego);
     if(!item || !modalDetalle) return;
 
+    // 1. Rellenar textos básicos
     document.getElementById("modalTitulo").innerText = item.nombre || "Sin Título";
     document.getElementById("modalID").innerText = item.id || "S/N";
     document.getElementById("modalFormato").innerText = item.formato || "---";
     document.getElementById("modalCompresion").innerText = item.compresion || "Zstandard";
-    document.getElementById("modalImagen").src = `${rutaLocalPortadas}${item.id}.png`;
+    
+    const imgPortada = document.getElementById("modalImagen");
+    if (imgPortada) {
+        // Si es GBA usa CoversGBA, si no usa la ruta normal de portadas
+        const rutaFinalPortada = (consolaActual === "gba") 
+            ? `Assets/CoversGBA/${item.id}.png` 
+            : `${rutaLocalPortadas}${item.id}.png`;
+        
+        imgPortada.src = rutaFinalPortada;
+    }
 
     if(imgDisco) {
         imgDisco.style.transition = "none";

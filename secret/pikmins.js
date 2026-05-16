@@ -43,8 +43,8 @@
 
     const PIKMIN_TYPES = [
         { img: 'Assets/secret/pikmin.png', colorGlow: "#ff3333" },  // Rojo
-        { img: 'Assets/secret/pikmin2.png', colorGlow: "#3366ff" }, // Azul
-        { img: 'Assets/secret/pikmin3.png', colorGlow: "#ffcc00" }  // Amarillo
+        { img: 'Assets/secret/pikmin2.png', colorGlow: "#ffcc00" }, // Azul
+        { img: 'Assets/secret/pikmin3.png', colorGlow: "#3366ff" }  // Amarillo
     ];
     
     const playSound = (path, volume = 0.4) => {
@@ -146,7 +146,7 @@
         }
 
         setTimeout(() => {
-            playSound('pikmin/Grab Item.wav', 0.5); //
+            playSound('pikmin/Grab_Item.wav', 0.5); //
             
             targetObj.style.transition = "top 0.8s ease-in-out, left 5s linear";
             targetObj.style.top = (groundLevel - 20) + "px";

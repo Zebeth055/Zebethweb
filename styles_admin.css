@@ -696,3 +696,37 @@ input:not(.input-gc) {
     color: var(--gc-cyan-neon);
     text-shadow: 0 0 8px var(--gc-cyan-neon);
 }
+
+#btn-toggle-console {
+    transition: all 0.3s ease;
+    min-width: 150px;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+#btn-toggle-console:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: scale(1.05);
+}
+
+/* Opcional: Diferenciar el fondo de la lista según la consola */
+.main-container.mode-gba {
+    border-color: #00ff5d;
+}
+.gba-cover-icon {
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 0px; /* Forma rectangular de caja de cartón de GBA */
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+}
+
+/* Alineación y dimensiones del icono del botón */
+.btn-custom-icon {
+    width: 20px;       /* Ajusta el tamaño según se vea mejor en tu interfaz */
+    height: auto;
+    vertical-align: middle;
+    margin-right: 6px;
+    display: inline-block;
+}

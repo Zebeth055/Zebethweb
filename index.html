@@ -11,7 +11,6 @@
 <meta property="og:image" content="https://github.com/Zebeth055/Zebethweb/blob/main/Assets/icons/gamecube%20icono.svg">
 <meta property="og:url" content="https://zebeth055.github.io/Zebethweb/">
 <meta property="theme-color" content="#5814e4">
-
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Gamecube Backup">
 <meta name="twitter:description" content="Un backup de mis juegos de gamecube.">
@@ -60,11 +59,14 @@
     <img src="Assets/icons/gamecube icono.svg" class="header-icon" alt="icon">
 </div>
 <div class="container-acciones">
-        <button class="Tools-retro" onclick="window.open('dolphin-emu.org/')">
+       <button class="Tools-retro" onclick="window.location.href='https://dolphin-emu.org/'">
             <img src="Assets/icons/Dolphin icon.svg" class="btn-custom-icon" alt="icon"> 
         </button>
         <button class="Tools-retro" onclick="abrirModalRetro('modalDolphin')">
             <img src="Assets/icons/gear.svg" class="btn-custom-icon" alt="icon"> 
+        </button>
+    <button id="btn-cambiar-consola" class="Tools-retro" onclick="cambiarConsola()">
+            <img id="icono-consola" src="Assets/icons/gamecube icon.png" class="btn-custom-icon" alt="icon">
         </button>
     </div>
         
@@ -168,11 +170,11 @@
             
             <div class="grid-herramientas-dolphin">
 <button class="btn-tool-dolphin" onclick="window.location.href = 'Tools/GCT Maker.html'">
-    <img src="Assets/icons/config.png" class="tool-icon-img" alt="Config">
+    <img src="Assets/icons/memory card.gif" class="tool-icon-img" alt="Config">
     GCT Maker
 </button>
                 <button class="btn-tool-dolphin" onclick="window.open('URL_HERRAMIENTA_4', '_blank')">
-                    <img src="Assets/icons/textures.png" class="tool-icon-img" alt="Texturas">
+                    <img src="Assets/icons/texture icon.png" class="tool-icon-img" alt="Texturas">
                     TEXTURAS
                 </button>
             </div>

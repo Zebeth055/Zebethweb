@@ -453,6 +453,7 @@ header {
     box-sizing: border-box;
     min-height: 70vh;
     transition: opacity 0.3s ease-in-out;
+    align-items: start;
 }
 
 .grid-fade-out { opacity: 0; }
@@ -477,7 +478,6 @@ header {
 
 .tarjeta {
     width: 100%;
-    height: 295px;
     background-color: #0055a3;
     border: 4px solid #000;
     border-radius: 10px;
@@ -1420,15 +1420,6 @@ footer {
     width: 50px;           /* Tamaño ajustable */
     height: 50px;
     object-fit: contain;   /* Evita que la imagen se deforme */
-    margin-bottom: 8px;    /* Espacio entre imagen y texto */
-    filter: drop-shadow(0 0 5px rgba(0, 255, 255, 0.5)); /* Brillo cyan suave */
-    transition: transform 0.3s ease, filter 0.3s ease;
-}
-
-/* Efecto cuando pasas el mouse por el botón */
-.btn-tool-dolphin:hover .tool-icon-img {
-    transform: scale(1.1); /* La imagen crece un poco */
-    filter: drop-shadow(0 0 12px rgba(0, 255, 255, 0.9)); /* El brillo se intensifica */
 }
 
 /* Ajuste del botón para que la imagen y el texto se alineen bien */
@@ -1439,6 +1430,17 @@ footer {
     justify-content: center;
     min-height: 110px;     /* Asegura que todos los botones midan lo mismo */
     padding: 15px 10px;
+}
+
+/* --- MUNDO GBA (Horizontal) --- */
+.tarjeta-gba .portada-contenedor {
+    aspect-ratio: 1 / 1; /* Proporción de caja GBA */
+    padding: 2px; /* Un poco de margen para que parezca cartón */
+}
+
+.tarjeta-gba .portada-contenedor img {
+    object-fit: contain; /* No corta la imagen, la ajusta al ancho */
+    filter: drop-shadow(0 5px 10px rgba(0,0,0,0.8)); /* Sombra de objeto real */
 }
 
 /* =========================================

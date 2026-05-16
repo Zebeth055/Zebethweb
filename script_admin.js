@@ -1,4 +1,4 @@
-// 1. LOS IMPORTS (Consolidados arriba para mayor orden)
+// 1. LOS IMPORTS
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { 
     initializeFirestore, collection, addDoc, deleteDoc, doc, getDocs, 
@@ -16,25 +16,17 @@ const firebaseConfig = {
     appId: "1:497969896150:web:9fc8cecef549fa2d284777"
 };
 
-// --- PRIMERO INICIALIZAR APP ---
 const app = initializeApp(firebaseConfig);
-
-// --- LUEGO INICIALIZAR SERVICIOS USANDO 'app' ---
 const auth = getAuth(app);
 const db = initializeFirestore(app, {
-    experimentalForceLongPolling: true // Esto resuelve el error ERR_BLOCKED_BY_CLIENT
+    experimentalForceLongPolling: true
 });
 
-// 3. AUTENTICACIÓN (Recuerda cambiar estos datos por los tuyos)
 signInWithEmailAndPassword(auth, "tu-email@ejemplo.com", "tu-password")
-  .then((userCredential) => {
-    console.log("Logueado como:", userCredential.user.uid);
-  })
-  .catch((error) => {
-    console.error("Error de login:", error.message);
-  });
+  .then((userCredential) => console.log("Logueado como:", userCredential.user.uid))
+  .catch((error) => console.error("Error de login:", error.message));
 
-// 3. VARIABLES DE ESTADO
+// 3. VARIABLES DE ESTADO Y DOM
 const listaContainer = document.getElementById("lista-juegos");
 const confirmModal = document.getElementById("confirmModal");
 const optionYes = document.getElementById("optionYes");
@@ -48,20 +40,99 @@ const infoText = document.getElementById("info-text");
 const btnEdit = document.getElementById("btn-toggle-edit");
 const editStatus = document.getElementById("edit-status");
 
+// Variables para el Switch de Consola
+const btnConsole = document.getElementById("btn-toggle-console");
+const consoleLabel = document.getElementById("console-label");
+const consoleIcon = document.getElementById("console-icon");
+
+let consolaActual = "gamecube"; // Estado inicial: gamecube o gba
+let unsubscribeDB = null; 
+
 let seleccionados = new Set(); 
 let editMode = false;
 let ultimoSeleccionadoIdx = null;
 
+// Helper para obtener el nombre exacto de la colección
+function obtenerColeccion() {
+    return consolaActual === "gamecube" ? "juegos" : "gba juegos";
+}
+
+// --- LÓGICA DEL SWITCH DE CONSOLA ---
+// --- LÓGICA DEL SWITCH DE CONSOLA ---
+if (btnConsole) {
+    btnConsole.onclick = () => {
+        consolaActual = (consolaActual === "gamecube") ? "gba" : "gamecube";
+        
+        if (consolaActual === "gba") {
+            consoleLabel.innerText = "GBA";
+            btnConsole.style.borderColor = "#00ff5d";
+            btnConsole.style.color = "#00ff5d";
+            
+            // Cambiar el src al icono de Game Boy Advance
+            consoleIcon.src = "Assets/icons/gba icon.png"; 
+        } else {
+            consoleLabel.innerText = "GAMECUBE";
+            btnConsole.style.borderColor = "#ff3366";
+            btnConsole.style.color = "#ff3366";
+            
+            // Cambiar el src al icono de GameCube
+            consoleIcon.src = "Assets/icons/gamecube icon.png";
+        }
+
+        // Limpiar estados de selección previa
+        seleccionados.clear();
+        ultimoSeleccionadoIdx = null;
+        actualizarBarraBatch();
+        
+        // Escuchar la nueva base de datos correspondiente
+        iniciarEscuchaDB();
+    };
+}
+
+// --- BOTÓN GENERAR DATA DE PRUEBA (ARREGLADO) ---
+const btnSeedData = document.getElementById("btn-seed-data");
+if (btnSeedData) {
+    btnSeedData.onclick = async () => {
+        const msg = `SEED DATA:<br>¿Generar 3 juegos de prueba en la colección de ${consolaActual.toUpperCase()}?`;
+        if (await customConfirm(msg)) {
+            let juegosPrueba = [];
+            
+            if (consolaActual === "gba") {
+                juegosPrueba = [
+                    { nombre_mostrar: "Pokémon Esmeralda", nombre_archivo: "BPEE", formato: "GBA", url: "https://firebasestorage.googleapis.com/.../pokemon.gba", fecha_subida: new Date() },
+                    { nombre_mostrar: "The Legend of Zelda: The Minish Cap", nombre_archivo: "BZME", formato: "GBA", url: "https://firebasestorage.googleapis.com/.../zelda.gba", fecha_subida: new Date() },
+                    { nombre_mostrar: "Metroid Fusion", nombre_archivo: "BMFE", formato: "GBA", url: "https://firebasestorage.googleapis.com/.../metroid.gba", fecha_subida: new Date() }
+                ];
+            } else {
+                juegosPrueba = [
+                    { nombre: "Super Smash Bros. Melee", id: "GALE01", formato: "ISO", url: "https://firebasestorage.googleapis.com/.../smash.iso", fecha_subida: new Date() },
+                    { nombre: "The Legend of Zelda: The Wind Waker", id: "GZLE01", formato: "ISO", url: "https://firebasestorage.googleapis.com/.../zelda.iso", fecha_subida: new Date() },
+                    { nombre: "Metroid Prime 2: Echoes", id: "G2EE01", formato: "NKIT", url: "https://firebasestorage.googleapis.com/.../metroid2.nkit", fecha_subida: new Date() }
+                ];
+            }
+
+            try {
+                for (const juego of juegosPrueba) {
+                    await addDoc(collection(db, obtenerColeccion()), juego);
+                }
+                await showSuccess();
+            } catch (error) {
+                console.error("Error inyectando datos de prueba:", error);
+            }
+        }
+    };
+}
+
 // 4. SISTEMA JSON
 document.getElementById('btn-export-json').onclick = async () => {
     try {
-        const querySnapshot = await getDocs(collection(db, "juegos"));
+        const querySnapshot = await getDocs(collection(db, obtenerColeccion()));
         const data = querySnapshot.docs.map(doc => doc.data());
         const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `backup_zebethweb_${new Date().toISOString().slice(0,10)}.json`;
+        a.download = `backup_${consolaActual}_${new Date().toISOString().slice(0,10)}.json`;
         a.click();
         URL.revokeObjectURL(url);
     } catch (error) { console.error("Error al exportar:", error); }
@@ -74,9 +145,9 @@ document.getElementById('input-import-json').onchange = async (e) => {
     reader.onload = async (event) => {
         try {
             const juegosParaImportar = JSON.parse(event.target.result);
-            if (await customConfirm(`DATABASE INJECTION:<br>¿Importar ${juegosParaImportar.length} entradas?`)) {
+            if (await customConfirm(`DATABASE INJECTION:<br>¿Importar ${juegosParaImportar.length} entradas a ${consolaActual.toUpperCase()}?`)) {
                 for (const juego of juegosParaImportar) {
-                    await addDoc(collection(db, "juegos"), {
+                    await addDoc(collection(db, obtenerColeccion()), {
                         ...juego,
                         fecha_subida: new Date()
                     });
@@ -118,25 +189,21 @@ function showSuccess() {
 function toggleSeleccion(id, elemento, event, index, todosLosDocs) {
     const items = document.querySelectorAll(".db-item");
 
-    // CASO A: SHIFT + CLICK (Selección de Rango)
     if (event.shiftKey && ultimoSeleccionadoIdx !== null) {
         const start = Math.min(ultimoSeleccionadoIdx, index);
         const end = Math.max(ultimoSeleccionadoIdx, index);
         
-        // Si no se presiona Ctrl, limpiamos selección previa para crear el nuevo rango
         if (!event.ctrlKey && !event.metaKey) {
             seleccionados.clear();
             items.forEach(el => el.classList.remove("selected-batch"));
         }
 
-        // Marcamos todos los elementos dentro del rango
         for (let i = start; i <= end; i++) {
             const idRango = todosLosDocs[i].id;
             seleccionados.add(idRango);
             items[i].classList.add("selected-batch");
         }
     } 
-    // CASO B: CTRL / CMD + CLICK (Añadir/Quitar individual)
     else if (event.ctrlKey || event.metaKey) {
         if (seleccionados.has(id)) {
             seleccionados.delete(id);
@@ -145,10 +212,8 @@ function toggleSeleccion(id, elemento, event, index, todosLosDocs) {
             seleccionados.add(id);
             elemento.classList.add("selected-batch");
         }
-        // Actualizamos el índice base para el próximo Shift+Click
         ultimoSeleccionadoIdx = index;
     } 
-    // CASO C: CLICK SIMPLE (Selección única)
     else {
         seleccionados.clear();
         items.forEach(el => el.classList.remove("selected-batch"));
@@ -157,7 +222,6 @@ function toggleSeleccion(id, elemento, event, index, todosLosDocs) {
         elemento.classList.add("selected-batch");
         ultimoSeleccionadoIdx = index;
     }
-
     actualizarBarraBatch();
 }
 
@@ -181,8 +245,8 @@ function resetBarraInfo() {
 }
 
 async function ejecutarBorradoLote() {
-    if (await customConfirm(`BATCH DELETE:<br>¿Eliminar ${seleccionados.size} juegos?`)) {
-        const promesas = Array.from(seleccionados).map(id => deleteDoc(doc(db, "juegos", id)));
+    if (await customConfirm(`BATCH DELETE:<br>¿Eliminar ${seleccionados.size} juegos de ${consolaActual.toUpperCase()}?`)) {
+        const promesas = Array.from(seleccionados).map(id => deleteDoc(doc(db, obtenerColeccion(), id)));
         await Promise.all(promesas);
         seleccionados.clear();
         await showSuccess();
@@ -196,23 +260,24 @@ if (btnEdit) {
         editStatus.innerText = editMode ? "ON" : "OFF";
         editStatus.className = editMode ? "status-on" : "status-off";
         
-        // Limpiamos selección e índice al apagar
         if (!editMode) { 
             seleccionados.clear(); 
-            ultimoSeleccionadoIdx = null; // <--- Importante
+            ultimoSeleccionadoIdx = null; 
             actualizarBarraBatch(); 
         }
     };
 }
 
-// 8. ESCUCHA DB + ANIMACIONES DE ENTRADA
+// 8. ESCUCHA DB REALTIME (INTEGRACIÓN INDEPENDIENTE)
 function iniciarEscuchaDB() {
     if (!listaContainer) return;
-    const q = query(collection(db, "juegos"), orderBy("fecha_subida", "desc"));
+    if (unsubscribeDB) unsubscribeDB(); // Detener escucha previa
 
-    onSnapshot(q, (querySnapshot) => {
+    const q = query(collection(db, obtenerColeccion()), orderBy("fecha_subida", "desc"));
+
+    unsubscribeDB = onSnapshot(q, (querySnapshot) => {
         listaContainer.innerHTML = "";
-        const docsArray = querySnapshot.docs; // Array de referencia para los índices
+        const docsArray = querySnapshot.docs; 
         let index = 0;
 
         querySnapshot.forEach((documento) => {
@@ -221,8 +286,6 @@ function iniciarEscuchaDB() {
             const item = document.createElement("div");
             
             item.className = "db-item";
-            
-            // Estilos de animación inicial
             item.style.opacity = "0"; 
             item.style.transform = "scale(0.8)";
             item.style.transition = "all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)";
@@ -230,26 +293,39 @@ function iniciarEscuchaDB() {
 
             if (seleccionados.has(idDoc)) item.classList.add("selected-batch");
 
+            // Mapeos independientes por consola
+            const itemID = (consolaActual === "gba") ? (datos.nombre_archivo || idDoc) : (datos.id || idDoc);
+            const itemNom = (consolaActual === "gba") ? (datos.nombre_mostrar || "Sin Título") : (datos.nombre || "Sin Título");
+            
+            // Portadas independientes (GBA usa imágenes rectangulares frontales, GC usa sus CDs)
+            const rutaImg = (consolaActual === "gba") 
+                ? `Assets/CoversGBA/${itemID}.png` 
+                : `Assets/CoversCD//${itemID}.png`;
+
+            const fallbackImg = (consolaActual === "gba")
+                ? `https://via.placeholder.com/50x70?text=GBA`
+                : `Assets/CoversCD//undefinedcd.png`;
+
+            // Cambiamos la clase de la imagen de 'disco-icon' a 'gba-cover-icon' para quitar la forma de CD
+            const claseImagen = (consolaActual === "gba") ? "gba-cover-icon" : "disco-icon";
+
             item.innerHTML = `
                 <button class="delete-btn" data-id="${idDoc}">X</button>
-                <img src="Assets/CoversCD//${datos.id}.png" class="disco-icon" onerror="this.src='Assets/CoversCD//undefinedcd.png';">
+                <img src="${rutaImg}" class="${claseImagen}" onerror="this.src='${fallbackImg}';">
             `;
 
-            // UN SOLO ONCLICK QUE GESTIONE TODO
             item.onclick = (e) => {
                 if (e.target.classList.contains("delete-btn")) return;
-                
                 if (editMode) {
-                    // Pasamos el índice actual (index) y el array completo
                     toggleSeleccion(idDoc, item, e, index, docsArray);
                 } else {
-                    abrirModalDetalle(datos, idDoc);
+                    abrirModalDetalle(datos, idDoc, itemID, itemNom);
                 }
             };
 
             item.onmouseenter = () => {
                 if (infoText && !seleccionados.size) {
-                    infoText.innerHTML = `${datos.nombre} <span style="color:#00ffff">[${datos.id}]</span>`;
+                    infoText.innerHTML = `${itemNom} <span style="color:#00ffff">[${itemID}]</span>`;
                 }
             };
 
@@ -260,13 +336,13 @@ function iniciarEscuchaDB() {
                 item.style.transform = "scale(1)";
             });
 
-            index++; // Este contador es vital para el Shift+Click
+            index++; 
         });
         vincularBotonesBorrarRapido();
     });
 }
 
-// 9. BORRADO RÁPIDO + ANIMACIÓN DE SALIDA
+// 9. BORRADO RÁPIDO
 function vincularBotonesBorrarRapido() {
     document.querySelectorAll(".delete-btn").forEach((btn) => {
         btn.onclick = async (e) => {
@@ -275,9 +351,9 @@ function vincularBotonesBorrarRapido() {
             const itemElement = btn.closest(".db-item");
 
             if (await customConfirm("FAST DELETE:<br>¿Eliminar entrada ahora?")) {
-                itemElement.classList.add("item-exit"); // Activamos CSS glitchDelete
+                itemElement.classList.add("item-exit"); 
                 setTimeout(async () => {
-                    await deleteDoc(doc(db, "juegos", id));
+                    await deleteDoc(doc(db, obtenerColeccion(), id));
                     await showSuccess();
                 }, 300); 
             }
@@ -285,17 +361,28 @@ function vincularBotonesBorrarRapido() {
     });
 }
 
-// 10. MODAL DETALLE
-async function abrirModalDetalle(datos, idDoc) {
+// 10. MODAL DETALLE (ARREGLADO PARA PORTADAS GBA)
+async function abrirModalDetalle(datos, idDoc, itemID, itemNom) {
     const modal = document.getElementById("modalDetalle");
     const disco = document.getElementById("modalDisco");
+    const imgModal = document.getElementById("modalImagen");
     
-    document.getElementById("modalImagen").src = `Assets/Covers/${datos.id}.png`;
-    disco.src = `Assets/CoversCD//${datos.id}.png`;
-    disco.classList.add("girando");
+    if (consolaActual === "gba") {
+        // En GBA cargamos la portada frontal de la caja y apagamos el disco
+        if (imgModal) imgModal.src = `Assets/CoversGBA/${itemID}.png`;
+        if (disco) disco.style.display = "none";
+    } else {
+        // En GameCube cargamos la portada normal y el CD rotatorio
+        if (imgModal) imgModal.src = `Assets/Covers/${itemID}.png`;
+        if (disco) {
+            disco.style.display = "block";
+            disco.src = `Assets/CoversCD//${itemID}.png`;
+            disco.classList.add("girando");
+        }
+    }
 
-    document.getElementById("editNombre").value = datos.nombre || "";
-    document.getElementById("editID").value = datos.id || "";
+    document.getElementById("editNombre").value = itemNom;
+    document.getElementById("editID").value = itemID;
     document.getElementById("editFormato").value = datos.formato || "";
     document.getElementById("editURL").value = datos.url || "";
     
@@ -304,46 +391,66 @@ async function abrirModalDetalle(datos, idDoc) {
 
     document.getElementById("btnActualizarModal").onclick = async () => {
         if (await customConfirm("¿Guardar cambios?")) {
-            await updateDoc(doc(db, "juegos", idDoc), {
-                nombre: document.getElementById("editNombre").value,
-                id: document.getElementById("editID").value,
+            const camposActualizados = {
                 formato: document.getElementById("editFormato").value,
                 url: document.getElementById("editURL").value
-            });
+            };
+
+            if (consolaActual === "gba") {
+                camposActualizados.nombre_mostrar = document.getElementById("editNombre").value;
+                camposActualizados.nombre_archivo = document.getElementById("editID").value;
+            } else {
+                camposActualizados.nombre = document.getElementById("editNombre").value;
+                camposActualizados.id = document.getElementById("editID").value;
+            }
+
+            await updateDoc(doc(db, obtenerColeccion(), idDoc), camposActualizados);
             modal.style.display = "none";
+            if (disco) disco.classList.remove("girando");
             await showSuccess();
         }
     };
 
     document.getElementById("btnBorrarDesdeModal").onclick = async () => {
-        if (await customConfirm(`¿ELIMINAR PERMANENTEMENTE?<br>${datos.nombre}`)) {
-            await deleteDoc(doc(db, "juegos", idDoc));
+        if (await customConfirm(`¿ELIMINAR PERMANENTEMENTE?<br>${itemNom}`)) {
+            await deleteDoc(doc(db, obtenerColeccion(), idDoc));
             modal.style.display = "none";
+            if (disco) disco.classList.remove("girando");
             await showSuccess();
         }
     };
 
     document.getElementById("btnCerrarModal").onclick = () => {
         modal.style.display = "none";
-        disco.classList.remove("girando");
+        if (disco) disco.classList.remove("girando");
     };
     modal.style.display = "flex";
 }
 
-// 11. GUARDAR NUEVO
+// 11. GUARDAR NUEVO DESDE EL PANEL IZQUIERDO
 document.getElementById("btnGuardar").onclick = async () => {
+    const inputNom = document.getElementById("nombre").value;
+    const inputID = document.getElementById("id_serial").value;
+    
     const campos = {
-        nombre: document.getElementById("nombre").value,
-        id: document.getElementById("id_serial").value,
         formato: document.getElementById("formato").value,
-        url: document.getElementById("link_descarga").value
+        url: document.getElementById("link_descarga").value,
+        fecha_subida: new Date()
     };
 
-    if (Object.values(campos).some(v => !v.trim())) {
+    if (consolaActual === "gba") {
+        campos.nombre_mostrar = inputNom;
+        campos.nombre_archivo = inputID;
+    } else {
+        campos.nombre = inputNom;
+        campos.id = inputID;
+    }
+
+    if (!campos.url.trim() || !inputNom.trim()) {
         await showWarning(); return;
     }
 
-    await addDoc(collection(db, "juegos"), { ...campos, fecha_subida: new Date() });
+    await addDoc(collection(db, obtenerColeccion()), campos);
     await showSuccess();
     document.querySelectorAll(".left-panel input").forEach(i => i.value = "");
 };
@@ -353,9 +460,10 @@ window.onclick = (e) => {
     const modal = document.getElementById("modalDetalle");
     if (e.target === modal) {
         modal.style.display = "none";
-        document.getElementById("modalDisco").classList.remove("girando");
+        const disco = document.getElementById("modalDisco");
+        if (disco) disco.classList.remove("girando");
     }
 };
 
-
+// --- INICIAR PRIMERA CARGA ---
 iniciarEscuchaDB();
