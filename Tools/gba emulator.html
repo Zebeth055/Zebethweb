@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GBA Web Emulator</title>
+    <link rel="stylesheet" href="gba-style.css">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <header class="simple-header">
+        <header class="simple-header">
+    <img src="../Assets/icons/game-boy-player-logo.svg" alt="GBA Emulator" class="header-logo">
+</header>
+        
+        </header>
+
+    <main>
+        <div class="gba-emulator-wrapper">
+            <div class="gba-screen-container">
+                <div id="gba-canvas-container" style="width: 100%; height: 100%;"></div>
+                
+                <div class="scanlines"></div>
+            </div>
+
+            <div class="gba-controls">
+                <input type="file" id="rom-upload" accept=".gba,.zip" class="hidden" />
+                
+                <label for="rom-upload" class="btn-gc btn-gc-a">
+                    <span>(A)</span> CARGAR ROM
+                </label>
+                
+                <button id="btn-pause" class="btn-gc btn-gc-b" disabled>
+                    <span>(B)</span> PAUSA
+                </button>
+            </div>
+
+            <div class="info-status" id="emu-status">
+                ESTADO: ESPERANDO CARTUCHO...
+            </div>
+        </div>
+    </main>
+
+    <script src="gba-script.js"></script>
+</body>
+</html>

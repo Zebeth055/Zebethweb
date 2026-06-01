@@ -1422,6 +1422,7 @@ footer {
     object-fit: contain;   /* Evita que la imagen se deforme */
 }
 
+
 /* Ajuste del botón para que la imagen y el texto se alineen bien */
 .btn-tool-dolphin {
     display: flex;
@@ -1442,6 +1443,8 @@ footer {
     object-fit: contain; /* No corta la imagen, la ajusta al ancho */
     filter: drop-shadow(0 5px 10px rgba(0,0,0,0.8)); /* Sombra de objeto real */
 }
+
+
 
 /* =========================================
    9. OPTIMIZACIÓN ANDROID / MOBILE OS

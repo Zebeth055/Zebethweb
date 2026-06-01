@@ -1,0 +1,303 @@
+/* =========================================
+   VARIABLES BASE (Game Boy Player Edition)
+   ========================================= */
+:root {
+    --gc-dark: rgb(0, 0, 0);
+    --gc-grid: rgba(255, 255, 255, 0.15);
+    --btn-b: #ff3366;
+    --font-main: "Arial Rounded MT Bold", "Helvetica", sans-serif;
+    --btn-a: #00ff5d;
+    --bordes: #000dda;
+}
+
+/* =========================================
+   ESTILOS GLOBALES (Anti-Scroll)
+   ========================================= */
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100vh; /* Fija la altura exactamente al tamaño de tu ventana */
+    overflow: hidden; /* ELIMINA CUALQUIER RASTRO DE SCROLL */
+}
+
+.header-logo {
+    max-width: 300px;
+    width: 100%;
+    height: auto;
+    margin: 5px 0;
+    transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+/* Efecto: El logo se "enciende" un poco al pasar el mouse */
+.header-logo:hover {
+    filter: drop-shadow(0 0 10px rgba(0, 255, 93, 0.6));
+    transform: scale(1.05);
+}
+
+body {
+    font-family: var(--font-main);
+    background-image: 
+        linear-gradient(var(--gc-grid) 1.5px, transparent 1.5px),
+        linear-gradient(90deg, var(--gc-grid) 1.5px, transparent 1.5px),
+        radial-gradient(circle at center, #4a2574 0%, #160a2c 100%);
+    background-size: 30px 30px, 30px 30px, 100% 100%;
+    background-attachment: fixed;
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Header simple */
+.simple-header {
+    text-align: center;
+    padding: 5px;
+    width: 100%;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+}
+
+.header-title {
+    font-size: 2rem;
+    letter-spacing: 4px;
+    margin: 0;
+    color: #fff;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+main {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1; /* Permite que el contenido principal ocupe todo el resto del espacio */
+    overflow: hidden;
+}
+
+/* LA MAGIA: Ocultar el header si el emulador está en modo 'large-size' */
+body:has(.gba-emulator-wrapper.large-size) .simple-header {
+    display: none;
+}
+
+/* =========================================
+   CONTENEDOR DEL EMULADOR (Carcasa Externa)
+   ========================================= */
+.gba-emulator-wrapper {
+    background: linear-gradient(135deg, #24123a 0%, #3b1a5e 50%, #1b0b2b 100%);
+    border: 4px solid #111;
+    border-radius: 24px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9);
+    width: 95vw;
+    max-width: 640px;
+    margin: 10px auto; 
+    padding: 40px 25px 25px 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    box-sizing: border-box;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.gba-emulator-wrapper {
+    /* Fondo que imita los tonos oscuros/morados de la interfaz del GP */
+    background: linear-gradient(180deg, #1f112e 0%, #2e1a47 100%);
+    
+    /* Borde grueso que simula el marco de la consola */
+    border: 8px solid #000;
+    border-radius: 35px;
+    
+    /* Sombra profunda para dar efecto de relieve 3D */
+    box-shadow: 
+        0 10px 0 #000, 
+        0 20px 30px rgba(0, 0, 0, 0.8),
+        inset 0 0 20px rgba(0, 0, 0, 0.5);
+    
+    width: 95vw;
+    max-width: 640px;
+    margin: 20px auto; 
+    
+    /* Padding ajustado para dar aire, similar al menú de las imágenes */
+    padding: 30px;
+    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 25px;
+    box-sizing: border-box;
+    position: relative;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+
+/* =========================================
+   MARCO DE LA PANTALLA (Plástico Mate GBA Player)
+   ========================================= */
+.gba-screen-container {
+    background: #111116;
+    border: 4px solid #000;
+    border-radius: 40px;
+    padding: 30px 18px 32px 18px; 
+    position: relative;
+    width: 100%;
+    box-sizing: border-box;
+    box-shadow: 
+        0 15px 35px rgba(0, 0, 0, 0.7),
+        inset 0 0 0 2px #333; 
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+/* LOGO NINTENDO SUPERIOR */
+.gba-screen-container::before {
+    content: "Nintendo";
+    position: absolute;
+    top: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #fff;
+    font-family: var(--font-main);
+    font-size: 0.65rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    padding: 1px 9px;
+    border-radius: 12px;
+    opacity: 0.85;
+}
+
+/* LOGO GAME BOY ADVANCE INFERIOR */
+.gba-screen-container::after {
+    content: "GAME BOY ADVANCE";
+    position: absolute;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #fff;
+    font-family: var(--font-main);
+    font-size: 0.65rem;
+    font-style: italic;
+    font-weight: bold;
+    letter-spacing: 1.5px;
+    opacity: 0.85;
+}
+
+/* =========================================
+   ÁREA INTERNA DEL JUEGO (Canvas / Iframe)
+   ========================================= */
+#gba-canvas-container {
+    width: 100% !important;
+    aspect-ratio: 3 / 2 !important; 
+    border: 3px solid #000;
+    box-shadow: 0 0 0 2px #5a5a66; 
+    background-color: #000;
+    overflow: hidden;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+}
+
+/* =========================================
+   BOTONES Y CONTROLES
+   ========================================= */
+.gba-controls {
+    display: flex;
+    flex-direction: row;     /* Esto los pone uno al lado del otro */
+    flex-wrap: wrap;         /* Permite que bajen si no hay espacio */
+    justify-content: center; /* Los mantiene centrados */
+    gap: 15px;               /* Espacio entre botones */
+    width: 100%;
+    margin-top: 20px;
+}
+
+.btn-gc {
+    padding: 10px 20px;
+    border-radius: 50px;
+    border: 3px solid #000;
+    font-weight: bold;
+    cursor: pointer;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    font-family: var(--font-main);
+    transition: transform 0.1s, filter 0.2s;
+    box-shadow: 0 4px 0 #000;
+}
+
+.btn-gc:active { 
+    transform: translateY(3px);
+    box-shadow: 0 1px 0 #000;
+}
+
+.btn-gc:hover { filter: brightness(1.2); }
+
+.btn-gc-a { background: var(--btn-a); color: #000; }
+.btn-gc-b { background: var(--btn-b); color: #fff; }
+.btn-gc-b:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.hidden {
+    display: none;
+}
+
+.info-status {
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--btn-a);
+    text-shadow: 0 0 5px rgba(0, 255, 93, 0.4);
+    font-size: 0.9rem;
+    text-align: center;
+    margin-top: 5px;
+}
+
+/* =========================================
+   MODO VENTANA AGRANDADA (Botón Z de Tamaño)
+   ========================================= */
+.gba-emulator-wrapper.large-size {
+    max-width: 95vw !important; 
+    height: 95vh; /* Ocupa el 95% del alto de la pantalla */
+    margin: 0 !important; /* Se centra perfectamente al desaparecer el header */
+    justify-content: center;
+}
+
+.gba-emulator-wrapper.large-size .gba-screen-container {
+    width: auto !important;
+    height: 80vh !important; /* El marco crece con el alto, no con el ancho */
+    max-width: 95vw !important;
+    aspect-ratio: auto;
+}
+
+.gba-emulator-wrapper.large-size #gba-canvas-container {
+    height: 100% !important;
+    width: auto !important;
+    margin: 0 auto;
+    aspect-ratio: 3 / 2 !important; /* Mantiene la proporción perfecta del GBA */
+}
+
+/* =========================================
+   AJUSTES DE FULLSCREEN NATIVO (Fondo GameCube)
+   ========================================= */
+.gba-emulator-wrapper:fullscreen {
+    width: 100vw !important;
+    height: 100vh !important;
+    max-width: none !important;
+    max-height: none !important;
+    background: radial-gradient(circle at center, #4a2574 0%, #160a2c 100%) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+}
+
+.gba-emulator-wrapper:fullscreen .gba-screen-container {
+    width: 85vh !important;
+    max-width: 95vw !important;
+    height: auto !important;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+}
